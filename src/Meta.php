@@ -4,40 +4,89 @@ namespace Osmuhin\HtmlMetaCrawler;
 
 class Meta
 {
+	/**
+	 * A charset declaration, giving the character encoding in which the document is encoded.
+	 */
 	public ?string $charset = null;
 
 	public ?string $colorScheme = null;
 
-	public ?string $description = null;
-
-	public ?string $author = null;
-
-	public ?string $lang = 'en_US';
-
-	public ?string $msApplicationConfig = null;
-
-	public ?string $msApplicationTileColor = null;
-
-	public ?string $referrer = null;
-
-	public ?string $themeColor = null;
-
-	public ?string $title = null;
-
-	public ?string $viewport = null;
-
-	public ?string $contentSecurityPolicy = null;
-
-	public ?string $contentType = null;
-
-	public ?string $defaultStyle = null;
-
-	public ?string $refresh = null;
-
+	/**
+	 * The name of the application running in the web page.
+	 */
 	public ?string $applicationName = null;
 
+	/**
+	 * A short and accurate summary of the content of the page. Search engines like Google
+	 * may use this field to control the appearance of the webpage in the search result.
+	 */
+	public ?string $description = null;
+
+	/**
+	 * The name of the document's author.
+	 */
+	public ?string $author = null;
+
+	/**
+	 * The identifier of the software that generated the page.
+	 */
 	public ?string $generator = null;
 
+	/**
+	 * The lang global attribute helps define the language of an element: the language that
+	 * non-editable elements are written in, or the language that the editable elements should
+	 * be written in by the user. The attribute contains a single "language tag" in the format
+	 * defined in RFC 5646: Tags for Identifying Languages (also known as BCP 47).
+	 *
+	 * The default value of lang, which means that the language is unknown.
+	 */
+	public ?string $lang = null;
+
+	/**
+	 * Controls the HTTP Referer header of requests sent from the document.
+	 *
+	 * Values for the content attribute of <meta name="referrer">:
+	 *
+	 * - no-referrer: Do not send a HTTP Referer header;
+	 * - origin: Send the origin (https://developer.mozilla.org/en-US/docs/Glossary/Origin)
+	 * of the document;
+	 * - no-referrer-when-downgrade: Send the full URL when the destination is at least as secure
+	 * as the current page (HTTP(S)→HTTPS), but send no referrer when it's less secure
+	 * (HTTPS→HTTP). This is the default behavior;
+	 * - origin-when-cross-origin: Send the full URL (stripped of parameters) for same-origin
+	 * requests, but only send the origin for other cases;
+	 * - same-origin: Send the full URL (stripped of parameters) for same-origin requests.
+	 * Cross-origin requests will contain no referrer header;
+	 * - strict-origin: Send the origin when the destination is at least as secure as the current
+	 * page (HTTP(S)→HTTPS), but send no referrer when it's less secure (HTTPS→HTTP);
+	 * - strict-origin-when-cross-origin: Send the full URL (stripped of parameters) for
+	 * same-origin requests. Send the origin when the destination is at least as secure as
+	 * the current page (HTTP(S)→HTTPS). Otherwise, send no referrer;
+	 * - unsafe-URL: Send the full URL (stripped of parameters) for same-origin or cross-origin
+	 * requests.
+	 */
+	public ?string $referrer = 'no-referrer-when-downgrade';
+
+	/**
+	 * Indicates a suggested color that user agents should use to customize the display of the
+	 * page or of the surrounding user interface. The content attribute contains a valid CSS
+	 * color.
+	 */
+	public array $themeColor = [];
+
+	/**
+	 * Document's title that is shown in a browser's title bar or a page's tab.
+	 */
+	public ?string $title = null;
+
+	/**
+	 * Viewport gives a browser instructions on how to control the page's dimensions and scaling.
+	 */
+	public ?string $viewport = null;
+
+	/**
+	 * Words relevant to the page's content separated by commas.
+	 */
 	public ?string $keywords = null;
 
 	public array $htmlAttributes = [];
@@ -86,13 +135,6 @@ class Meta
 				continue;
 			}
 
-			if (
-				($httpEquiv = @$meta->attributes['http-equiv']) &&
-				$this->handleMetaHttpEquiv($httpEquiv, $meta)
-			) {
-				continue;
-			}
-
 			if ($property = @$meta->attributes['property']) {
 				if (preg_match("/^og\:/i", $property)) {
 					dump('opengraph');
@@ -125,37 +167,24 @@ class Meta
 				return $this->title ??= @$meta->attributes['content'];
 			case 'description':
 				return $this->description = @$meta->attributes['content'];
-			case 'msapplication-TileColor':
-				return $this->msApplicationTileColor = @$meta->attributes['content'];
-			case 'msapplication-config':
-				return $this->msApplicationConfig = @$meta->attributes['content'];
 			case 'theme-color':
-				return $this->themeColor = @$meta->attributes['content'];
+				if ($media = @$meta->attributes['media']) {
+					$this->themeColor[$media] = @$meta->attributes['content'];
+				} else {
+					$this->themeColor[] = @$meta->attributes['content'];
+				}
+
+				return $this->themeColor;
 			case 'color-scheme':
 				return $this->colorScheme = @$meta->attributes['content'];
 			case 'author':
 				return $this->author = @$meta->attributes['content'];
+			case 'keywords':
+				return $this->keywords = @$meta->attributes['content'];
 			case 'application-name':
 				return $this->applicationName = @$meta->attributes['content'];
 			case 'generator':
 				return $this->generator = @$meta->attributes['content'];
-			case 'keywords':
-				return $this->keywords = @$meta->attributes['content'];
-		}
-
-		return false;
-	}
-
-	private function handleMetaHttpEquiv(string $httpEquiv, Element $meta) {
-		switch (mb_strtolower($httpEquiv)) {
-			case 'content-security-policy':
-				return $this->contentSecurityPolicy = @$meta->attributes['content'];
-			case 'content-type':
-				return $this->contentType ??= @$meta->attributes['content'];
-			case 'default-style':
-				return $this->defaultStyle = @$meta->attributes['content'];
-			case 'refresh':
-				return $this->refresh = @$meta->attributes['content'];
 		}
 
 		return false;
