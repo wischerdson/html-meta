@@ -8,8 +8,10 @@ class ElementsCollection
 
 	public ?Element $title = null;
 
+	/** @var \Osmuhin\HtmlMetaCrawler\Element[] */
 	public array $meta = [];
 
+	/** @var \Osmuhin\HtmlMetaCrawler\Element[] */
 	public array $link = [];
 
 	public function setHtml(Element $html)

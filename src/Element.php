@@ -32,7 +32,7 @@ class Element
 	private function setInnerText()
 	{
 		if (
-			$this->node->childNodes->count() !== 1 &&
+			$this->node->childNodes->count() === 1 &&
 			$this->node->firstChild->nodeType === XML_TEXT_NODE
 		) {
 			$this->innerText = $this->node->textContent;

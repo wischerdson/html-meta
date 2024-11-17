@@ -7,6 +7,7 @@
 	bootstrap="vendor/autoload.php"
 	failOnRisky="true"
 	failOnWarning="true"
+	testdox="true"
 >
 	<testsuites>
 		<testsuite name="HTML meta crawler test suite">

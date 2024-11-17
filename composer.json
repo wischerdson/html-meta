@@ -2,6 +2,13 @@
 	"name": "osmuhin/html-meta-crawler",
 	"type": "library",
 	"version": "1.0.0",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Осмухин Даниил",
+			"email": "wischerdson@gmail.com"
+		}
+	],
 	"require": {
 		"php": ">=8.3",
 		"symfony/dom-crawler": "^7.1"
@@ -10,16 +17,9 @@
 		"phpunit/phpunit": "^11.4",
 		"symfony/var-dumper": "^7.1"
 	},
-	"license": "MIT",
 	"autoload": {
 		"psr-4": {
 			"Osmuhin\\HtmlMetaCrawler\\": "src/"
 		}
-	},
-	"authors": [
-		{
-			"name": "Осмухин Даниил",
-			"email": "wischerdson@gmail.com"
-		}
-	]
+	}
 }
