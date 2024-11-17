@@ -9,6 +9,29 @@ class Meta
 	 */
 	public ?string $charset = null;
 
+	/**
+	 * Specifies one or more color schemes with which the document is compatible.
+	 *
+	 * The browser will use this information in tandem with the user's browser or device
+	 * settings to determine what colors to use for everything from background and foregrounds
+	 * to form controls and scrollbars. The primary use for <meta name="color-scheme"> is to
+	 * indicate compatibility with—and order of preference for—light and dark color modes.
+	 *
+	 * The value of the content property for color-scheme may be one of the following:
+	 *
+	 * - normal: The document is unaware of color schemes and should be rendered using the
+	 * default color palette;
+	 * - light, dark, light dark, dark light: One or more color schemes supported by the
+	 * document. Specifying the same color scheme more than once has the same effect as specifying
+	 * it only once. Indicating multiple color schemes indicates that the first scheme is
+	 * preferred by the document, but that the second specified scheme is acceptable if the
+	 * user prefers it.
+	 * - only light: Indicates that the document only supports light mode, with a light
+	 * background and dark foreground colors. By specification, only dark is not valid,
+	 * because forcing a document to render in dark mode when it isn't truly compatible with
+	 * it can result in unreadable content; all major browsers default to light mode if not
+	 * otherwise configured.
+	 */
 	public ?string $colorScheme = null;
 
 	/**
@@ -91,11 +114,11 @@ class Meta
 
 	public array $htmlAttributes = [];
 
+	public array $twitter = [];
+
 	public Favicon $favicon;
 
 	public OpenGraph $openGraph;
-
-	public Twitter $twitter;
 
 	/** @var \Osmuhin\HtmlMetaCrawler\Element[] */
 	public array $unrecognizedMeta = [];
@@ -103,7 +126,6 @@ class Meta
 	public function __construct(private ElementsCollection $collection)
 	{
 		$this->openGraph = new OpenGraph();
-		$this->twitter = new Twitter();
 		$this->favicon = new Favicon();
 
 		$this->title = $this->collection->title?->innerText;
@@ -141,8 +163,8 @@ class Meta
 					continue;
 				}
 
-				if (preg_match("/^twitter\:/i", $property)) {
-					dump('twitter');
+				if (preg_match("/^twitter\:(.*)/i", $property, $matches)) {
+					$this->twitter[$matches[1]] = @$meta->attributes['content'];
 					continue;
 				}
 			}
@@ -185,6 +207,10 @@ class Meta
 				return $this->applicationName = @$meta->attributes['content'];
 			case 'generator':
 				return $this->generator = @$meta->attributes['content'];
+		}
+
+		if (preg_match("/^twitter\:(.*)/i", $name, $matches)) {
+			return $this->twitter[$matches[1]] = @$meta->attributes['content'];
 		}
 
 		return false;
