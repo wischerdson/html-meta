@@ -2,7 +2,9 @@
 
 namespace Osmuhin\HtmlMetaCrawler;
 
-class Meta
+use Osmuhin\HtmlMetaCrawler\Contracts\Dto;
+
+class Meta implements Dto
 {
 	/**
 	 * A charset declaration, giving the character encoding in which the document is encoded.
@@ -111,105 +113,22 @@ class Meta
 
 	public OpenGraph $openGraph;
 
+	public HttpEquiv $httpEquiv;
+
 	/** @var \Osmuhin\HtmlMetaCrawler\Element[] */
 	public array $unrecognizedMeta = [];
 
-	public function __construct(private ElementsCollection $collection)
+	public function __construct()
 	{
 		$this->openGraph = new OpenGraph();
 		$this->favicon = new Favicon();
-
-		$this->title = $this->collection->title?->innerText;
-		$this->lang = @$this->collection->html?->attributes['lang'];
-
-		$this->htmlAttributes = $this->collection->html?->attributes ?: [];
-
-		$this->iterateMetas($collection->meta);
-		$this->iterateLinks($collection->link);
-
-		unset($this->collection);
+		$this->httpEquiv = new HttpEquiv();
 	}
 
-	/**
-	 * @param \Osmuhin\HtmlMetaCrawler\Element[] $metas
-	 */
-	private function iterateMetas(array $metas): void
+	public function toArray(): array
 	{
-		foreach ($metas as $meta) {
-			if ($charset = @$meta->attributes['charset']) {
-				$this->charset = $charset;
-				continue;
-			}
+		return [
 
-			if (
-				($name = @$meta->attributes['name']) &&
-				$this->handleMetaName($name, $meta)
-			) {
-				continue;
-			}
-
-			if ($property = @$meta->attributes['property']) {
-				if (preg_match("/^og\:/i", $property)) {
-					dump('opengraph');
-					continue;
-				}
-
-				if (preg_match("/^twitter\:(.*)/i", $property, $matches)) {
-					$this->twitter[$matches[1]] = @$meta->attributes['content'];
-					continue;
-				}
-			}
-
-			$this->unrecognizedMeta[] = $meta;
-		}
-	}
-
-	/**
-	 * @param \Osmuhin\HtmlMetaCrawler\Element[] $links
-	 */
-	private function iterateLinks(array $links): void
-	{
-
-	}
-
-	private function handleMetaName(string $name, Element $meta)
-	{
-		$name = mb_strtolower($name, 'UTF-8');
-		$content = @$meta->attributes['content'];
-
-		switch ($name) {
-			case 'viewport':
-				return $this->viewport = $content;
-			case 'title':
-				return $this->title ??= $content;
-			case 'description':
-				return $this->description = $content;
-			case 'color-scheme':
-				return $this->colorScheme = $content;
-			case 'author':
-				return $this->author = $content;
-			case 'keywords':
-				return $this->keywords = $content;
-			case 'application-name':
-				return $this->applicationName = $content;
-			case 'generator':
-				return $this->generator = $content;
-			case 'referrer':
-				return $this->referrer = $content;
-			case 'theme-color':
-				if ($media = @$meta->attributes['media']) {
-					$this->themeColor[$media] = $content;
-				} else {
-					$this->themeColor[] = $content;
-				}
-
-				return $this->themeColor;
-		}
-
-		if (preg_match("/^twitter\:(.*)/i", $name, $matches)) {
-			return $this->twitter[$matches[1]] = $content;
-		}
-
-		return false;
+		];
 	}
 }

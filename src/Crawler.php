@@ -2,22 +2,27 @@
 
 namespace Osmuhin\HtmlMetaCrawler;
 
-use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Component\DomCrawler\Crawler as DomCrawler;
 
 class Crawler
 {
 	/**
-	 * You can override DTO class your own.
-	 * It should extends the \Osmuhin\HtmlMetaCrawler\Distributor class
+	 * You can override distributor class your own.
+	 * It should extends the \Osmuhin\HtmlMetaCrawler\Distributor class.
 	 */
 	public static string $distributorClass = Distributor::class;
 
-	private string $url;
+	/**
+	 * You can override dto-class of meta your own.
+	 * It should extends the \Osmuhin\HtmlMetaCrawler\Dto\Meta class.
+	 */
+	public static string $metaClass = Meta::class;
 
+	/** A string with raw html */
 	private string $html;
 
+	/** An instance of the distributor class that generates the final result */
 	private Distributor $distributor;
 
 	public function __construct()
@@ -25,25 +30,12 @@ class Crawler
 		$this->distributor = new self::$distributorClass();
 	}
 
-	/**
-	 * @throws \InvalidArgumentException
-	 */
-	public static function init(string $url = null, string $html = null): self
+	public static function init(string $html = null): self
 	{
-		if ($url !== null && $html !== null) {
-			throw new InvalidArgumentException('You cannot use both "url" and "html" arguments at the same time.');
-		}
-
 		$crawler = new self();
+		$crawler->html = $html;
 
-		return $url ? $crawler->setUrl($url) : $crawler->setHtmlString($html);
-	}
-
-	public function setUrl(string $url): self
-	{
-		$this->url = $url;
-
-		return $this;
+		return $crawler;
 	}
 
 	public function setHtmlString(string $html): self
@@ -53,9 +45,14 @@ class Crawler
 		return $this;
 	}
 
+	/**
+	 * @throws \RuntimeException
+	 */
 	public function run(): Meta
 	{
-		$this->checkHtmlForParsing();
+		if (!isset($this->html)) {
+			throw new RuntimeException('An HTML string must be provided for parsing.');
+		}
 
 		$crawler = new DomCrawler($this->html);
 
@@ -85,23 +82,6 @@ class Crawler
 			}
 		}
 
-		return $this->distributor;
-	}
-
-	/**
-	 * @throws \RuntimeException
-	 */
-	private function checkHtmlForParsing()
-	{
-		if (isset($this->html)) {
-			return;
-		}
-
-		if (!isset($this->url)) {
-			throw new RuntimeException('Either an HTML string or a site URL must be provided for parsing.');
-		}
-
-		/** @todo needs to be rewritten */
-		$this->html = file_get_contents($this->url);
+		return $this->distributor->getMeta();
 	}
 }
