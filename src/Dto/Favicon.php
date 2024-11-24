@@ -1,8 +1,8 @@
 <?php
 
-namespace Osmuhin\HtmlMetaCrawler;
+namespace Osmuhin\HtmlMetaCrawler\Dto;
 
 class Favicon
 {
-	
+
 }

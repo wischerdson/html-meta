@@ -1,6 +1,6 @@
 <?php
 
-namespace Osmuhin\HtmlMetaCrawler;
+namespace Osmuhin\HtmlMetaCrawler\Dto;
 
 use Osmuhin\HtmlMetaCrawler\Contracts\Dto;
 
