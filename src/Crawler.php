@@ -2,6 +2,7 @@
 
 namespace Osmuhin\HtmlMetaCrawler;
 
+use Osmuhin\HtmlMetaCrawler\Dto\Meta;
 use RuntimeException;
 use Symfony\Component\DomCrawler\Crawler as DomCrawler;
 

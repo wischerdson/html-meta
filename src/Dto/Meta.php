@@ -8,102 +8,121 @@ class Meta implements Dto
 {
 	/**
 	 * A charset declaration, giving the character encoding in which the document is encoded.
-	 *
-	 * <meta charset="utf-8">
+	 * Example: <meta charset="utf-8"\>
 	 */
 	public ?string $charset = null;
 
 	/**
 	 * Specifies one or more color schemes with which the document is compatible.
-	 *
-	 * <meta name="color-scheme" content="light dark">
+	 * Example: <meta name="color-scheme" content="light dark"\>
 	 */
 	public ?string $colorScheme = null;
 
 	/**
 	 * The name of the application running in the web page.
-	 *
-	 * <meta name="application-name" content="Amazon">
+	 * Example: <meta name="application-name" content="Amazon"\>
 	 */
 	public ?string $applicationName = null;
 
 	/**
+	 * Specifies the ownership of the copyright.
+	 * Example: <meta name="copyright" content="Apple Inc."\>
+	 */
+	public ?string $copyright = null;
+
+	/**
 	 * A short and accurate summary of the content of the page.
-	 *
-	 * <meta name="description" content="Some description">
+	 * <meta name="description" content="Some description"\>
 	 */
 	public ?string $description = null;
 
 	/**
 	 * The name of the document's author.
-	 *
-	 * <meta name="author" content="Osmuhin Daniil">
+	 * <meta name="author" content="Osmuhin Daniil"\>
 	 */
 	public ?string $author = null;
 
 	/**
 	 * The identifier of the software that generated the page.
-	 *
-	 * <meta name="generator" content="WordPress.com">
+	 * <meta name="generator" content="WordPress.com"\>
 	 */
 	public ?string $generator = null;
 
 	/**
-	 * The lang global attribute helps define the language of an element: the language that
-	 * non-editable elements are written in, or the language that the editable elements should
-	 * be written in by the user. The attribute contains a single "language tag" in the format
-	 * defined in RFC 5646: Tags for Identifying Languages (also known as BCP 47).
-	 *
-	 * The default value of lang, which means that the language is unknown.
+	 * The language of the document content.
+	 * Example: <html lang="en_US"\></html\>
 	 */
 	public ?string $lang = null;
 
 	/**
-	 * Controls the HTTP Referer header of requests sent from the document.
-	 *
-	 * Values for the content attribute of <meta name="referrer">:
-	 *
-	 * - no-referrer: Do not send a HTTP Referer header;
-	 * - origin: Send the origin (https://developer.mozilla.org/en-US/docs/Glossary/Origin)
-	 * of the document;
-	 * - no-referrer-when-downgrade: Send the full URL when the destination is at least as secure
-	 * as the current page (HTTP(S)→HTTPS), but send no referrer when it's less secure
-	 * (HTTPS→HTTP). This is the default behavior;
-	 * - origin-when-cross-origin: Send the full URL (stripped of parameters) for same-origin
-	 * requests, but only send the origin for other cases;
-	 * - same-origin: Send the full URL (stripped of parameters) for same-origin requests.
-	 * Cross-origin requests will contain no referrer header;
-	 * - strict-origin: Send the origin when the destination is at least as secure as the current
-	 * page (HTTP(S)→HTTPS), but send no referrer when it's less secure (HTTPS→HTTP);
-	 * - strict-origin-when-cross-origin: Send the full URL (stripped of parameters) for
-	 * same-origin requests. Send the origin when the destination is at least as secure as
-	 * the current page (HTTP(S)→HTTPS). Otherwise, send no referrer;
-	 * - unsafe-URL: Send the full URL (stripped of parameters) for same-origin or cross-origin
-	 * requests.
+	 * Contains the absolute or partial address from which a resource has been requested.
+	 * Example: <meta name="referrer" content="origin"\>
 	 */
 	public ?string $referrer = null;
 
 	/**
 	 * Indicates a suggested color that user agents should use to customize the display of the
-	 * page or of the surrounding user interface. The content attribute contains a valid CSS
-	 * color.
+	 * page or of the surrounding user interface.
+	 * The content attribute contains a valid CSS color.
+	 * Examples:
+	 *     <meta name="theme-color" content="#4285f4"\>
+	 *     <meta name="theme-color" media="(prefers-color-scheme: light)" content="cyan"\>
 	 */
 	public array $themeColor = [];
 
 	/**
 	 * Document's title that is shown in a browser's title bar or a page's tab.
+	 * Example: <title\>Some title</title\>
 	 */
 	public ?string $title = null;
 
 	/**
 	 * Viewport gives a browser instructions on how to control the page's dimensions and scaling.
+	 * Example: <meta name="viewport" content="width=device-width, initial-scale=1"\>
 	 */
 	public ?string $viewport = null;
 
 	/**
 	 * Words relevant to the page's content separated by commas.
+	 * Example: <meta name="keywords" content="money, exchange"\>
 	 */
 	public ?string $keywords = null;
+
+	/**
+	 * The behavior that cooperative crawlers, or "robots", should use with the page.
+	 * Example: <meta name="robots" content="noindex"\>
+	 */
+	public ?string $robots = null;
+
+	/**
+	 * Sets whether a web application runs in full-screen mode.
+	 * Example: <meta name="apple-mobile-web-app-capable" content="yes"\>
+	 */
+	public ?string $appleMobileWebAppCapable = null;
+
+	/**
+	 * Sets the style of the status bar for a web application.
+	 * Example: <meta name="apple-mobile-web-app-status-bar-style" content="black"\>
+	 */
+	public ?string $appleMobileWebAppStatusBarStyle = null;
+
+	/**
+	 * Enables or disables automatic detection of possible phone numbers in a webpage.
+	 * Example: <meta name="format-detection" content="telephone=no"\>
+	 */
+	public ?string $formatDetection = null;
+
+	/**
+	 * Sets the direction of text output inside the element.
+	 * Example: <html dir="ltr"\></html\>
+	 */
+	public ?string $dir = null;
+
+	/**
+	 * Implements a smart app banner on the website.
+	 * Example: <meta name="apple-itunes-app" content="app-id=myAppStoreID, app-argument=myURL"\>
+	 */
+	public ?string $appleItunesApp = null;
 
 	public array $htmlAttributes = [];
 
@@ -128,7 +147,30 @@ class Meta implements Dto
 	public function toArray(): array
 	{
 		return [
-
+			'appleItunesApp' => $this->appleItunesApp,
+			'appleMobileWebAppCapable' => $this->appleMobileWebAppCapable,
+			'appleMobileWebAppStatusBarStyle' => $this->appleMobileWebAppStatusBarStyle,
+			'applicationName' => $this->applicationName,
+			'author' => $this->author,
+			'charset' => $this->charset,
+			'colorScheme' => $this->colorScheme,
+			'copyright' => $this->copyright,
+			'description' => $this->description,
+			'dir' => $this->dir,
+			'favicon' => $this->favicon->toArray(),
+			'formatDetection' => $this->formatDetection,
+			'generator' => $this->generator,
+			'htmlAttributes' => $this->htmlAttributes,
+			'httpEquiv' => $this->httpEquiv->toArray(),
+			'keywords' => $this->keywords,
+			'lang' => $this->lang,
+			'openGraph' => $this->openGraph->toArray(),
+			'referrer' => $this->referrer,
+			'robots' => $this->robots,
+			'themeColor' => $this->themeColor,
+			'title' => $this->title,
+			'twitter' => $this->twitter,
+			'viewport' => $this->viewport,
 		];
 	}
 
@@ -146,6 +188,12 @@ class Meta implements Dto
 			'application-name' => 'applicationName',
 			'generator' => 'generator',
 			'referrer' => 'referrer',
+			'copyright' => 'copyright',
+			'robots' => 'robots',
+			'apple-mobile-web-app-capable' => 'appleMobileWebAppCapable',
+			'apple-mobile-web-app-status-bar-style' => 'appleMobileWebAppStatusBarStyle',
+			'format-detection' => 'formatDetection',
+			'apple-itunes-app' => 'appleItunesApp',
 		];
 	}
 }

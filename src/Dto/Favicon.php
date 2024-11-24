@@ -2,7 +2,14 @@
 
 namespace Osmuhin\HtmlMetaCrawler\Dto;
 
-class Favicon
-{
+use Osmuhin\HtmlMetaCrawler\Contracts\Dto;
 
+class Favicon implements Dto
+{
+	public function toArray(): array
+	{
+		return [
+
+		];
+	}
 }

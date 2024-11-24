@@ -16,6 +16,7 @@ class Distributor
 	public function setHtml(Element $html): void
 	{
 		$this->meta->lang = @$html->attributes['lang'];
+		$this->meta->dir = @$html->attributes['dir'];
 		$this->meta->htmlAttributes = $html->attributes;
 	}
 
@@ -80,6 +81,7 @@ class Distributor
 		switch ($name) {
 			case 'title':
 				$this->meta->title ??= $content;
+
 				return;
 			case 'theme-color':
 				if ($media = @$meta->attributes['media']) {
