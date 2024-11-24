@@ -2,6 +2,8 @@
 
 namespace Osmuhin\HtmlMetaCrawler;
 
+use Osmuhin\HtmlMetaCrawler\Dto\Meta;
+
 class Distributor
 {
 	private Meta $meta;
@@ -28,21 +30,23 @@ class Distributor
 			return;
 		}
 
-		if (
-			($name = @$meta->attributes['name']) &&
-			$this->handleNamedMeta($name, $meta)
-		) {
+		if (isset($meta->attributes['name'])) {
+			$this->handleNamedMeta($meta->attributes['name'], $meta);
+
 			return;
 		}
 
-		if (
-			($property = @$meta->attributes['property']) &&
-			$this->handleMetaWithProperty($property, $meta)
-		) {
+		if (isset($meta->attributes['property'])) {
+			$this->handleMetaWithProperty($meta->attributes['property'], $meta);
+
 			return;
 		}
 
-		$this->meta->unrecognizedMeta[] = $meta;
+		if (isset($meta->attributes['http-equiv'])) {
+			$this->handleHttpEquivMeta($meta->attributes['http-equiv'], $meta);
+
+			return;
+		}
 	}
 
 	public function setLink(Element $link): void
@@ -55,30 +59,28 @@ class Distributor
 		return $this->meta;
 	}
 
-	protected function handleNamedMeta(string $name, Element $meta): bool
+	protected function handleNamedMeta(string $name, Element $meta): void
 	{
-		$name = mb_strtolower($name, 'UTF-8');
-		$content = @$meta->attributes['content'];
+		if (!$name = mb_strtolower(trim($name), 'UTF-8')) {
+			return;
+		}
+
+		if (!$content = @$meta->attributes['content']) {
+			return;
+		}
+
+		$map = $this->meta->getPropertiesMap();
+
+		if (isset($map[$name])) {
+			$this->meta->{$map[$name]} = $content;
+
+			return;
+		}
 
 		switch ($name) {
-			case 'viewport':
-				return $this->meta->viewport = $content;
 			case 'title':
-				return $this->meta->title ??= $content;
-			case 'description':
-				return $this->meta->description = $content;
-			case 'color-scheme':
-				return $this->meta->colorScheme = $content;
-			case 'author':
-				return $this->meta->author = $content;
-			case 'keywords':
-				return $this->meta->keywords = $content;
-			case 'application-name':
-				return $this->meta->applicationName = $content;
-			case 'generator':
-				return $this->meta->generator = $content;
-			case 'referrer':
-				return $this->meta->referrer = $content;
+				$this->meta->title ??= $content;
+				return;
 			case 'theme-color':
 				if ($media = @$meta->attributes['media']) {
 					$this->meta->themeColor[$media] = $content;
@@ -86,14 +88,14 @@ class Distributor
 					$this->meta->themeColor[] = $content;
 				}
 
-				return $this->meta->themeColor;
+				return;
 		}
 
 		if (preg_match("/^twitter\:(.*)/i", $name, $matches)) {
-			return $this->meta->twitter[$matches[1]] = $content;
-		}
+			$this->meta->twitter[$matches[1]] = $content;
 
-		return false;
+			return;
+		}
 	}
 
 	protected function handleMetaWithProperty(string $property, Element $meta): bool
@@ -109,5 +111,26 @@ class Distributor
 		}
 
 		return false;
+	}
+
+	protected function handleHttpEquivMeta(string $name, Element $meta): void
+	{
+		if (!$name = mb_strtolower(trim($name), 'UTF-8')) {
+			return;
+		}
+
+		if (!$content = @$meta->attributes['content']) {
+			return;
+		}
+
+		$map = $this->meta->httpEquiv->getPropertiesMap();
+
+		if (isset($map[$name])) {
+			$this->meta->httpEquiv->{$map[$name]} = $content;
+
+			return;
+		}
+
+		$this->meta->httpEquiv->other[$name] = $content;
 	}
 }

@@ -92,4 +92,23 @@ class HttpEquiv implements Dto
 			'accessControlAllowOrigin' => $this->accessControlAllowOrigin
 		] + $this->other;
 	}
+
+	/**
+	 * Map of the correspondence of meta tag properties to object properties
+	 */
+	public function getPropertiesMap(): array
+	{
+		return [
+			'content-type' => 'contentType',
+			'x-ua-compatible' => 'xUaCompatible',
+			'cache-control' => 'cacheControl',
+			'content-language' => 'contentLanguage',
+			'pragma' => 'pragma',
+			'expires' => 'expires',
+			'refresh' => 'refresh',
+			'content-security-policy' => 'contentSecurityPolicy',
+			'x-dns-prefetch-control' => 'xDnsPrefetchControl',
+			'access-control-allow-origin' => 'accessControlAllowOrigin',
+		];
+	}
 }

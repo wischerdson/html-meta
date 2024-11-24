@@ -131,4 +131,21 @@ class Meta implements Dto
 
 		];
 	}
+
+	/**
+	 * Map of the correspondence of meta tag properties to object properties
+	 */
+	public function getPropertiesMap(): array
+	{
+		return [
+			'viewport' => 'viewport',
+			'description' => 'description',
+			'color-scheme' => 'colorScheme',
+			'author' => 'author',
+			'keywords' => 'keywords',
+			'application-name' => 'applicationName',
+			'generator' => 'generator',
+			'referrer' => 'referrer',
+		];
+	}
 }
