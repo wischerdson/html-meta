@@ -8,33 +8,35 @@ use Symfony\Component\DomCrawler\Crawler as DomCrawler;
 
 class Crawler
 {
-	/** You can override DTO class your own. */
-	public static string $metaDtoClass = Meta::class;
+	/**
+	 * You can override DTO class your own.
+	 * It should extends the \Osmuhin\HtmlMetaCrawler\Distributor class
+	 */
+	public static string $distributorClass = Distributor::class;
 
 	private string $url;
 
 	private string $html;
 
-	private ElementsCollection $collection;
+	private Distributor $distributor;
 
 	public function __construct()
 	{
-		$this->collection = new ElementsCollection();
+		$this->distributor = new self::$distributorClass();
 	}
 
 	/**
 	 * @throws \InvalidArgumentException
 	 */
-	public static function init(string $url = null, string $html = null)
+	public static function init(string $url = null, string $html = null): self
 	{
 		if ($url !== null && $html !== null) {
 			throw new InvalidArgumentException('You cannot use both "url" and "html" arguments at the same time.');
 		}
 
 		$crawler = new self();
-		$url ? $crawler->setUrl($url) : $crawler->setHtmlString($html);
 
-		return $crawler;
+		return $url ? $crawler->setUrl($url) : $crawler->setHtmlString($html);
 	}
 
 	public function setUrl(string $url): self
@@ -58,7 +60,7 @@ class Crawler
 		$crawler = new DomCrawler($this->html);
 
 		if ($htmlNode = $crawler->filterXPath('//html')->getNode(0)) {
-			$this->collection->setHtml(
+			$this->distributor->setHtml(
 				new Element($htmlNode)
 			);
 		}
@@ -66,24 +68,24 @@ class Crawler
 		foreach ($crawler->filterXPath('//head/*') as $node) {
 			switch ($node->nodeName) {
 				case 'title':
-					$this->collection->setTitle(
+					$this->distributor->setTitle(
 						new Element($node)
 					);
 					break;
 				case 'link':
-					$this->collection->addLink(
+					$this->distributor->setLink(
 						new Element($node)
 					);
 					break;
 				case 'meta':
-					$this->collection->addMeta(
+					$this->distributor->setMeta(
 						new Element($node)
 					);
 					break;
 			}
 		}
 
-		return new self::$metaDtoClass($this->collection);
+		return $this->distributor;
 	}
 
 	/**

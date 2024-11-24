@@ -6,52 +6,43 @@ class Meta
 {
 	/**
 	 * A charset declaration, giving the character encoding in which the document is encoded.
+	 *
+	 * <meta charset="utf-8">
 	 */
 	public ?string $charset = null;
 
 	/**
 	 * Specifies one or more color schemes with which the document is compatible.
 	 *
-	 * The browser will use this information in tandem with the user's browser or device
-	 * settings to determine what colors to use for everything from background and foregrounds
-	 * to form controls and scrollbars. The primary use for <meta name="color-scheme"> is to
-	 * indicate compatibility with—and order of preference for—light and dark color modes.
-	 *
-	 * The value of the content property for color-scheme may be one of the following:
-	 *
-	 * - normal: The document is unaware of color schemes and should be rendered using the
-	 * default color palette;
-	 * - light, dark, light dark, dark light: One or more color schemes supported by the
-	 * document. Specifying the same color scheme more than once has the same effect as specifying
-	 * it only once. Indicating multiple color schemes indicates that the first scheme is
-	 * preferred by the document, but that the second specified scheme is acceptable if the
-	 * user prefers it.
-	 * - only light: Indicates that the document only supports light mode, with a light
-	 * background and dark foreground colors. By specification, only dark is not valid,
-	 * because forcing a document to render in dark mode when it isn't truly compatible with
-	 * it can result in unreadable content; all major browsers default to light mode if not
-	 * otherwise configured.
+	 * <meta name="color-scheme" content="light dark">
 	 */
 	public ?string $colorScheme = null;
 
 	/**
 	 * The name of the application running in the web page.
+	 *
+	 * <meta name="application-name" content="Amazon">
 	 */
 	public ?string $applicationName = null;
 
 	/**
-	 * A short and accurate summary of the content of the page. Search engines like Google
-	 * may use this field to control the appearance of the webpage in the search result.
+	 * A short and accurate summary of the content of the page.
+	 *
+	 * <meta name="description" content="Some description">
 	 */
 	public ?string $description = null;
 
 	/**
 	 * The name of the document's author.
+	 *
+	 * <meta name="author" content="Osmuhin Daniil">
 	 */
 	public ?string $author = null;
 
 	/**
 	 * The identifier of the software that generated the page.
+	 *
+	 * <meta name="generator" content="WordPress.com">
 	 */
 	public ?string $generator = null;
 
@@ -88,7 +79,7 @@ class Meta
 	 * - unsafe-URL: Send the full URL (stripped of parameters) for same-origin or cross-origin
 	 * requests.
 	 */
-	public ?string $referrer = 'no-referrer-when-downgrade';
+	public ?string $referrer = null;
 
 	/**
 	 * Indicates a suggested color that user agents should use to customize the display of the
@@ -129,7 +120,7 @@ class Meta
 		$this->favicon = new Favicon();
 
 		$this->title = $this->collection->title?->innerText;
-		$this->lang = @$this->collection->html?->attributes['lang'] ?: $this->lang;
+		$this->lang = @$this->collection->html?->attributes['lang'];
 
 		$this->htmlAttributes = $this->collection->html?->attributes ?: [];
 
@@ -181,36 +172,42 @@ class Meta
 
 	}
 
-	private function handleMetaName(string $name, Element $meta) {
-		switch (mb_strtolower($name)) {
+	private function handleMetaName(string $name, Element $meta)
+	{
+		$name = mb_strtolower($name, 'UTF-8');
+		$content = @$meta->attributes['content'];
+
+		switch ($name) {
 			case 'viewport':
-				return $this->viewport = @$meta->attributes['content'];
+				return $this->viewport = $content;
 			case 'title':
-				return $this->title ??= @$meta->attributes['content'];
+				return $this->title ??= $content;
 			case 'description':
-				return $this->description = @$meta->attributes['content'];
+				return $this->description = $content;
+			case 'color-scheme':
+				return $this->colorScheme = $content;
+			case 'author':
+				return $this->author = $content;
+			case 'keywords':
+				return $this->keywords = $content;
+			case 'application-name':
+				return $this->applicationName = $content;
+			case 'generator':
+				return $this->generator = $content;
+			case 'referrer':
+				return $this->referrer = $content;
 			case 'theme-color':
 				if ($media = @$meta->attributes['media']) {
-					$this->themeColor[$media] = @$meta->attributes['content'];
+					$this->themeColor[$media] = $content;
 				} else {
-					$this->themeColor[] = @$meta->attributes['content'];
+					$this->themeColor[] = $content;
 				}
 
 				return $this->themeColor;
-			case 'color-scheme':
-				return $this->colorScheme = @$meta->attributes['content'];
-			case 'author':
-				return $this->author = @$meta->attributes['content'];
-			case 'keywords':
-				return $this->keywords = @$meta->attributes['content'];
-			case 'application-name':
-				return $this->applicationName = @$meta->attributes['content'];
-			case 'generator':
-				return $this->generator = @$meta->attributes['content'];
 		}
 
 		if (preg_match("/^twitter\:(.*)/i", $name, $matches)) {
-			return $this->twitter[$matches[1]] = @$meta->attributes['content'];
+			return $this->twitter[$matches[1]] = $content;
 		}
 
 		return false;
