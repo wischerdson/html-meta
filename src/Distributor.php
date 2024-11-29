@@ -2,15 +2,33 @@
 
 namespace Osmuhin\HtmlMetaCrawler;
 
+use Osmuhin\HtmlMetaCrawler\Contracts\Distributor as DistributorContract;
+use Osmuhin\HtmlMetaCrawler\Contracts\Dto;
 use Osmuhin\HtmlMetaCrawler\Dto\Meta;
 
-class Distributor
+class Distributor implements DistributorContract
 {
-	private Meta $meta;
+	private DistributorOpenGraph $ogDistributor;
 
-	public function __construct()
+	private DistributorHttpEquiv $httpEquivDistributor;
+
+	public function __construct(private Meta $meta)
 	{
-		$this->meta = new Crawler::$metaClass();
+		$this->ogDistributor = new DistributorOpenGraph($this->meta->openGraph);
+		$this->httpEquivDistributor = new DistributorHttpEquiv($this->meta->httpEquiv);
+	}
+
+	public static function assignAccordingToTheMap(Dto $object, string $name, string $content)
+	{
+		$map = $object::getPropertiesMap();
+
+		if (isset($map[$name])) {
+			$object->{$map[$name]} ??= $content;
+
+			return true;
+		}
+
+		return false;
 	}
 
 	public function setHtml(Element $html): void
@@ -44,7 +62,17 @@ class Distributor
 		}
 
 		if (isset($meta->attributes['http-equiv'])) {
-			$this->handleHttpEquivMeta($meta->attributes['http-equiv'], $meta);
+			$name = $meta->attributes['http-equiv'];
+
+			if (!$name = mb_strtolower(trim($name), 'UTF-8')) {
+				return;
+			}
+
+			if (!$content = @$meta->attributes['content']) {
+				return;
+			}
+
+			$this->httpEquivDistributor->set($name, $content);
 
 			return;
 		}
@@ -53,11 +81,6 @@ class Distributor
 	public function setLink(Element $link): void
 	{
 
-	}
-
-	public function getMeta(): Meta
-	{
-		return $this->meta;
 	}
 
 	protected function handleNamedMeta(string $name, Element $meta): void
@@ -70,11 +93,7 @@ class Distributor
 			return;
 		}
 
-		$map = $this->meta->getPropertiesMap();
-
-		if (isset($map[$name])) {
-			$this->meta->{$map[$name]} = $content;
-
+		if (self::assignAccordingToTheMap($this->meta, $name, $content)) {
 			return;
 		}
 
@@ -100,39 +119,23 @@ class Distributor
 		}
 	}
 
-	protected function handleMetaWithProperty(string $property, Element $meta): bool
+	protected function handleMetaWithProperty(string $property, Element $meta): void
 	{
-		if (preg_match("/^og\:/i", $property)) {
-			dump('opengraph');
-
-			return true;
-		}
-
-		if (preg_match("/^twitter\:(.*)/i", $property, $matches)) {
-			return $this->meta->twitter[$matches[1]] = @$meta->attributes['content'];
-		}
-
-		return false;
-	}
-
-	protected function handleHttpEquivMeta(string $name, Element $meta): void
-	{
-		if (!$name = mb_strtolower(trim($name), 'UTF-8')) {
-			return;
-		}
+		$property = mb_strtolower(trim($property), 'UTF-8');
 
 		if (!$content = @$meta->attributes['content']) {
 			return;
 		}
 
-		$map = $this->meta->httpEquiv->getPropertiesMap();
-
-		if (isset($map[$name])) {
-			$this->meta->httpEquiv->{$map[$name]} = $content;
-
+		if ($this->ogDistributor->set($property, $content)) {
 			return;
 		}
 
-		$this->meta->httpEquiv->other[$name] = $content;
+		if (preg_match("/^twitter\:(.*)/i", $property, $matches)) {
+			$this->meta->twitter[$matches[1]] = @$meta->attributes['content'];
+			unset($matches);
+
+			return;
+		}
 	}
 }

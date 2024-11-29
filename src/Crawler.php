@@ -26,9 +26,13 @@ class Crawler
 	/** An instance of the distributor class that generates the final result */
 	private Distributor $distributor;
 
+	private Meta $meta;
+
 	public function __construct()
 	{
-		$this->distributor = new self::$distributorClass();
+		$this->meta = new self::$metaClass();
+
+		$this->distributor = new self::$distributorClass($this->meta);
 	}
 
 	public static function init(string $html = null): self
@@ -83,6 +87,6 @@ class Crawler
 			}
 		}
 
-		return $this->distributor->getMeta();
+		return $this->meta;
 	}
 }

@@ -96,7 +96,7 @@ class HttpEquiv implements Dto
 	/**
 	 * Map of the correspondence of meta tag properties to object properties
 	 */
-	public function getPropertiesMap(): array
+	public static function getPropertiesMap(): array
 	{
 		return [
 			'content-type' => 'contentType',
