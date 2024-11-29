@@ -1,8 +1,8 @@
 <?php
 
-namespace Osmuhin\HtmlMetaCrawler\Dto\OpenGraph;
+namespace Osmuhin\HtmlMeta\Dto\OpenGraph;
 
-use Osmuhin\HtmlMetaCrawler\Contracts\Dto;
+use Osmuhin\HtmlMeta\Contracts\Dto;
 
 class MusicSong implements Dto
 {

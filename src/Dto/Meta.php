@@ -1,8 +1,8 @@
 <?php
 
-namespace Osmuhin\HtmlMetaCrawler\Dto;
+namespace Osmuhin\HtmlMeta\Dto;
 
-use Osmuhin\HtmlMetaCrawler\Contracts\Dto;
+use Osmuhin\HtmlMeta\Contracts\Dto;
 
 class Meta implements Dto
 {
@@ -134,7 +134,7 @@ class Meta implements Dto
 
 	public HttpEquiv $httpEquiv;
 
-	/** @var \Osmuhin\HtmlMetaCrawler\Element[] */
+	/** @var \Osmuhin\HtmlMeta\Element[] */
 	public array $unrecognizedMeta = [];
 
 	public function __construct()

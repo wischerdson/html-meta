@@ -1,9 +1,9 @@
 <?php
 
-namespace Osmuhin\HtmlMetaCrawler;
+namespace Osmuhin\HtmlMeta;
 
-use Osmuhin\HtmlMetaCrawler\Contracts\Distributor;
-use Osmuhin\HtmlMetaCrawler\Dto\HttpEquiv;
+use Osmuhin\HtmlMeta\Contracts\Distributor;
+use Osmuhin\HtmlMeta\Dto\HttpEquiv;
 
 class DistributorHttpEquiv implements Distributor
 {

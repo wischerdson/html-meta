@@ -1,8 +1,8 @@
 <?php
 
-namespace Osmuhin\HtmlMetaCrawler;
+namespace Osmuhin\HtmlMeta;
 
-use Osmuhin\HtmlMetaCrawler\Dto\Meta;
+use Osmuhin\HtmlMeta\Dto\Meta;
 use RuntimeException;
 use Symfony\Component\DomCrawler\Crawler as DomCrawler;
 
@@ -10,13 +10,13 @@ class Crawler
 {
 	/**
 	 * You can override distributor class your own.
-	 * It should extends the \Osmuhin\HtmlMetaCrawler\Distributor class.
+	 * It should extends the \Osmuhin\HtmlMeta\Distributor class.
 	 */
 	public static string $distributorClass = Distributor::class;
 
 	/**
 	 * You can override dto-class of meta your own.
-	 * It should extends the \Osmuhin\HtmlMetaCrawler\Dto\Meta class.
+	 * It should extends the \Osmuhin\HtmlMeta\Dto\Meta class.
 	 */
 	public static string $metaClass = Meta::class;
 

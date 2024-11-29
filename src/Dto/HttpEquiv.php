@@ -1,8 +1,8 @@
 <?php
 
-namespace Osmuhin\HtmlMetaCrawler\Dto;
+namespace Osmuhin\HtmlMeta\Dto;
 
-use Osmuhin\HtmlMetaCrawler\Contracts\Dto;
+use Osmuhin\HtmlMeta\Contracts\Dto;
 
 /**
  * The http-equiv attribute in HTML is used inside the <meta> tag to transmit meta information

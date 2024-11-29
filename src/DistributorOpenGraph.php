@@ -1,10 +1,10 @@
 <?php
 
-namespace Osmuhin\HtmlMetaCrawler;
+namespace Osmuhin\HtmlMeta;
 
-use Osmuhin\HtmlMetaCrawler\Contracts\Distributor;
-use Osmuhin\HtmlMetaCrawler\Dto\OpenGraph;
-use Osmuhin\HtmlMetaCrawler\Dto\OpenGraph\Image;
+use Osmuhin\HtmlMeta\Contracts\Distributor;
+use Osmuhin\HtmlMeta\Dto\OpenGraph;
+use Osmuhin\HtmlMeta\Dto\OpenGraph\Image;
 
 class DistributorOpenGraph implements Distributor
 {

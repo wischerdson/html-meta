@@ -1,5 +1,5 @@
 {
-	"name": "osmuhin/html-meta-crawler",
+	"name": "osmuhin/html-meta",
 	"type": "library",
 	"version": "1.0.0",
 	"license": "MIT",
@@ -19,7 +19,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Osmuhin\\HtmlMetaCrawler\\": "src/"
+			"Osmuhin\\HtmlMeta\\": "src/"
 		}
 	},
 	"autoload-dev": {

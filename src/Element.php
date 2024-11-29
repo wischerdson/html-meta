@@ -1,6 +1,6 @@
 <?php
 
-namespace Osmuhin\HtmlMetaCrawler;
+namespace Osmuhin\HtmlMeta;
 
 use DOMNode;
 

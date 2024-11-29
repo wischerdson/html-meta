@@ -1,8 +1,8 @@
 <?php
 
-use Osmuhin\HtmlMetaCrawler\Element;
-use Osmuhin\HtmlMetaCrawler\ElementsCollection;
-use Osmuhin\HtmlMetaCrawler\Meta;
+use Osmuhin\HtmlMeta\Element;
+use Osmuhin\HtmlMeta\ElementsCollection;
+use Osmuhin\HtmlMeta\Meta;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;

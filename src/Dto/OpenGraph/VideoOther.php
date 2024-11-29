@@ -1,6 +1,6 @@
 <?php
 
-namespace Osmuhin\HtmlMetaCrawler\Dto\OpenGraph;
+namespace Osmuhin\HtmlMeta\Dto\OpenGraph;
 
 class VideoOther extends VideoMovie
 {

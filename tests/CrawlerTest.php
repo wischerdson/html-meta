@@ -1,7 +1,7 @@
 <?php
 
-use Osmuhin\HtmlMetaCrawler\Crawler;
-use Osmuhin\HtmlMetaCrawler\Meta;
+use Osmuhin\HtmlMeta\Crawler;
+use Osmuhin\HtmlMeta\Meta;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;

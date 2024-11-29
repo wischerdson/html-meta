@@ -1,6 +1,6 @@
 <?php
 
-namespace Osmuhin\HtmlMetaCrawler\Contracts;
+namespace Osmuhin\HtmlMeta\Contracts;
 
 interface Dto
 {

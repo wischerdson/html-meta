@@ -1,10 +1,10 @@
 <?php
 
-namespace Osmuhin\HtmlMetaCrawler;
+namespace Osmuhin\HtmlMeta;
 
-use Osmuhin\HtmlMetaCrawler\Contracts\Distributor as DistributorContract;
-use Osmuhin\HtmlMetaCrawler\Contracts\Dto;
-use Osmuhin\HtmlMetaCrawler\Dto\Meta;
+use Osmuhin\HtmlMeta\Contracts\Distributor as DistributorContract;
+use Osmuhin\HtmlMeta\Contracts\Dto;
+use Osmuhin\HtmlMeta\Dto\Meta;
 
 class Distributor implements DistributorContract
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Osmuhin\HtmlMetaCrawler\Dto;
+namespace Osmuhin\HtmlMeta\Dto;
 
-use Osmuhin\HtmlMetaCrawler\Contracts\Dto;
-use Osmuhin\HtmlMetaCrawler\Dto\OpenGraph\Image;
+use Osmuhin\HtmlMeta\Contracts\Dto;
+use Osmuhin\HtmlMeta\Dto\OpenGraph\Image;
 
 /**
  * Open Graph is an Internet protocol that was created by Facebook to standardize the use of
@@ -32,13 +32,13 @@ class OpenGraph implements Dto
 	/** @var string[] */
 	public array $alternateLocales = [];
 
-	/** @var \Osmuhin\HtmlMetaCrawler\Dto\OpenGraph\Image[] */
+	/** @var \Osmuhin\HtmlMeta\Dto\OpenGraph\Image[] */
 	public array $images = [];
 
-	/** @var \Osmuhin\HtmlMetaCrawler\Dto\OpenGraph\Video[] */
+	/** @var \Osmuhin\HtmlMeta\Dto\OpenGraph\Video[] */
 	public array $videos = [];
 
-	/** @var \Osmuhin\HtmlMetaCrawler\Dto\OpenGraph\Audio[] */
+	/** @var \Osmuhin\HtmlMeta\Dto\OpenGraph\Audio[] */
 	public array $audio = [];
 
 	public function toArray(): array

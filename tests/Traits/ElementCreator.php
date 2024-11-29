@@ -3,7 +3,7 @@
 namespace Tests\Traits;
 
 use DOMDocument;
-use Osmuhin\HtmlMetaCrawler\Element;
+use Osmuhin\HtmlMeta\Element;
 
 trait ElementCreator
 {

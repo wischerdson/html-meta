@@ -1,8 +1,8 @@
 <?php
 
-use Osmuhin\HtmlMetaCrawler\Distributor;
-use Osmuhin\HtmlMetaCrawler\Dto\Meta;
-use Osmuhin\HtmlMetaCrawler\Dto\OpenGraph;
+use Osmuhin\HtmlMeta\Distributor;
+use Osmuhin\HtmlMeta\Dto\Meta;
+use Osmuhin\HtmlMeta\Dto\OpenGraph;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;

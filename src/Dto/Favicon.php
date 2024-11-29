@@ -1,8 +1,8 @@
 <?php
 
-namespace Osmuhin\HtmlMetaCrawler\Dto;
+namespace Osmuhin\HtmlMeta\Dto;
 
-use Osmuhin\HtmlMetaCrawler\Contracts\Dto;
+use Osmuhin\HtmlMeta\Contracts\Dto;
 
 class Favicon implements Dto
 {
