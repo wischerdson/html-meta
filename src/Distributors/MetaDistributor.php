@@ -8,7 +8,7 @@ class MetaDistributor extends AbstractDistributor
 {
 	public function canHandle(Element $el): bool
 	{
-		return $el->name === 'meta';
+		return $el->name === 'meta' && $el->attributes;
 	}
 
 	public function handle(Element $el): void
@@ -52,12 +52,16 @@ class MetaDistributor extends AbstractDistributor
 			return;
 		}
 
-		self::assignAccordingToTheMap(
+		$assignmentResult = self::assignAccordingToTheMap(
 			self::getPropertiesMap(),
 			$this->meta,
 			$name,
 			$content
 		);
+
+		if ($assignmentResult) {
+			return;
+		}
 
 		switch ($name) {
 			case 'title':

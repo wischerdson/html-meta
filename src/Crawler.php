@@ -27,7 +27,7 @@ class Crawler
 		$this->distributor->setMeta($this->meta);
 	}
 
-	public static function init(string $html = null): self
+	public static function init(?string $html = null): self
 	{
 		$crawler = new self();
 		$crawler->html = $html;
