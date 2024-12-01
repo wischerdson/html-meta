@@ -3,19 +3,23 @@
 namespace Osmuhin\HtmlMeta;
 
 use Osmuhin\HtmlMeta\Distributors\AbstractDistributor;
-use Osmuhin\HtmlMeta\Distributors\HtmlDistributor;
-use Osmuhin\HtmlMeta\Distributors\LinkDistributor;
-use Osmuhin\HtmlMeta\Distributors\MetaDistributor;
-use Osmuhin\HtmlMeta\Distributors\TitleDistributor;
 
 class MainDistributor extends AbstractDistributor
 {
 	public function __construct()
 	{
-		$this->subDistributor(new HtmlDistributor())
-			->subDistributor(new TitleDistributor())
-			->subDistributor(new MetaDistributor())
-			->subDistributor(new LinkDistributor());
+		$this->useSubDistributors(
+			\Osmuhin\HtmlMeta\Distributors\HtmlDistributor::init(),
+			\Osmuhin\HtmlMeta\Distributors\TitleDistributor::init(),
+			\Osmuhin\HtmlMeta\Distributors\MetaDistributor::init()->useSubDistributors(
+				\Osmuhin\HtmlMeta\Distributors\HttpEquivDistributor::init(),
+				\Osmuhin\HtmlMeta\Distributors\TwitterDistributor::init(),
+				\Osmuhin\HtmlMeta\Distributors\OpenGraphDistributor::init()
+			),
+			\Osmuhin\HtmlMeta\Distributors\LinkDistributor::init()->useSubDistributors(
+				\Osmuhin\HtmlMeta\Distributors\FaviconDistributor::init()
+			)
+		);
 	}
 
 	public function canHandle(Element $element): bool

@@ -10,8 +10,13 @@ abstract class AbstractDistributor implements Distributor
 {
 	protected Meta $meta;
 
-	/** @var self[] */
+	/** @var \Osmuhin\HtmlMeta\Distributors\AbstractDistributor[] */
 	private array $subDistributors = [];
+
+	public static function init(): self
+	{
+		return new static();
+	}
 
 	public function setMeta(Meta $meta): self
 	{
@@ -24,9 +29,13 @@ abstract class AbstractDistributor implements Distributor
 		return $this;
 	}
 
-	public function subDistributor(AbstractDistributor $distributor): self
+	public function useSubDistributors(...$args): self
 	{
-		$this->subDistributors[] = $distributor;
+		$distributors = $args;
+
+		foreach ($distributors as $distributor) {
+			$this->subDistributors[] = $distributor;
+		}
 
 		return $this;
 	}

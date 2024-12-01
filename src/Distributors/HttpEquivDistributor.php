@@ -38,20 +38,16 @@ class HttpEquivDistributor extends AbstractDistributor
 	protected static function getPropertiesMap(): array
 	{
 		return [
-			'viewport' => 'viewport',
-			'description' => 'description',
-			'color-scheme' => 'colorScheme',
-			'author' => 'author',
-			'keywords' => 'keywords',
-			'application-name' => 'applicationName',
-			'generator' => 'generator',
-			'referrer' => 'referrer',
-			'copyright' => 'copyright',
-			'robots' => 'robots',
-			'apple-mobile-web-app-capable' => 'appleMobileWebAppCapable',
-			'apple-mobile-web-app-status-bar-style' => 'appleMobileWebAppStatusBarStyle',
-			'format-detection' => 'formatDetection',
-			'apple-itunes-app' => 'appleItunesApp',
+			'content-type' => 'contentType',
+			'x-ua-compatible' => 'xUaCompatible',
+			'cache-control' => 'cacheControl',
+			'content-language' => 'contentLanguage',
+			'pragma' => 'pragma',
+			'expires' => 'expires',
+			'refresh' => 'refresh',
+			'content-security-policy' => 'contentSecurityPolicy',
+			'x-dns-prefetch-control' => 'xDnsPrefetchControl',
+			'access-control-allow-origin' => 'accessControlAllowOrigin',
 		];
 	}
 }

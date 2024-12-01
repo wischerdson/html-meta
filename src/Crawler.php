@@ -11,27 +11,25 @@ class Crawler
 {
 	public static string $xpath = '//html|//html/head/link|//html/head/meta|//html/head/title';
 
-	public static string $distibutor = MainDistributor::class;
+	public static string $distributorClass = MainDistributor::class;
 
 	private string $html;
 
-	private Distributor $distributer;
+	private Distributor $distributor;
 
 	private Meta $meta;
 
-	public function __construct(Distributor $distibutor)
+	public function __construct()
 	{
 		$this->meta = new Meta();
-		$this->distributer = $distibutor;
 
-		$this->distributer->setMeta($this->meta);
+		$this->distributor = new self::$distributorClass();
+		$this->distributor->setMeta($this->meta);
 	}
 
 	public static function init(string $html = null): self
 	{
-		$mainDistributor = new self::$distibutor();
-
-		$crawler = new self($mainDistributor);
+		$crawler = new self();
 		$crawler->html = $html;
 
 		return $crawler;
@@ -56,7 +54,7 @@ class Crawler
 		$crawler = new DomCrawler($this->html);
 
 		foreach ($crawler->filterXPath(self::$xpath) as $node) {
-			$this->distributer->handle(
+			$this->distributor->handle(
 				new Element($node)
 			);
 		}
