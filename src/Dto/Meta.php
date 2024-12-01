@@ -173,27 +173,4 @@ class Meta implements Dto
 			'viewport' => $this->viewport,
 		];
 	}
-
-	/**
-	 * Map of the correspondence of meta tag properties to object properties
-	 */
-	public static function getPropertiesMap(): array
-	{
-		return [
-			'viewport' => 'viewport',
-			'description' => 'description',
-			'color-scheme' => 'colorScheme',
-			'author' => 'author',
-			'keywords' => 'keywords',
-			'application-name' => 'applicationName',
-			'generator' => 'generator',
-			'referrer' => 'referrer',
-			'copyright' => 'copyright',
-			'robots' => 'robots',
-			'apple-mobile-web-app-capable' => 'appleMobileWebAppCapable',
-			'apple-mobile-web-app-status-bar-style' => 'appleMobileWebAppStatusBarStyle',
-			'format-detection' => 'formatDetection',
-			'apple-itunes-app' => 'appleItunesApp',
-		];
-	}
 }

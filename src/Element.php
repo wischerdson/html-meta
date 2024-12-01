@@ -14,7 +14,7 @@ class Element
 
 	public function __construct(DOMNode $node)
 	{
-		$this->name = $node->nodeName;
+		$this->name = mb_strtolower($node->nodeName, 'UTF-8');
 
 		foreach ($node->attributes as $attr) {
 			$this->attributes[$attr->nodeName] = $attr->nodeValue;

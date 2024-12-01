@@ -6,11 +6,9 @@ use Osmuhin\HtmlMeta\Contracts\Distributor as DistributorContract;
 use Osmuhin\HtmlMeta\Contracts\Dto;
 use Osmuhin\HtmlMeta\Dto\Meta;
 
-class Distributor implements DistributorContract
+class Director implements DistributorContract
 {
-	private DistributorOpenGraph $ogDistributor;
-
-	private DistributorHttpEquiv $httpEquivDistributor;
+	private array $distributors = [];
 
 	public function __construct(private Meta $meta)
 	{
@@ -18,36 +16,21 @@ class Distributor implements DistributorContract
 		$this->httpEquivDistributor = new DistributorHttpEquiv($this->meta->httpEquiv);
 	}
 
-	public static function assignAccordingToTheMap(Dto $object, string $name, string $content)
-	{
-		$map = $object::getPropertiesMap();
-
-		if (isset($map[$name])) {
-			$object->{$map[$name]} ??= $content;
-
-			return true;
-		}
-
-		return false;
-	}
+	
 
 	public function setHtml(Element $html): void
 	{
-		$this->meta->lang = @$html->attributes['lang'];
-		$this->meta->dir = @$html->attributes['dir'];
-		$this->meta->htmlAttributes = $html->attributes;
+
 	}
 
 	public function setTitle(Element $title): void
 	{
-		$this->meta->title = $title->innerText;
+
 	}
 
 	public function setMeta(Element $meta): void
 	{
-		if ($this->meta->charset = @$meta->attributes['charset']) {
-			return;
-		}
+
 
 		if (isset($meta->attributes['name'])) {
 			$this->handleNamedMeta($meta->attributes['name'], $meta);
@@ -61,21 +44,7 @@ class Distributor implements DistributorContract
 			return;
 		}
 
-		if (isset($meta->attributes['http-equiv'])) {
-			$name = $meta->attributes['http-equiv'];
 
-			if (!$name = mb_strtolower(trim($name), 'UTF-8')) {
-				return;
-			}
-
-			if (!$content = @$meta->attributes['content']) {
-				return;
-			}
-
-			$this->httpEquivDistributor->set($name, $content);
-
-			return;
-		}
 	}
 
 	public function setLink(Element $link): void

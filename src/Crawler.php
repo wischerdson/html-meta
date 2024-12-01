@@ -2,42 +2,36 @@
 
 namespace Osmuhin\HtmlMeta;
 
+use Osmuhin\HtmlMeta\Contracts\Distributor;
 use Osmuhin\HtmlMeta\Dto\Meta;
 use RuntimeException;
 use Symfony\Component\DomCrawler\Crawler as DomCrawler;
 
 class Crawler
 {
-	/**
-	 * You can override distributor class your own.
-	 * It should extends the \Osmuhin\HtmlMeta\Distributor class.
-	 */
-	public static string $distributorClass = Distributor::class;
+	public static string $xpath = '//html|//html/head/link|//html/head/meta|//html/head/title';
 
-	/**
-	 * You can override dto-class of meta your own.
-	 * It should extends the \Osmuhin\HtmlMeta\Dto\Meta class.
-	 */
-	public static string $metaClass = Meta::class;
+	public static string $distibutor = MainDistributor::class;
 
-	/** A string with raw html */
 	private string $html;
 
-	/** An instance of the distributor class that generates the final result */
-	private Distributor $distributor;
+	private Distributor $distributer;
 
 	private Meta $meta;
 
-	public function __construct()
+	public function __construct(Distributor $distibutor)
 	{
-		$this->meta = new self::$metaClass();
+		$this->meta = new Meta();
+		$this->distributer = $distibutor;
 
-		$this->distributor = new self::$distributorClass($this->meta);
+		$this->distributer->setMeta($this->meta);
 	}
 
 	public static function init(string $html = null): self
 	{
-		$crawler = new self();
+		$mainDistributor = new self::$distibutor();
+
+		$crawler = new self($mainDistributor);
 		$crawler->html = $html;
 
 		return $crawler;
@@ -53,7 +47,7 @@ class Crawler
 	/**
 	 * @throws \RuntimeException
 	 */
-	public function run(): Meta
+	public function run()
 	{
 		if (!isset($this->html)) {
 			throw new RuntimeException('An HTML string must be provided for parsing.');
@@ -61,30 +55,10 @@ class Crawler
 
 		$crawler = new DomCrawler($this->html);
 
-		if ($htmlNode = $crawler->filterXPath('//html')->getNode(0)) {
-			$this->distributor->setHtml(
-				new Element($htmlNode)
+		foreach ($crawler->filterXPath(self::$xpath) as $node) {
+			$this->distributer->handle(
+				new Element($node)
 			);
-		}
-
-		foreach ($crawler->filterXPath('//head/*') as $node) {
-			switch ($node->nodeName) {
-				case 'title':
-					$this->distributor->setTitle(
-						new Element($node)
-					);
-					break;
-				case 'link':
-					$this->distributor->setLink(
-						new Element($node)
-					);
-					break;
-				case 'meta':
-					$this->distributor->setMeta(
-						new Element($node)
-					);
-					break;
-			}
 		}
 
 		return $this->meta;
