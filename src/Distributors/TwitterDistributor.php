@@ -6,13 +6,58 @@ use Osmuhin\HtmlMeta\Element;
 
 class TwitterDistributor extends AbstractDistributor
 {
+	protected string $name;
+
+	protected string $content;
+
 	public function canHandle(Element $el): bool
 	{
-		return false;
+		$name = @$el->attributes['name'] ?: @$el->attributes['property'];
+
+		if (!$name || !str_starts_with($name, 'twitter:')) {
+			return false;
+		}
+
+		if (!$content = @$el->attributes['content']) {
+			return false;
+		}
+
+		if (!$content = mb_strtolower(trim($content), 'UTF-8')) {
+			return false;
+		}
+
+		$this->name = $name;
+		$this->content = $content;
+
+		return true;
 	}
 
 	public function handle(Element $el): void
 	{
+		$assignmentResult = self::assignAccordingToTheMap(
+			self::getPropertiesMap(),
+			$this->meta->twitter,
+			$this->name,
+			$this->content
+		);
 
+		if ($assignmentResult) {
+			return;
+		}
+
+		$this->meta->twitter->other[$this->name] = $this->content;
+	}
+
+	protected static function getPropertiesMap(): array
+	{
+		return [
+			'twitter:card' => 'card',
+			'twitter:site' => 'site',
+			'twitter:title' => 'title',
+			'twitter:description' => 'description',
+			'twitter:image' => 'image',
+			'twitter:image:alt' => 'imageAlt',
+			'twitter:creator' => 'creator'
+		];
 	}
 }

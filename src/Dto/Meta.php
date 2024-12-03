@@ -126,7 +126,7 @@ class Meta implements Dto
 
 	public array $htmlAttributes = [];
 
-	public array $twitter = [];
+	public Twitter $twitter;
 
 	public Favicon $favicon;
 
@@ -140,6 +140,7 @@ class Meta implements Dto
 	public function __construct()
 	{
 		$this->openGraph = new OpenGraph();
+		$this->twitter = new Twitter();
 		$this->favicon = new Favicon();
 		$this->httpEquiv = new HttpEquiv();
 	}
