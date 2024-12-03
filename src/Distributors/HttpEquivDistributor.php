@@ -8,6 +8,8 @@ class HttpEquivDistributor extends AbstractDistributor
 {
 	private string $name;
 
+	private string $content;
+
 	public function canHandle(Element $el): bool
 	{
 		if (!$name = @$el->attributes['http-equiv']) {
@@ -18,21 +20,24 @@ class HttpEquivDistributor extends AbstractDistributor
 			return false;
 		}
 
-		return (bool) $this->name = $name;
+		if (!$content = trim(@$el->attributes['content'])) {
+			return false;
+		}
+
+		$this->name = $name;
+		$this->content = $content;
+
+		return true;
 	}
 
 	public function handle(Element $el): void
 	{
-		if (!$content = @$el->attributes['content']) {
-			return;
-		}
-
 		self::assignAccordingToTheMap(
 			self::getPropertiesMap(),
 			$this->meta->httpEquiv,
 			$this->name,
-			$content
-		) || $this->meta->httpEquiv->other[$this->name] = $content;
+			$this->content
+		) || $this->meta->httpEquiv->other[$this->name] = $this->content;
 	}
 
 	protected static function getPropertiesMap(): array

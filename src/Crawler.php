@@ -45,7 +45,7 @@ class Crawler
 	/**
 	 * @throws \RuntimeException
 	 */
-	public function run()
+	public function run(): Meta
 	{
 		if (!isset($this->html)) {
 			throw new RuntimeException('An HTML string must be provided for parsing.');
