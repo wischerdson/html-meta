@@ -6,9 +6,9 @@ use Osmuhin\HtmlMeta\Element;
 
 class HttpEquivDistributor extends AbstractDistributor
 {
-	private string $name;
+	protected string $name;
 
-	private string $content;
+	protected string $content;
 
 	public function canHandle(Element $el): bool
 	{

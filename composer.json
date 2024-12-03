@@ -9,6 +9,10 @@
 			"email": "wischerdson@gmail.com"
 		}
 	],
+	"support": {
+		"issues": "https://github.com/wischerdson/html-meta/issues",
+		"source": "https://github.com/wischerdson/html-meta"
+	},
 	"require": {
 		"php": ">=8.0",
 		"symfony/dom-crawler": "*"
@@ -26,5 +30,11 @@
 		"psr-4": {
 			"Tests\\": "tests/"
 		}
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
+	"config": {
+		"preferred-install": "dist",
+		"sort-packages": true
 	}
 }

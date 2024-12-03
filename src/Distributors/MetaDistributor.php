@@ -25,20 +25,20 @@ class MetaDistributor extends AbstractDistributor
 	protected static function getPropertiesMap(): array
 	{
 		return [
-			'viewport' => 'viewport',
-			'description' => 'description',
-			'color-scheme' => 'colorScheme',
-			'author' => 'author',
-			'keywords' => 'keywords',
-			'application-name' => 'applicationName',
-			'generator' => 'generator',
-			'referrer' => 'referrer',
-			'copyright' => 'copyright',
-			'robots' => 'robots',
+			'apple-itunes-app' => 'appleItunesApp',
 			'apple-mobile-web-app-capable' => 'appleMobileWebAppCapable',
 			'apple-mobile-web-app-status-bar-style' => 'appleMobileWebAppStatusBarStyle',
+			'application-name' => 'applicationName',
+			'author' => 'author',
+			'color-scheme' => 'colorScheme',
+			'copyright' => 'copyright',
+			'description' => 'description',
 			'format-detection' => 'formatDetection',
-			'apple-itunes-app' => 'appleItunesApp',
+			'generator' => 'generator',
+			'keywords' => 'keywords',
+			'referrer' => 'referrer',
+			'robots' => 'robots',
+			'viewport' => 'viewport',
 		];
 	}
 
