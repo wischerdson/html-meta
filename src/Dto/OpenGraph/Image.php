@@ -29,17 +29,4 @@ class Image implements Dto
 			'alt' => $this->alt,
 		];
 	}
-
-	public static function getPropertiesMap(): array
-	{
-		return [
-			'og:image' => 'url',
-			'og:image:url' => 'url',
-			'og:image:secure_url' => 'secureUrl',
-			'og:image:type' => 'type',
-			'og:image:width' => 'width',
-			'og:image:height' => 'height',
-			'og:image:alt' => 'alt'
-		];
-	}
 }

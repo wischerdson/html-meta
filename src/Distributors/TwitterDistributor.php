@@ -18,15 +18,14 @@ class TwitterDistributor extends AbstractDistributor
 			return false;
 		}
 
-		if (!$content = @$el->attributes['content']) {
+		if (
+			(!$content = @$el->attributes['content']) ||
+			(!$content = trim($content))
+		) {
 			return false;
 		}
 
-		if (!$content = mb_strtolower(trim($content), 'UTF-8')) {
-			return false;
-		}
-
-		$this->name = $name;
+		$this->name = trim($name);
 		$this->content = $content;
 
 		return true;

@@ -77,31 +77,5 @@ class MetaDistributor extends AbstractDistributor
 
 				return;
 		}
-
-		// if (preg_match("/^twitter\:(.*)/i", $name, $matches)) {
-		// 	$this->meta->twitter[$matches[1]] = $content;
-
-		// 	return;
-		// }
-	}
-
-	protected function handleMetaWithProperty(string $property, Element $meta): void
-	{
-		// $property = mb_strtolower(trim($property), 'UTF-8');
-
-		// if (!$content = @$meta->attributes['content']) {
-		// 	return;
-		// }
-
-		// if ($this->ogDistributor->set($property, $content)) {
-		// 	return;
-		// }
-
-		// if (preg_match("/^twitter\:(.*)/i", $property, $matches)) {
-		// 	$this->meta->twitter[$matches[1]] = @$meta->attributes['content'];
-		// 	unset($matches);
-
-		// 	return;
-		// }
 	}
 }

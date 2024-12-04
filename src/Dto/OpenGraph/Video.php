@@ -26,16 +26,4 @@ class Video implements Dto
 			'height' => $this->height
 		];
 	}
-
-	public static function getPropertiesMap(): array
-	{
-		return [
-			'og:video' => 'url',
-			'og:video:url' => 'url',
-			'og:video:secure_url' => 'secureUrl',
-			'og:video:type' => 'type',
-			'og:video:width' => 'width',
-			'og:video:height' => 'height',
-		];
-	}
 }

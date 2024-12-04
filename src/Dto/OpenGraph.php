@@ -3,7 +3,9 @@
 namespace Osmuhin\HtmlMeta\Dto;
 
 use Osmuhin\HtmlMeta\Contracts\Dto;
+use Osmuhin\HtmlMeta\Dto\OpenGraph\Audio;
 use Osmuhin\HtmlMeta\Dto\OpenGraph\Image;
+use Osmuhin\HtmlMeta\Dto\OpenGraph\Video;
 
 /**
  * Open Graph is an Internet protocol that was created by Facebook to standardize the use of
@@ -27,7 +29,7 @@ class OpenGraph implements Dto
 
 	public ?string $siteName = null;
 
-	public ?string $primaryLocale = null;
+	public ?string $locale = null;
 
 	/** @var string[] */
 	public array $alternateLocales = [];
@@ -50,25 +52,11 @@ class OpenGraph implements Dto
 			'description' => $this->description,
 			'determiner' => $this->determiner,
 			'siteName' => $this->siteName,
-			'primaryLocale' => $this->primaryLocale,
+			'locale' => $this->locale,
 			'alternateLocales' => $this->alternateLocales,
-			'images' => array_map(fn (Image $image) => $image->toArray(), $this->images)
-		];
-	}
-
-	/**
-	 * Map of the correspondence of opengraph <meta\> properties to object properties
-	 */
-	public static function getPropertiesMap(): array
-	{
-		return [
-			'og:title' => 'title',
-			'og:type' => 'type',
-			'og:url' => 'url',
-			'og:description' => 'description',
-			'og:determiner' => 'determiner',
-			'og:site_name' => 'siteName',
-			'og:locale' => 'primaryLocale'
+			'images' => array_map(fn (Image $image) => $image->toArray(), $this->images),
+			'videos' => array_map(fn (Video $video) => $video->toArray(), $this->videos),
+			'audio' => array_map(fn (Audio $audio) => $audio->toArray(), $this->audio),
 		];
 	}
 }
