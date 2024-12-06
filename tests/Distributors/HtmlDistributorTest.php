@@ -20,7 +20,7 @@ final class HtmlDistributorTest extends TestCase
 	public function setUp(): void
 	{
 		$this->meta = new Meta();
-		$this->distibutor = new HtmlDistributor($this->meta);
+		$this->distibutor = new HtmlDistributor();
 		$this->distibutor->setMeta($this->meta);
 	}
 

@@ -21,7 +21,7 @@ final class HttpEquivDistributorTest extends TestCase
 	public function setUp(): void
 	{
 		$this->meta = new Meta();
-		$this->distibutor = new HttpEquivDistributor($this->meta);
+		$this->distibutor = new HttpEquivDistributor();
 		$this->distibutor->setMeta($this->meta);
 	}
 

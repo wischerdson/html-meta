@@ -6,16 +6,16 @@ use PHPUnit\Framework\TestCase;
 
 class CrawlerTest extends TestCase
 {
-	#[Test]
-	public function test_0(): void
-	{
-		$html = file_get_contents(__DIR__ . '/Fixtures/laravel.html');
-		// $html = file_get_contents();
+	// #[Test]
+	// public function test_0(): void
+	// {
+	// 	$html = file_get_contents(__DIR__ . '/Fixtures/laravel.html');
+	// 	// $html = file_get_contents();
 
-		$meta = Crawler::init(html: $html)->run();
+	// 	$meta = Crawler::init(html: $html)->run();
 
-		dd($meta);
-	}
+	// 	dd($meta);
+	// }
 
 	#[Test]
 	public function test_crawler_without_html(): void

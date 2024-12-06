@@ -21,7 +21,7 @@ final class MetaDistributorTest extends TestCase
 	public function setUp(): void
 	{
 		$this->meta = new Meta();
-		$this->distibutor = new MetaDistributor($this->meta);
+		$this->distibutor = new MetaDistributor();
 		$this->distibutor->setMeta($this->meta);
 	}
 

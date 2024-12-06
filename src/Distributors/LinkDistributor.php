@@ -8,11 +8,11 @@ class LinkDistributor extends AbstractDistributor
 {
 	public function canHandle(Element $el): bool
 	{
-		return false;
+		return $el->name === 'link' && $el->attributes;
 	}
 
 	public function handle(Element $el): void
 	{
-
+		//
 	}
 }

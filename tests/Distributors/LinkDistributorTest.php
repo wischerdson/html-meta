@@ -2,25 +2,25 @@
 
 namespace Tests\Distributors;
 
-use Osmuhin\HtmlMeta\Distributors\TitleDistributor;
+use Osmuhin\HtmlMeta\Distributors\LinkDistributor;
 use Osmuhin\HtmlMeta\Dto\Meta;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Tests\Traits\ElementCreator;
 
-final class TitleDistributorTest extends TestCase
+final class LinkDistributorTest extends TestCase
 {
 	use ElementCreator;
 
 	private Meta $meta;
 
-	private TitleDistributor $distibutor;
+	private LinkDistributor $distibutor;
 
 	public function setUp(): void
 	{
 		$this->meta = new Meta();
-		$this->distibutor = new TitleDistributor();
+		$this->distibutor = new LinkDistributor();
 		$this->distibutor->setMeta($this->meta);
 	}
 
@@ -31,17 +31,10 @@ final class TitleDistributorTest extends TestCase
 		$element = $this->makeElement('<h1>Hello world</h1>');
 		$this->assertFalse($this->distibutor->canHandle($element));
 
-		$element = $this->makeElement('<title>Hello world</title>');
+		$element = $this->makeElement('<link />');
+		$this->assertFalse($this->distibutor->canHandle($element));
+
+		$element = $this->makeElement('<link some-attribute="" />');
 		$this->assertTrue($this->distibutor->canHandle($element));
-	}
-
-	#[Test]
-	#[TestDox('Test "handle" method of the distributor')]
-	public function test_handle_method()
-	{
-		$element = $this->makeElement('<title>123Hello world321</title>');
-
-		$this->distibutor->handle($element);
-		$this->assertSame('123Hello world321', $this->meta->title);
 	}
 }
