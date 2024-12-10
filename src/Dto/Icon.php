@@ -8,9 +8,9 @@ class Icon implements Dto
 {
 	public string $url;
 
-	public string $mime;
+	public ?string $mime = null;
 
-	public string $extension;
+	public ?string $extension = null;
 
 	public ?int $width = null;
 
