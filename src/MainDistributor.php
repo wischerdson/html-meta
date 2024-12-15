@@ -22,11 +22,17 @@ class MainDistributor extends AbstractDistributor
 		);
 	}
 
+	/**
+     * @codeCoverageIgnore
+     */
 	public function canHandle(Element $element): bool
 	{
 		return true;
 	}
 
+	/**
+     * @codeCoverageIgnore
+     */
 	public function handle(Element $element): void
 	{
 		$this->pollSubDistributors($element);

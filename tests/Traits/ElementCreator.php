@@ -2,39 +2,33 @@
 
 namespace Tests\Traits;
 
-use DOMDocument;
 use Osmuhin\HtmlMeta\Element;
 
 trait ElementCreator
 {
-	protected function makeMetaWithProperty(string $property, string $content, array $attrs = [])
+	protected static function makeMetaWithProperty(string $property, string $content, array $attrs = []): Element
 	{
-		return $this->makeMetaElement(['property' => $property, 'content' => $content] + $attrs);
+		return self::makeMetaElement(['property' => $property, 'content' => $content] + $attrs);
 	}
 
-	protected function makeNamedMetaElement(string $name, string $content, array $attrs = [])
+	protected static function makeNamedMetaElement(string $name, string $content, array $attrs = []): Element
 	{
-		return $this->makeMetaElement(['name' => $name, 'content' => $content] + $attrs);
+		return self::makeMetaElement(['name' => $name, 'content' => $content] + $attrs);
 	}
 
-	protected function makeMetaElement(array $attributes)
+	protected static function makeMetaElement(array $attributes): Element
 	{
-		$glued = [];
-
-		foreach ($attributes as $key => $value) {
-			$glued[] = "{$key}=\"{$value}\"";
-		}
-
-		$html = implode(' ', $glued);
-
-		return $this->makeElement("<meta {$html} />");
+		return self::makeElement('meta', $attributes);
 	}
 
-	protected function makeElement(string $xml): Element
+	protected static function makeElement(string $name, array $attributes = [], ?string $innerText = null): Element
 	{
-		$dom = new DOMDocument();
-		$dom->loadXML($xml);
+		/** @var \Osmuhin\HtmlMeta\Element $element */
+		$element = self::createStub(Element::class);
+		$element->name = $name;
+		$element->attributes = $attributes;
+		$element->innerText = $innerText;
 
-		return new Element($dom->documentElement);
+		return $element;
 	}
 }

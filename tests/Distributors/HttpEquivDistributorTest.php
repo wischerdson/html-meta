@@ -29,19 +29,19 @@ final class HttpEquivDistributorTest extends TestCase
 	#[TestDox('Test "canHandle" method of the distributor')]
 	public function test_can_handle_method()
 	{
-		$element = $this->makeElement('<meta />');
+		$element = $this->makeElement('meta');
 		self::assertFalse($this->distibutor->canHandle($element));
 
-		$element = $this->makeElement('<meta charset="UTF-8" />');
+		$element = $this->makeElement('meta', ['charset' => 'UTF-8']);
 		self::assertFalse($this->distibutor->canHandle($element));
 
-		$element = $this->makeElement('<meta http-equiv="" content="" />');
+		$element = $this->makeElement('meta', ['http-equiv' => '', 'content' => '']);
 		self::assertFalse($this->distibutor->canHandle($element));
 
-		$element = $this->makeElement('<meta http-equiv="   " />');
+		$element = $this->makeElement('meta', ['http-equiv' => '   ']);
 		self::assertFalse($this->distibutor->canHandle($element));
 
-		$element = $this->makeElement('<meta http-equiv=" refresh  " content=" " />');
+		$element = $this->makeElement('meta', ['http-equiv' => ' refresh  ', 'content' => ' ']);
 		self::assertFalse($this->distibutor->canHandle($element));
 	}
 

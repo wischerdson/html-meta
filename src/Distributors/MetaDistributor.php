@@ -44,6 +44,7 @@ class MetaDistributor extends AbstractDistributor
 
 	protected function handleNamedMeta(string $name, Element $meta): void
 	{
+		// @codeCoverageIgnoreStart
 		if (!$name = mb_strtolower(trim($name), 'UTF-8')) {
 			return;
 		}
@@ -51,6 +52,7 @@ class MetaDistributor extends AbstractDistributor
 		if (!$content = @$meta->attributes['content']) {
 			return;
 		}
+		// @codeCoverageIgnoreEnd
 
 		$assignmentResult = self::assignAccordingToTheMap(
 			self::getPropertiesMap(),

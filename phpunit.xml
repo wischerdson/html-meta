@@ -13,6 +13,12 @@
 	failOnWarning="true"
 	testdox="true"
 >
+	<coverage>
+		<report>
+			<html outputDirectory="build/coverage-html" />
+			<clover outputFile="build/coverage.xml" />
+		</report>
+	</coverage>
 	<testsuites>
 		<testsuite name="HTML meta crawler test suite">
 			<directory>tests</directory>

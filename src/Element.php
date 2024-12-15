@@ -6,7 +6,7 @@ use DOMNode;
 
 class Element
 {
-	public readonly string $name;
+	public string $name;
 
 	public array $attributes = [];
 
