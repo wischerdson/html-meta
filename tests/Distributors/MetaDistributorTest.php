@@ -18,7 +18,7 @@ final class MetaDistributorTest extends TestCase
 
 	private MetaDistributor $distibutor;
 
-	public function setUp(): void
+	protected function setUp(): void
 	{
 		$this->meta = new Meta();
 		$this->distibutor = new MetaDistributor();
@@ -30,13 +30,13 @@ final class MetaDistributorTest extends TestCase
 	public function test_can_handle_method()
 	{
 		$element = $this->makeElement('<title>Hello world</title>');
-		$this->assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distibutor->canHandle($element));
 
 		$element = $this->makeElement('<meta />');
-		$this->assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distibutor->canHandle($element));
 
 		$element = $this->makeElement('<meta charset="UTF-8" />');
-		$this->assertTrue($this->distibutor->canHandle($element));
+		self::assertTrue($this->distibutor->canHandle($element));
 	}
 
 	#[Test]
@@ -54,7 +54,7 @@ final class MetaDistributorTest extends TestCase
 			$this->distibutor->handle($element1);
 			$this->distibutor->handle($element2);
 
-			$this->assertEquals($content1, $this->meta->$propertyInObject);
+			self::assertSame($content1, $this->meta->$propertyInObject);
 		}
 	}
 }

@@ -17,7 +17,7 @@ final class HtmlDistributorTest extends TestCase
 
 	private HtmlDistributor $distibutor;
 
-	public function setUp(): void
+	protected function setUp(): void
 	{
 		$this->meta = new Meta();
 		$this->distibutor = new HtmlDistributor();
@@ -29,10 +29,10 @@ final class HtmlDistributorTest extends TestCase
 	public function test_can_handle_method()
 	{
 		$element = $this->makeElement('<head><meta charset="UTF-8" /></head>');
-		$this->assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distibutor->canHandle($element));
 
 		$element = $this->makeElement('<html><head><meta charset="UTF-8" /></head></html>');
-		$this->assertTrue($this->distibutor->canHandle($element));
+		self::assertTrue($this->distibutor->canHandle($element));
 	}
 
 	#[Test]
@@ -42,17 +42,17 @@ final class HtmlDistributorTest extends TestCase
 
 		$this->distibutor->handle($element);
 
-		$this->assertSame('ru_RU', $this->meta->lang);
-		$this->assertSame('rtl', $this->meta->dir);
+		self::assertSame('ru_RU', $this->meta->lang);
+		self::assertSame('rtl', $this->meta->dir);
 
-		$this->assertCount(3, $this->meta->htmlAttributes);
+		self::assertCount(3, $this->meta->htmlAttributes);
 
-		$this->assertArrayHasKey('lang', $this->meta->htmlAttributes);
-		$this->assertArrayHasKey('dir', $this->meta->htmlAttributes);
-		$this->assertArrayHasKey('class', $this->meta->htmlAttributes);
+		self::assertArrayHasKey('lang', $this->meta->htmlAttributes);
+		self::assertArrayHasKey('dir', $this->meta->htmlAttributes);
+		self::assertArrayHasKey('class', $this->meta->htmlAttributes);
 
-		$this->assertSame('ru_RU', $this->meta->htmlAttributes['lang']);
-		$this->assertSame('rtl', $this->meta->htmlAttributes['dir']);
-		$this->assertSame('dark', $this->meta->htmlAttributes['class']);
+		self::assertSame('ru_RU', $this->meta->htmlAttributes['lang']);
+		self::assertSame('rtl', $this->meta->htmlAttributes['dir']);
+		self::assertSame('dark', $this->meta->htmlAttributes['class']);
 	}
 }

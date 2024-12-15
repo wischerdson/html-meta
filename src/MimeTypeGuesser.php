@@ -20,6 +20,6 @@ class MimeTypeGuesser
 
 		$explodedName = explode('.', $file);
 
-		return count($explodedName) > 1 ? array_pop($explodedName) : null;
+		return \count($explodedName) > 1 ? array_pop($explodedName) : null;
 	}
 }

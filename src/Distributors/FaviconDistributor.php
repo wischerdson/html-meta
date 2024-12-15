@@ -61,7 +61,7 @@ class FaviconDistributor extends AbstractDistributor
 		if ($icon->sizes) {
 			$explodedSizes = explode('x', $icon->sizes);
 
-			if (count($explodedSizes) === 2) {
+			if (\count($explodedSizes) === 2) {
 				$icon->width = $explodedSizes[0];
 				$icon->height = $explodedSizes[1];
 			}

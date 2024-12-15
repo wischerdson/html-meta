@@ -17,7 +17,7 @@ final class LinkDistributorTest extends TestCase
 
 	private LinkDistributor $distibutor;
 
-	public function setUp(): void
+	protected function setUp(): void
 	{
 		$this->meta = new Meta();
 		$this->distibutor = new LinkDistributor();
@@ -29,12 +29,12 @@ final class LinkDistributorTest extends TestCase
 	public function test_can_handle_method()
 	{
 		$element = $this->makeElement('<h1>Hello world</h1>');
-		$this->assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distibutor->canHandle($element));
 
 		$element = $this->makeElement('<link />');
-		$this->assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distibutor->canHandle($element));
 
 		$element = $this->makeElement('<link some-attribute="" />');
-		$this->assertTrue($this->distibutor->canHandle($element));
+		self::assertTrue($this->distibutor->canHandle($element));
 	}
 }

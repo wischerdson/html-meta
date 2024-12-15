@@ -18,7 +18,7 @@ final class HttpEquivDistributorTest extends TestCase
 
 	private HttpEquivDistributor $distibutor;
 
-	public function setUp(): void
+	protected function setUp(): void
 	{
 		$this->meta = new Meta();
 		$this->distibutor = new HttpEquivDistributor();
@@ -30,19 +30,19 @@ final class HttpEquivDistributorTest extends TestCase
 	public function test_can_handle_method()
 	{
 		$element = $this->makeElement('<meta />');
-		$this->assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distibutor->canHandle($element));
 
 		$element = $this->makeElement('<meta charset="UTF-8" />');
-		$this->assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distibutor->canHandle($element));
 
 		$element = $this->makeElement('<meta http-equiv="" content="" />');
-		$this->assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distibutor->canHandle($element));
 
 		$element = $this->makeElement('<meta http-equiv="   " />');
-		$this->assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distibutor->canHandle($element));
 
 		$element = $this->makeElement('<meta http-equiv=" refresh  " content=" " />');
-		$this->assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distibutor->canHandle($element));
 	}
 
 	#[Test]
@@ -55,13 +55,13 @@ final class HttpEquivDistributorTest extends TestCase
 			$element1 = $this->makeMetaElement(['http-equiv' => $propertyInTag, 'content' => "  Some content for the property {$propertyInTag}  "]);
 			$element2 = $this->makeMetaElement(['http-equiv' => $propertyInTag, 'content' => "Duplicate property {$propertyInTag} with another content"]);
 
-			$this->assertTrue($this->distibutor->canHandle($element1));
+			self::assertTrue($this->distibutor->canHandle($element1));
 			$this->distibutor->handle($element1);
 
-			$this->assertTrue($this->distibutor->canHandle($element2));
+			self::assertTrue($this->distibutor->canHandle($element2));
 			$this->distibutor->handle($element2);
 
-			$this->assertEquals("Some content for the property {$propertyInTag}", $this->meta->httpEquiv->$propertyInObject);
+			self::assertSame("Some content for the property {$propertyInTag}", $this->meta->httpEquiv->$propertyInObject);
 		}
 	}
 }

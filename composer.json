@@ -20,6 +20,7 @@
 		"symfony/dom-crawler": "*"
 	},
 	"require-dev": {
+		"friendsofphp/php-cs-fixer": "^3.65",
 		"phpunit/phpunit": "^11.4",
 		"symfony/var-dumper": "^7.1"
 	},
