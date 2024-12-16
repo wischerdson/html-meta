@@ -2,6 +2,7 @@
 
 namespace Osmuhin\HtmlMeta\Distributors;
 
+use InvalidArgumentException;
 use Osmuhin\HtmlMeta\Contracts\Distributor;
 use Osmuhin\HtmlMeta\Dto\Meta;
 use Osmuhin\HtmlMeta\Element;
@@ -34,10 +35,33 @@ abstract class AbstractDistributor implements Distributor
 		$distributors = $args;
 
 		foreach ($distributors as $distributor) {
-			$this->subDistributors[] = $distributor;
+			$this->setSubDistributor($distributor);
 		}
 
 		return $this;
+	}
+
+	/**
+	 * @throws \InvalidArgumentException
+	 */
+	public function setSubDistributor(Distributor|string $distributor, ?string $insteadOf = null): self
+	{
+		$distributor = is_string($distributor) ? new $distributor() : $distributor;
+
+		if (!($distributor instanceof Distributor)) {
+			throw new InvalidArgumentException('$distributor must implements \Osmuhin\HtmlMeta\Contracts\Distributor interface');
+		}
+
+		$key = $insteadOf ?: $distributor::class;
+
+		$this->subDistributors[$key] = $distributor;
+
+		return $this;
+	}
+
+	public function getSubDistributor(string $class): Distributor|null
+	{
+		return @$this->subDistributors[$class];
 	}
 
 	protected static function assignAccordingToTheMap(array $map, object $object, string $name, string $content): bool

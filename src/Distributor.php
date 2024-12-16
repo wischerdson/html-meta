@@ -4,9 +4,9 @@ namespace Osmuhin\HtmlMeta;
 
 use Osmuhin\HtmlMeta\Distributors\AbstractDistributor;
 
-class MainDistributor extends AbstractDistributor
+class Distributor extends AbstractDistributor
 {
-	public function __construct()
+	public function useDefaultDistributersConfiguration()
 	{
 		$this->useSubDistributors(
 			\Osmuhin\HtmlMeta\Distributors\HtmlDistributor::init(),
@@ -23,16 +23,16 @@ class MainDistributor extends AbstractDistributor
 	}
 
 	/**
-     * @codeCoverageIgnore
-     */
+	 * @codeCoverageIgnore
+	 */
 	public function canHandle(Element $element): bool
 	{
 		return true;
 	}
 
 	/**
-     * @codeCoverageIgnore
-     */
+	 * @codeCoverageIgnore
+	 */
 	public function handle(Element $element): void
 	{
 		$this->pollSubDistributors($element);

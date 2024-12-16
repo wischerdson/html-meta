@@ -12,9 +12,14 @@ interface Distributor
 	public function setMeta(Meta $meta): self;
 
 	/**
-	 * @param \Osmuhin\HtmlMeta\Contracts\Distributor[] $args
+	 * @param \Osmuhin\HtmlMeta\Contracts\Distributor|string ...$args
+	 * @param \Osmuhin\HtmlMeta\Contracts\Distributor[]|string[] $args
 	 */
 	public function useSubDistributors(...$args): self;
+
+	public function setSubDistributor(self|string $distributor, ?string $insteadOf = null): self;
+
+	public function getSubDistributor(string $class): self|null;
 
 	/**
 	 * Checks whether the distributor can handle the current element.
