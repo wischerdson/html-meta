@@ -30,6 +30,11 @@ abstract class AbstractDistributor implements Distributor
 		return $this;
 	}
 
+	public function getMeta(): Meta
+	{
+		return $this->meta;
+	}
+
 	public function useSubDistributors(...$args): self
 	{
 		$distributors = $args;
@@ -44,24 +49,25 @@ abstract class AbstractDistributor implements Distributor
 	/**
 	 * @throws \InvalidArgumentException
 	 */
-	public function setSubDistributor(Distributor|string $distributor, ?string $insteadOf = null): self
+	public function setSubDistributor(Distributor|string $distributor, ?string $key = null): self
 	{
 		$distributor = is_string($distributor) ? new $distributor() : $distributor;
 
 		if (!($distributor instanceof Distributor)) {
-			throw new InvalidArgumentException('$distributor must implements \Osmuhin\HtmlMeta\Contracts\Distributor interface');
+			$class = $distributor::class;
+			throw new InvalidArgumentException("{$class} must implements \Osmuhin\HtmlMeta\Contracts\Distributor interface");
 		}
 
-		$key = $insteadOf ?: $distributor::class;
+		$key ??= $distributor::class;
 
 		$this->subDistributors[$key] = $distributor;
 
 		return $this;
 	}
 
-	public function getSubDistributor(string $class): Distributor|null
+	public function getSubDistributor(string $key): Distributor|null
 	{
-		return @$this->subDistributors[$class];
+		return @$this->subDistributors[$key];
 	}
 
 	protected static function assignAccordingToTheMap(array $map, object $object, string $name, string $content): bool
@@ -86,12 +92,5 @@ abstract class AbstractDistributor implements Distributor
 		}
 
 		return false;
-	}
-
-	protected function eachSubDistributors(): iterable
-	{
-		foreach ($this->subDistributors as $subDistributor) {
-			yield $subDistributor;
-		}
 	}
 }

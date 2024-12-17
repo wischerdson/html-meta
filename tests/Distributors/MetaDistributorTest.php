@@ -18,13 +18,13 @@ final class MetaDistributorTest extends TestCase
 
 	private Meta $meta;
 
-	private MetaDistributor $distibutor;
+	private MetaDistributor $distributor;
 
 	protected function setUp(): void
 	{
 		$this->meta = new Meta();
-		$this->distibutor = new MetaDistributor();
-		$this->distibutor->setMeta($this->meta);
+		$this->distributor = new MetaDistributor();
+		$this->distributor->setMeta($this->meta);
 	}
 
 	#[Test]
@@ -32,20 +32,20 @@ final class MetaDistributorTest extends TestCase
 	public function test_can_handle_method(): void
 	{
 		$element = $this->makeElement('title', innerText: 'Hello world');
-		self::assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distributor->canHandle($element));
 
 		$element = $this->makeElement('meta');
-		self::assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distributor->canHandle($element));
 
 		$element = $this->makeElement('meta', ['charset' => 'UTF-8']);
-		self::assertTrue($this->distibutor->canHandle($element));
+		self::assertTrue($this->distributor->canHandle($element));
 	}
 
 	#[Test]
 	#[TestDox('Can distributor fills Meta DTO by the map')]
 	public function test_can_distributor_fills_dto_by_the_map(): void
 	{
-		$map = (new ReflectionMethod($this->distibutor, 'getPropertiesMap'))->invoke(null);
+		$map = (new ReflectionMethod($this->distributor, 'getPropertiesMap'))->invoke(null);
 
 		foreach ($map as $propertyInTag => $propertyInObject) {
 			$content1 = "Some content for the property {$propertyInTag}";
@@ -53,8 +53,8 @@ final class MetaDistributorTest extends TestCase
 			$element1 = $this->makeNamedMetaElement($propertyInTag, $content1);
 			$element2 = $this->makeNamedMetaElement($propertyInTag, $content2);
 
-			$this->distibutor->handle($element1);
-			$this->distibutor->handle($element2);
+			$this->distributor->handle($element1);
+			$this->distributor->handle($element2);
 
 			self::assertSame($content1, $this->meta->$propertyInObject);
 		}
@@ -63,8 +63,8 @@ final class MetaDistributorTest extends TestCase
 	public function test_can_distributor_handles_charset(): void
 	{
 		$element = $this->makeElement('meta', ['charset' => 'CP1251']);
-		$this->distibutor->canHandle($element);
-		$this->distibutor->handle($element);
+		$this->distributor->canHandle($element);
+		$this->distributor->handle($element);
 
 		assertEquals('CP1251', $this->meta->charset);
 	}
@@ -74,17 +74,35 @@ final class MetaDistributorTest extends TestCase
 		$this->meta->title = 'Test123';
 
 		$element = $this->makeNamedMetaElement('title', '123Test');
-		$this->distibutor->canHandle($element);
-		$this->distibutor->handle($element);
+		$this->distributor->canHandle($element);
+		$this->distributor->handle($element);
 
 		self::assertSame('Test123', $this->meta->title);
 
 		$this->meta->title = null;
 
 		$element = $this->makeNamedMetaElement('title', '12345Test');
-		$this->distibutor->canHandle($element);
-		$this->distibutor->handle($element);
+		$this->distributor->canHandle($element);
+		$this->distributor->handle($element);
 
 		self::assertSame('12345Test', $this->meta->title);
+	}
+
+	public function test_theme_color(): void
+	{
+		$element = $this->makeNamedMetaElement('theme-color', 'cyan');
+		$this->distributor->canHandle($element);
+		$this->distributor->handle($element);
+
+		self::assertSame([0 => 'cyan'], $this->meta->themeColor);
+
+		$element = $this->makeNamedMetaElement('theme-color', '#fff', ['media' => '(prefers-color-scheme: light)']);
+		$this->distributor->canHandle($element);
+		$this->distributor->handle($element);
+
+		self::assertSame([
+			0 => 'cyan',
+			'(prefers-color-scheme: light)' => '#fff'
+		], $this->meta->themeColor);
 	}
 }

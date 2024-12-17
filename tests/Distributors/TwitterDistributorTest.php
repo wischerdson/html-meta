@@ -16,13 +16,13 @@ final class TwitterDistributorTest extends TestCase
 
 	private Meta $meta;
 
-	private TwitterDistributor $distibutor;
+	private TwitterDistributor $distributor;
 
 	protected function setUp(): void
 	{
 		$this->meta = new Meta();
-		$this->distibutor = new TwitterDistributor();
-		$this->distibutor->setMeta($this->meta);
+		$this->distributor = new TwitterDistributor();
+		$this->distributor->setMeta($this->meta);
 	}
 
 	#[Test]
@@ -30,45 +30,45 @@ final class TwitterDistributorTest extends TestCase
 	public function test_can_handle_method(): void
 	{
 		$element = $this->makeElement('meta');
-		self::assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distributor->canHandle($element));
 
 		$element = $this->makeNamedMetaElement('    ', '    ');
-		self::assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distributor->canHandle($element));
 
 		$element = $this->makeMetaWithProperty('    ', '    ');
-		self::assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distributor->canHandle($element));
 
 		$element = $this->makeMetaWithProperty('twitterProperty', 'someContent');
-		self::assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distributor->canHandle($element));
 
 		$element = $this->makeMetaWithProperty('twitter:name', '');
-		self::assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distributor->canHandle($element));
 
 		$element = $this->makeMetaWithProperty('twitter:name', '    ');
-		self::assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distributor->canHandle($element));
 
 		$element = $this->makeMetaWithProperty('twitter:name', 'someContent');
-		self::assertTrue($this->distibutor->canHandle($element));
+		self::assertTrue($this->distributor->canHandle($element));
 
 		$element = $this->makeNamedMetaElement('twitter:name', 'someContent');
-		self::assertTrue($this->distibutor->canHandle($element));
+		self::assertTrue($this->distributor->canHandle($element));
 	}
 
 	#[Test]
 	#[TestDox('Can distributor fills Meta DTO by the map')]
 	public function test_can_distributor_fills_dto_by_the_map(): void
 	{
-		$map = (new ReflectionMethod($this->distibutor, 'getPropertiesMap'))->invoke(null);
+		$map = (new ReflectionMethod($this->distributor, 'getPropertiesMap'))->invoke(null);
 
 		foreach ($map as $propertyInTag => $propertyInObject) {
 			$element = $this->makeNamedMetaElement($propertyInTag, "  Some content for the property {$propertyInTag}  ");
 			$duplicatedElement = $this->makeMetaWithProperty($propertyInTag, "Duplicate property {$propertyInTag} with another content");
 
-			self::assertTrue($this->distibutor->canHandle($element));
-			$this->distibutor->handle($element);
+			self::assertTrue($this->distributor->canHandle($element));
+			$this->distributor->handle($element);
 
-			self::assertTrue($this->distibutor->canHandle($duplicatedElement));
-			$this->distibutor->handle($duplicatedElement);
+			self::assertTrue($this->distributor->canHandle($duplicatedElement));
+			$this->distributor->handle($duplicatedElement);
 
 			self::assertSame("Some content for the property {$propertyInTag}", $this->meta->twitter->$propertyInObject);
 		}
@@ -77,8 +77,8 @@ final class TwitterDistributorTest extends TestCase
 	public function test_can_distributor_fills_other_dto_property(): void
 	{
 		$element = $this->makeMetaWithProperty('twitter:app:id:iphone', '123456789');
-		self::assertTrue($this->distibutor->canHandle($element));
-		$this->distibutor->handle($element);
+		self::assertTrue($this->distributor->canHandle($element));
+		$this->distributor->handle($element);
 
 		self::assertSame(['twitter:app:id:iphone' => '123456789'], $this->meta->twitter->other);
 	}

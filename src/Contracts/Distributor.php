@@ -11,6 +11,8 @@ interface Distributor
 
 	public function setMeta(Meta $meta): self;
 
+	public function getMeta(): Meta;
+
 	/**
 	 * @param \Osmuhin\HtmlMeta\Contracts\Distributor|string ...$args
 	 * @param \Osmuhin\HtmlMeta\Contracts\Distributor[]|string[] $args

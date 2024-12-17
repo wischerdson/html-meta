@@ -1,0 +1,127 @@
+<?php
+
+namespace Tests\Distributors;
+
+use InvalidArgumentException;
+use Osmuhin\HtmlMeta\Distributors\AbstractDistributor;
+use Osmuhin\HtmlMeta\Dto\Meta;
+use Osmuhin\HtmlMeta\Element;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
+use Tests\Fixtures\Distributors\SubDistributor1;
+use Tests\Fixtures\Distributors\SubDistributor2;
+use Tests\Fixtures\Distributors\SubDistributor3;
+use Tests\Traits\ElementCreator;
+
+use function PHPUnit\Framework\assertInstanceOf;
+use function PHPUnit\Framework\assertIsObject;
+use function PHPUnit\Framework\assertNotSame;
+use function PHPUnit\Framework\assertNull;
+use function PHPUnit\Framework\assertSame;
+
+final class AbstractDistributorTest extends TestCase
+{
+	use ElementCreator;
+
+	private AbstractDistributor $distributor;
+
+	protected function setUp(): void
+	{
+		$this->distributor = self::createAnonymousDistributor();
+	}
+
+	public function test_init(): void
+	{
+		$distributor = $this->distributor::init();
+
+		assertIsObject($distributor);
+		assertInstanceOf(AbstractDistributor::class, $distributor);
+	}
+
+	#[TestDox('Test whether invalida argument exception will be thrown is sub distributor dont implements required interface')]
+	public function test_whether_exception_will_be_thrown(): void
+	{
+		$subDistributor = new class {};
+		$class = $subDistributor::class;
+
+		$this->expectException(InvalidArgumentException::class);
+		$this->expectExceptionMessage("{$class} must implements \Osmuhin\HtmlMeta\Contracts\Distributor interface");
+
+		$this->distributor->setSubDistributor($class);
+	}
+
+	public function test_can_set_and_get_sub_distributor(): void
+	{
+		$subDistributor1 = self::createAnonymousDistributor();
+		$subDistributor2 = self::createAnonymousDistributor();
+
+		$this->distributor->setSubDistributor($subDistributor1, 'someKey');
+
+		assertSame($subDistributor1, $this->distributor->getSubDistributor('someKey'));
+
+		assertNull($this->distributor->getSubDistributor($subDistributor1::class));
+
+		$this->distributor->setSubDistributor($subDistributor2);
+		assertSame($subDistributor2, $this->distributor->getSubDistributor($subDistributor2::class));
+	}
+
+	public function test_can_set_multiple_sub_distributors(): void
+	{
+		$this->distributor->useSubDistributors(
+			$sd1 = SubDistributor1::init(),
+			$sd2 = SubDistributor2::init()->useSubDistributors(
+				$sd3 = SubDistributor3::init(),
+			)
+		);
+
+		assertSame($sd1, $this->distributor->getSubDistributor(SubDistributor1::class));
+		assertSame($sd2, $this->distributor->getSubDistributor(SubDistributor2::class));
+		assertSame($sd3, $sd2->getSubDistributor(SubDistributor3::class));
+	}
+
+	public function test_can_set_meta(): void
+	{
+		$this->distributor->useSubDistributors(
+			SubDistributor1::init(),
+			$sd = SubDistributor2::init()->useSubDistributors(
+				SubDistributor3::init(),
+			)
+		);
+
+		$meta = new Meta();
+		$fakeMeta = new Meta();
+
+		$this->distributor->setMeta($fakeMeta);
+		$this->distributor->setMeta($meta);
+
+		assertSame(
+			$meta,
+			$this->distributor->getSubDistributor(SubDistributor1::class)->getMeta()
+		);
+		assertSame(
+			$meta,
+			$this->distributor->getSubDistributor(SubDistributor2::class)->getMeta()
+		);
+		assertSame(
+			$meta,
+			$sd->getSubDistributor(SubDistributor3::class)->getMeta()
+		);
+
+		assertNotSame($fakeMeta, $sd->getSubDistributor(SubDistributor3::class)->getMeta());
+	}
+
+	private static function createAnonymousDistributor()
+	{
+		return new class extends AbstractDistributor {
+			public function canHandle(Element $el): bool
+			{
+				return true;
+			}
+
+			public function handle(Element $el): void
+			{
+
+			}
+		};
+	}
+}

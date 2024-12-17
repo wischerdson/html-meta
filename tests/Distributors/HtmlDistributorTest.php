@@ -15,13 +15,13 @@ final class HtmlDistributorTest extends TestCase
 
 	private Meta $meta;
 
-	private HtmlDistributor $distibutor;
+	private HtmlDistributor $distributor;
 
 	protected function setUp(): void
 	{
 		$this->meta = new Meta();
-		$this->distibutor = new HtmlDistributor();
-		$this->distibutor->setMeta($this->meta);
+		$this->distributor = new HtmlDistributor();
+		$this->distributor->setMeta($this->meta);
 	}
 
 	#[Test]
@@ -29,10 +29,10 @@ final class HtmlDistributorTest extends TestCase
 	public function test_can_handle_method()
 	{
 		$element = $this->makeElement('head');
-		self::assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distributor->canHandle($element));
 
 		$element = $this->makeElement('html');
-		self::assertTrue($this->distibutor->canHandle($element));
+		self::assertTrue($this->distributor->canHandle($element));
 	}
 
 	#[Test]
@@ -40,7 +40,7 @@ final class HtmlDistributorTest extends TestCase
 	{
 		$element = $this->makeElement('html', ['lang' => 'ru_RU', 'dir' => 'rtl', 'class' => 'dark']);
 
-		$this->distibutor->handle($element);
+		$this->distributor->handle($element);
 
 		self::assertSame('ru_RU', $this->meta->lang);
 		self::assertSame('rtl', $this->meta->dir);

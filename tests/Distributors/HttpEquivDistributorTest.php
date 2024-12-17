@@ -16,13 +16,13 @@ final class HttpEquivDistributorTest extends TestCase
 
 	private Meta $meta;
 
-	private HttpEquivDistributor $distibutor;
+	private HttpEquivDistributor $distributor;
 
 	protected function setUp(): void
 	{
 		$this->meta = new Meta();
-		$this->distibutor = new HttpEquivDistributor();
-		$this->distibutor->setMeta($this->meta);
+		$this->distributor = new HttpEquivDistributor();
+		$this->distributor->setMeta($this->meta);
 	}
 
 	#[Test]
@@ -30,36 +30,36 @@ final class HttpEquivDistributorTest extends TestCase
 	public function test_can_handle_method()
 	{
 		$element = $this->makeElement('meta');
-		self::assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distributor->canHandle($element));
 
 		$element = $this->makeElement('meta', ['charset' => 'UTF-8']);
-		self::assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distributor->canHandle($element));
 
 		$element = $this->makeElement('meta', ['http-equiv' => '', 'content' => '']);
-		self::assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distributor->canHandle($element));
 
 		$element = $this->makeElement('meta', ['http-equiv' => '   ']);
-		self::assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distributor->canHandle($element));
 
 		$element = $this->makeElement('meta', ['http-equiv' => ' refresh  ', 'content' => ' ']);
-		self::assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distributor->canHandle($element));
 	}
 
 	#[Test]
 	#[TestDox('Can distributor fills Meta DTO by the map')]
 	public function test_can_distributor_fills_dto_by_the_map()
 	{
-		$map = (new ReflectionMethod($this->distibutor, 'getPropertiesMap'))->invoke(null);
+		$map = (new ReflectionMethod($this->distributor, 'getPropertiesMap'))->invoke(null);
 
 		foreach ($map as $propertyInTag => $propertyInObject) {
 			$element1 = $this->makeMetaElement(['http-equiv' => $propertyInTag, 'content' => "  Some content for the property {$propertyInTag}  "]);
 			$element2 = $this->makeMetaElement(['http-equiv' => $propertyInTag, 'content' => "Duplicate property {$propertyInTag} with another content"]);
 
-			self::assertTrue($this->distibutor->canHandle($element1));
-			$this->distibutor->handle($element1);
+			self::assertTrue($this->distributor->canHandle($element1));
+			$this->distributor->handle($element1);
 
-			self::assertTrue($this->distibutor->canHandle($element2));
-			$this->distibutor->handle($element2);
+			self::assertTrue($this->distributor->canHandle($element2));
+			$this->distributor->handle($element2);
 
 			self::assertSame("Some content for the property {$propertyInTag}", $this->meta->httpEquiv->$propertyInObject);
 		}

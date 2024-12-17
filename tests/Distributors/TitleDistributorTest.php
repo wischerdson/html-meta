@@ -15,13 +15,13 @@ final class TitleDistributorTest extends TestCase
 
 	private Meta $meta;
 
-	private TitleDistributor $distibutor;
+	private TitleDistributor $distributor;
 
 	protected function setUp(): void
 	{
 		$this->meta = new Meta();
-		$this->distibutor = new TitleDistributor();
-		$this->distibutor->setMeta($this->meta);
+		$this->distributor = new TitleDistributor();
+		$this->distributor->setMeta($this->meta);
 	}
 
 	#[Test]
@@ -29,10 +29,10 @@ final class TitleDistributorTest extends TestCase
 	public function test_can_handle_method()
 	{
 		$element = $this->makeElement('h1', innerText: 'Hello world');
-		self::assertFalse($this->distibutor->canHandle($element));
+		self::assertFalse($this->distributor->canHandle($element));
 
 		$element = $this->makeElement('title', innerText: 'Hello world');
-		self::assertTrue($this->distibutor->canHandle($element));
+		self::assertTrue($this->distributor->canHandle($element));
 	}
 
 	#[Test]
@@ -41,7 +41,7 @@ final class TitleDistributorTest extends TestCase
 	{
 		$element = $this->makeElement('title', innerText: '123Hello world321');
 
-		$this->distibutor->handle($element);
+		$this->distributor->handle($element);
 		self::assertSame('123Hello world321', $this->meta->title);
 	}
 }
