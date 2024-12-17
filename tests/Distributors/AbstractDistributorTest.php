@@ -3,25 +3,32 @@
 namespace Tests\Distributors;
 
 use InvalidArgumentException;
+use Mockery;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use Osmuhin\HtmlMeta\Contracts\Distributor;
 use Osmuhin\HtmlMeta\Distributors\AbstractDistributor;
 use Osmuhin\HtmlMeta\Dto\Meta;
 use Osmuhin\HtmlMeta\Element;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
 use Tests\Fixtures\Distributors\SubDistributor1;
 use Tests\Fixtures\Distributors\SubDistributor2;
 use Tests\Fixtures\Distributors\SubDistributor3;
 use Tests\Traits\ElementCreator;
 
+use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertInstanceOf;
 use function PHPUnit\Framework\assertIsObject;
 use function PHPUnit\Framework\assertNotSame;
 use function PHPUnit\Framework\assertNull;
 use function PHPUnit\Framework\assertSame;
+use function PHPUnit\Framework\assertTrue;
 
 final class AbstractDistributorTest extends TestCase
 {
 	use ElementCreator;
+	use MockeryPHPUnitIntegration;
 
 	private AbstractDistributor $distributor;
 
@@ -38,7 +45,7 @@ final class AbstractDistributorTest extends TestCase
 		assertInstanceOf(AbstractDistributor::class, $distributor);
 	}
 
-	#[TestDox('Test whether invalida argument exception will be thrown is sub distributor dont implements required interface')]
+	#[TestDox('Test whether InvalidArgumentException will be thrown in sub distributor dont implements required interface')]
 	public function test_whether_exception_will_be_thrown(): void
 	{
 		$subDistributor = new class {};
@@ -110,7 +117,66 @@ final class AbstractDistributorTest extends TestCase
 		assertNotSame($fakeMeta, $sd->getSubDistributor(SubDistributor3::class)->getMeta());
 	}
 
-	private static function createAnonymousDistributor()
+	public function test_polling_subDistributors_1(): void
+	{
+		$element = self::createStub(Element::class);
+
+		$subDistributor = $this->createMock(AbstractDistributor::class);
+		$subDistributor->expects($this->once())
+			->method('canHandle')
+			->with($this->identicalTo($element))
+			->willReturn(false);
+
+		$this->distributor->useSubDistributors($subDistributor);
+
+		$result = (new ReflectionMethod($this->distributor, 'pollSubDistributors'))
+			->invoke($this->distributor, $element);
+
+		assertFalse($result);
+	}
+
+	public function test_polling_subDistributors_2(): void
+	{
+		$element = self::createStub(Element::class);
+
+		$subDistributor1 = Mockery::mock(SubDistributor1::class);
+		$subDistributor1->shouldReceive('canHandle')->once()->andReturn(true);
+		$subDistributor1->shouldAllowMockingProtectedMethods()
+			->shouldReceive('pollSubDistributors')
+			->once()
+			->andReturn(true);
+		$subDistributor1->shouldReceive('handle')->never();
+
+		$subDistributor2 = Mockery::mock(SubDistributor2::class);
+		$subDistributor2->shouldReceive('canHandle')->never();
+
+		$this->distributor->useSubDistributors($subDistributor1, $subDistributor2);
+
+		$result = (new ReflectionMethod($this->distributor, 'pollSubDistributors'))
+			->invoke($this->distributor, $element);
+
+		assertTrue($result);
+	}
+
+	public function test_polling_subDistributors_3(): void
+	{
+		$element = self::createStub(Element::class);
+
+		$subDistributor = Mockery::mock(SubDistributor1::class);
+		$subDistributor->shouldReceive('canHandle')->once()->andReturn(true)->ordered();
+		$subDistributor->shouldAllowMockingProtectedMethods()
+			->shouldReceive('pollSubDistributors')
+			->once()
+			->andReturn(false)->ordered();
+		$subDistributor->shouldReceive('handle')->once()->ordered();
+
+		$this->distributor->useSubDistributors($subDistributor);
+
+		(new ReflectionMethod($this->distributor, 'pollSubDistributors'))
+			->invoke($this->distributor, $element);
+	}
+
+	private static function createAnonymousDistributor(): Distributor
 	{
 		return new class extends AbstractDistributor {
 			public function canHandle(Element $el): bool
