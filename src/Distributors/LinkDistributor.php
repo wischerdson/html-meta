@@ -11,6 +11,9 @@ class LinkDistributor extends AbstractDistributor
 		return $el->name === 'link' && $el->attributes;
 	}
 
+	/**
+	 * @codeCoverageIgnore
+	 */
 	public function handle(Element $el): void
 	{
 		//

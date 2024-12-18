@@ -20,11 +20,10 @@ class Element
 			$this->attributes[$attr->nodeName] = $attr->nodeValue;
 		}
 
-		if (
-			$node->childNodes->count() === 1 &&
-			$node->firstChild->nodeType === XML_TEXT_NODE
-		) {
-			$this->innerText = $node->textContent;
+		foreach ($node->childNodes as $child) {
+			if ($child->nodeType === XML_TEXT_NODE) {
+				$this->innerText .= $child->textContent;
+			}
 		}
 	}
 }

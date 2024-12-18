@@ -34,7 +34,17 @@ final class AbstractDistributorTest extends TestCase
 
 	protected function setUp(): void
 	{
-		$this->distributor = self::createAnonymousDistributor();
+		$this->distributor = new class extends AbstractDistributor {
+			public function canHandle(Element $el): bool
+			{
+				return true;
+			}
+
+			public function handle(Element $el): void
+			{
+
+			}
+		};
 	}
 
 	public function test_init(): void
@@ -59,8 +69,8 @@ final class AbstractDistributorTest extends TestCase
 
 	public function test_can_set_and_get_sub_distributor(): void
 	{
-		$subDistributor1 = self::createAnonymousDistributor();
-		$subDistributor2 = self::createAnonymousDistributor();
+		$subDistributor1 = SubDistributor1::init();
+		$subDistributor2 = SubDistributor2::init();
 
 		$this->distributor->setSubDistributor($subDistributor1, 'someKey');
 
@@ -174,20 +184,5 @@ final class AbstractDistributorTest extends TestCase
 
 		(new ReflectionMethod($this->distributor, 'pollSubDistributors'))
 			->invoke($this->distributor, $element);
-	}
-
-	private static function createAnonymousDistributor(): Distributor
-	{
-		return new class extends AbstractDistributor {
-			public function canHandle(Element $el): bool
-			{
-				return true;
-			}
-
-			public function handle(Element $el): void
-			{
-
-			}
-		};
 	}
 }
