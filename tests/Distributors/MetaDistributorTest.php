@@ -31,13 +31,13 @@ final class MetaDistributorTest extends TestCase
 	#[TestDox('Test "canHandle" method of the distributor')]
 	public function test_can_handle_method(): void
 	{
-		$element = $this->makeElement('title', innerText: 'Hello world');
+		$element = self::makeElement('title', innerText: 'Hello world');
 		self::assertFalse($this->distributor->canHandle($element));
 
-		$element = $this->makeElement('meta');
+		$element = self::makeElement('meta');
 		self::assertFalse($this->distributor->canHandle($element));
 
-		$element = $this->makeElement('meta', ['charset' => 'UTF-8']);
+		$element = self::makeElement('meta', ['charset' => 'UTF-8']);
 		self::assertTrue($this->distributor->canHandle($element));
 	}
 
@@ -50,8 +50,8 @@ final class MetaDistributorTest extends TestCase
 		foreach ($map as $propertyInTag => $propertyInObject) {
 			$content1 = "Some content for the property {$propertyInTag}";
 			$content2 = "Duplicate property {$propertyInTag} with another content";
-			$element1 = $this->makeNamedMetaElement($propertyInTag, $content1);
-			$element2 = $this->makeNamedMetaElement($propertyInTag, $content2);
+			$element1 = self::makeNamedMetaElement($propertyInTag, $content1);
+			$element2 = self::makeNamedMetaElement($propertyInTag, $content2);
 
 			$this->distributor->handle($element1);
 			$this->distributor->handle($element2);
@@ -62,7 +62,7 @@ final class MetaDistributorTest extends TestCase
 
 	public function test_can_distributor_handles_charset(): void
 	{
-		$element = $this->makeElement('meta', ['charset' => 'CP1251']);
+		$element = self::makeElement('meta', ['charset' => 'CP1251']);
 		$this->distributor->canHandle($element);
 		$this->distributor->handle($element);
 
@@ -73,7 +73,7 @@ final class MetaDistributorTest extends TestCase
 	{
 		$this->meta->title = 'Test123';
 
-		$element = $this->makeNamedMetaElement('title', '123Test');
+		$element = self::makeNamedMetaElement('title', '123Test');
 		$this->distributor->canHandle($element);
 		$this->distributor->handle($element);
 
@@ -81,7 +81,7 @@ final class MetaDistributorTest extends TestCase
 
 		$this->meta->title = null;
 
-		$element = $this->makeNamedMetaElement('title', '12345Test');
+		$element = self::makeNamedMetaElement('title', '12345Test');
 		$this->distributor->canHandle($element);
 		$this->distributor->handle($element);
 
@@ -90,13 +90,13 @@ final class MetaDistributorTest extends TestCase
 
 	public function test_theme_color(): void
 	{
-		$element = $this->makeNamedMetaElement('theme-color', 'cyan');
+		$element = self::makeNamedMetaElement('theme-color', 'cyan');
 		$this->distributor->canHandle($element);
 		$this->distributor->handle($element);
 
 		self::assertSame([0 => 'cyan'], $this->meta->themeColor);
 
-		$element = $this->makeNamedMetaElement('theme-color', '#fff', ['media' => '(prefers-color-scheme: light)']);
+		$element = self::makeNamedMetaElement('theme-color', '#fff', ['media' => '(prefers-color-scheme: light)']);
 		$this->distributor->canHandle($element);
 		$this->distributor->handle($element);
 

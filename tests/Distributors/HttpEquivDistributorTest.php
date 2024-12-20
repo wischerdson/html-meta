@@ -29,19 +29,19 @@ final class HttpEquivDistributorTest extends TestCase
 	#[TestDox('Test "canHandle" method of the distributor')]
 	public function test_can_handle_method()
 	{
-		$element = $this->makeElement('meta');
+		$element = self::makeElement('meta');
 		self::assertFalse($this->distributor->canHandle($element));
 
-		$element = $this->makeElement('meta', ['charset' => 'UTF-8']);
+		$element = self::makeElement('meta', ['charset' => 'UTF-8']);
 		self::assertFalse($this->distributor->canHandle($element));
 
-		$element = $this->makeElement('meta', ['http-equiv' => '', 'content' => '']);
+		$element = self::makeElement('meta', ['http-equiv' => '', 'content' => '']);
 		self::assertFalse($this->distributor->canHandle($element));
 
-		$element = $this->makeElement('meta', ['http-equiv' => '   ']);
+		$element = self::makeElement('meta', ['http-equiv' => '   ']);
 		self::assertFalse($this->distributor->canHandle($element));
 
-		$element = $this->makeElement('meta', ['http-equiv' => ' refresh  ', 'content' => ' ']);
+		$element = self::makeElement('meta', ['http-equiv' => ' refresh  ', 'content' => ' ']);
 		self::assertFalse($this->distributor->canHandle($element));
 	}
 
@@ -52,8 +52,8 @@ final class HttpEquivDistributorTest extends TestCase
 		$map = (new ReflectionMethod($this->distributor, 'getPropertiesMap'))->invoke(null);
 
 		foreach ($map as $propertyInTag => $propertyInObject) {
-			$element1 = $this->makeMetaElement(['http-equiv' => $propertyInTag, 'content' => "  Some content for the property {$propertyInTag}  "]);
-			$element2 = $this->makeMetaElement(['http-equiv' => $propertyInTag, 'content' => "Duplicate property {$propertyInTag} with another content"]);
+			$element1 = self::makeMetaElement(['http-equiv' => $propertyInTag, 'content' => "  Some content for the property {$propertyInTag}  "]);
+			$element2 = self::makeMetaElement(['http-equiv' => $propertyInTag, 'content' => "Duplicate property {$propertyInTag} with another content"]);
 
 			self::assertTrue($this->distributor->canHandle($element1));
 			$this->distributor->handle($element1);

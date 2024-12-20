@@ -28,13 +28,13 @@ final class LinkDistributorTest extends TestCase
 	#[TestDox('Test "canHandle" method of the distributor')]
 	public function test_can_handle_method()
 	{
-		$element = $this->makeElement('h1', innerText: 'Hello world');
+		$element = self::makeElement('h1', innerText: 'Hello world');
 		self::assertFalse($this->distributor->canHandle($element));
 
-		$element = $this->makeElement('link');
+		$element = self::makeElement('link');
 		self::assertFalse($this->distributor->canHandle($element));
 
-		$element = $this->makeElement('link', ['some-attribute' => '']);
+		$element = self::makeElement('link', ['some-attribute' => '']);
 		self::assertTrue($this->distributor->canHandle($element));
 	}
 }
