@@ -55,16 +55,21 @@ class FaviconDistributor extends AbstractDistributor
 		$icon = new Icon();
 		$icon->url = $this->href;
 		$icon->extension = MimeTypeGuesser::guessExtension($this->href);
-		$icon->mime = @$el->attributes['type'] ?: MimeTypeGuesser::guessMimeType($icon->extension);
-		$icon->sizes = @$el->attributes['sizes'];
 
-		if ($icon->sizes) {
+		if ($icon->sizes = @$el->attributes['sizes']) {
+			$icon->sizes = mb_strtolower(trim($icon->sizes), 'UTF-8');
 			$explodedSizes = explode('x', $icon->sizes);
 
 			if (\count($explodedSizes) === 2) {
 				$icon->width = $explodedSizes[0];
 				$icon->height = $explodedSizes[1];
 			}
+		}
+
+		if ($icon->mime = @$el->attributes['type']) {
+			$icon->mime = mb_strtolower(trim($icon->mime), 'UTF-8');
+		} else {
+			$icon->mime = MimeTypeGuesser::guessMimeType($icon->extension);
 		}
 
 		return $icon;

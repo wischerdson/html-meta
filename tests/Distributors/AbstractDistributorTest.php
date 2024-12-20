@@ -5,7 +5,6 @@ namespace Tests\Distributors;
 use InvalidArgumentException;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
-use Osmuhin\HtmlMeta\Contracts\Distributor;
 use Osmuhin\HtmlMeta\Distributors\AbstractDistributor;
 use Osmuhin\HtmlMeta\Dto\Meta;
 use Osmuhin\HtmlMeta\Element;

@@ -1,15 +1,12 @@
 <?php
 
-use Osmuhin\HtmlMeta\Crawler;
 use Osmuhin\HtmlMeta\Element;
-use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 use function PHPUnit\Framework\assertSame;
 
 class ElementTest extends TestCase
 {
-	#[Test]
 	public function test(): void
 	{
 		$dom = new DOMDocument();

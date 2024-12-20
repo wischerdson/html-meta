@@ -27,7 +27,7 @@ final class HttpEquivDistributorTest extends TestCase
 
 	#[Test]
 	#[TestDox('Test "canHandle" method of the distributor')]
-	public function test_can_handle_method()
+	public function test_can_handle_method(): void
 	{
 		$element = self::makeElement('meta');
 		self::assertFalse($this->distributor->canHandle($element));
@@ -47,7 +47,7 @@ final class HttpEquivDistributorTest extends TestCase
 
 	#[Test]
 	#[TestDox('Can distributor fills Meta DTO by the map')]
-	public function test_can_distributor_fills_dto_by_the_map()
+	public function test_can_distributor_fills_dto_by_the_map(): void
 	{
 		$map = (new ReflectionMethod($this->distributor, 'getPropertiesMap'))->invoke(null);
 

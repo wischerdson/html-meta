@@ -31,10 +31,10 @@ class MimeTypeGuesserTest extends TestCase
 	}
 
 	#[DataProvider('pathsProvider')]
-	public function test_can_get_file_extension(string $path, ?string $result): void
+	public function test_can_get_file_extension(string $path, ?string $expected): void
 	{
 		assertSame(
-			$result,
+			$expected,
 			MimeTypeGuesser::guessExtension($path)
 		);
 	}

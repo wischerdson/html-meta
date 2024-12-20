@@ -26,7 +26,7 @@ final class LinkDistributorTest extends TestCase
 
 	#[Test]
 	#[TestDox('Test "canHandle" method of the distributor')]
-	public function test_can_handle_method()
+	public function test_can_handle_method(): void
 	{
 		$element = self::makeElement('h1', innerText: 'Hello world');
 		self::assertFalse($this->distributor->canHandle($element));
