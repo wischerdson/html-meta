@@ -1,6 +1,6 @@
 <?php
 
-use Osmuhin\HtmlMeta\MimeTypeGuesser;
+use Osmuhin\HtmlMeta\Utils;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -24,10 +24,10 @@ class MimeTypeGuesserTest extends TestCase
 	{
 		assertSame(
 			'image/jpeg',
-			MimeTypeGuesser::guessMimeType('jpeg')
+			Utils::guessMimeType('jpeg')
 		);
 
-		assertNull(MimeTypeGuesser::guessMimeType('nonexistentext'));
+		assertNull(Utils::guessMimeType('nonexistentext'));
 	}
 
 	#[DataProvider('pathsProvider')]
@@ -35,7 +35,7 @@ class MimeTypeGuesserTest extends TestCase
 	{
 		assertSame(
 			$expected,
-			MimeTypeGuesser::guessExtension($path)
+			Utils::guessExtension($path)
 		);
 	}
 }

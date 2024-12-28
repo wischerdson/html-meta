@@ -25,7 +25,6 @@ class Crawler
 		$this->meta = new Meta();
 
 		$this->distributor = $this->makeAnonymousDistributor();
-		$this->distributor->setMeta($this->meta);
 	}
 
 	public static function init(?string $html = null): self
@@ -59,6 +58,8 @@ class Crawler
 
 		$this->useDefaultDistributorsConfigurationFlag &&
 		$this->useDefaultDistributorsConfiguration();
+
+		$this->distributor->setMeta($this->meta);
 
 		$crawler = new DomCrawler($this->html);
 

@@ -70,17 +70,6 @@ abstract class AbstractDistributor implements Distributor
 		return @$this->subDistributors[$key];
 	}
 
-	protected static function assignAccordingToTheMap(array $map, object $object, string $name, string $content): bool
-	{
-		if (isset($map[$name])) {
-			$object->{$map[$name]} ??= $content;
-
-			return true;
-		}
-
-		return false;
-	}
-
 	protected function pollSubDistributors(Element $el): bool
 	{
 		foreach ($this->subDistributors as $subDistributor) {

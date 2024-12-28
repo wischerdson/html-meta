@@ -4,7 +4,7 @@ namespace Osmuhin\HtmlMeta\Distributors;
 
 use Osmuhin\HtmlMeta\Dto\Icon;
 use Osmuhin\HtmlMeta\Element;
-use Osmuhin\HtmlMeta\MimeTypeGuesser;
+use Osmuhin\HtmlMeta\Utils;
 
 class FaviconDistributor extends AbstractDistributor
 {
@@ -54,7 +54,7 @@ class FaviconDistributor extends AbstractDistributor
 	{
 		$icon = new Icon();
 		$icon->url = $this->href;
-		$icon->extension = MimeTypeGuesser::guessExtension($this->href);
+		$icon->extension = Utils::guessExtension($this->href);
 
 		if ($icon->sizes = @$el->attributes['sizes']) {
 			$icon->sizes = mb_strtolower(trim($icon->sizes), 'UTF-8');
@@ -69,7 +69,7 @@ class FaviconDistributor extends AbstractDistributor
 		if ($icon->mime = @$el->attributes['type']) {
 			$icon->mime = mb_strtolower(trim($icon->mime), 'UTF-8');
 		} else {
-			$icon->mime = MimeTypeGuesser::guessMimeType($icon->extension);
+			$icon->mime = Utils::guessMimeType($icon->extension);
 		}
 
 		return $icon;

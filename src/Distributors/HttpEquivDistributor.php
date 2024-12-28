@@ -3,6 +3,7 @@
 namespace Osmuhin\HtmlMeta\Distributors;
 
 use Osmuhin\HtmlMeta\Element;
+use Osmuhin\HtmlMeta\Utils;
 
 class HttpEquivDistributor extends AbstractDistributor
 {
@@ -20,7 +21,9 @@ class HttpEquivDistributor extends AbstractDistributor
 			return false;
 		}
 
-		if (!$content = trim(@$el->attributes['content'])) {
+		$content = @$el->attributes['content'];
+
+		if (!$content || !$content = trim($content)) {
 			return false;
 		}
 
@@ -32,7 +35,7 @@ class HttpEquivDistributor extends AbstractDistributor
 
 	public function handle(Element $el): void
 	{
-		self::assignAccordingToTheMap(
+		Utils::assignAccordingToTheMap(
 			self::getPropertiesMap(),
 			$this->meta->httpEquiv,
 			$this->name,

@@ -3,6 +3,7 @@
 namespace Osmuhin\HtmlMeta\Distributors;
 
 use Osmuhin\HtmlMeta\Element;
+use Osmuhin\HtmlMeta\Utils;
 
 class TwitterDistributor extends AbstractDistributor
 {
@@ -33,7 +34,7 @@ class TwitterDistributor extends AbstractDistributor
 
 	public function handle(Element $el): void
 	{
-		$assignmentResult = self::assignAccordingToTheMap(
+		$assignmentResult = Utils::assignAccordingToTheMap(
 			self::getPropertiesMap(),
 			$this->meta->twitter,
 			$this->name,

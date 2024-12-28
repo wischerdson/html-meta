@@ -6,10 +6,10 @@ use PHPUnit\Framework\TestCase;
 
 class CrawlerTest extends TestCase
 {
-	// #[Test]
+	// // #[Test]
 	// public function test_0(): void
 	// {
-	// 	$html = file_get_contents(__DIR__ . '/Fixtures/laravel.html');
+	// 	$html = file_get_contents('https://laravel.com');
 	// 	// $html = file_get_contents();
 
 	// 	$meta = Crawler::init(html: $html)->run();

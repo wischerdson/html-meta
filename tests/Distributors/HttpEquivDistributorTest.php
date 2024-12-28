@@ -4,6 +4,7 @@ namespace Tests\Distributors;
 
 use Osmuhin\HtmlMeta\Distributors\HttpEquivDistributor;
 use Osmuhin\HtmlMeta\Dto\Meta;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -25,24 +26,26 @@ final class HttpEquivDistributorTest extends TestCase
 		$this->distributor->setMeta($this->meta);
 	}
 
-	#[Test]
-	#[TestDox('Test "canHandle" method of the distributor')]
-	public function test_can_handle_method(): void
+	public static function metaPropertiesProvider(): array
 	{
-		$element = self::makeElement('meta');
-		self::assertFalse($this->distributor->canHandle($element));
+		return [
+			[[], false],
+			[['charset' => 'UTF-8'], false],
+			[['http-equiv' => null, 'content' => ''], false],
+			[['http-equiv' => '', 'content' => ''], false],
+			[['http-equiv' => '   '], false],
+			[['http-equiv' => ' refresh  ', 'content' => null], false],
+			[['http-equiv' => ' refresh  ', 'content' => " \n  "], false],
+			[['http-equiv' => ' refresh  ', 'content' => " \nasd  "], true],
+		];
+	}
 
-		$element = self::makeElement('meta', ['charset' => 'UTF-8']);
-		self::assertFalse($this->distributor->canHandle($element));
-
-		$element = self::makeElement('meta', ['http-equiv' => '', 'content' => '']);
-		self::assertFalse($this->distributor->canHandle($element));
-
-		$element = self::makeElement('meta', ['http-equiv' => '   ']);
-		self::assertFalse($this->distributor->canHandle($element));
-
-		$element = self::makeElement('meta', ['http-equiv' => ' refresh  ', 'content' => ' ']);
-		self::assertFalse($this->distributor->canHandle($element));
+	#[DataProvider('metaPropertiesProvider')]
+	#[TestDox('Test "canHandle" method of the distributor')]
+	public function test_can_handle_method(array $attributes, bool $expected): void
+	{
+		$element = self::makeElement('meta', $attributes);
+		self::assertSame($expected, $this->distributor->canHandle($element));
 	}
 
 	#[Test]

@@ -3,6 +3,7 @@
 namespace Osmuhin\HtmlMeta\Distributors;
 
 use Osmuhin\HtmlMeta\Element;
+use Osmuhin\HtmlMeta\Utils;
 
 class MetaDistributor extends AbstractDistributor
 {
@@ -54,7 +55,7 @@ class MetaDistributor extends AbstractDistributor
 		}
 		// @codeCoverageIgnoreEnd
 
-		$assignmentResult = self::assignAccordingToTheMap(
+		$assignmentResult = Utils::assignAccordingToTheMap(
 			self::getPropertiesMap(),
 			$this->meta,
 			$name,

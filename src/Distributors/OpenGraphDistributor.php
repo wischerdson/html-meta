@@ -6,6 +6,7 @@ use Osmuhin\HtmlMeta\Dto\OpenGraph\Audio;
 use Osmuhin\HtmlMeta\Dto\OpenGraph\Image;
 use Osmuhin\HtmlMeta\Dto\OpenGraph\Video;
 use Osmuhin\HtmlMeta\Element;
+use Osmuhin\HtmlMeta\Utils;
 
 class OpenGraphDistributor extends AbstractDistributor
 {
@@ -19,10 +20,17 @@ class OpenGraphDistributor extends AbstractDistributor
 
 	public function canHandle(Element $el): bool
 	{
+		$property = @$el->attributes['property'];
+		$content = @$el->attributes['content'];
+
+		if (!$property || !$content) {
+			return false;
+		}
+
 		if (
-			(!$property = @$el->attributes['property']) ||
+			(!$property = trim($property)) ||
 			!str_contains($property, ':') ||
-			(!$content = trim(@$el->attributes['content']))
+			(!$content = trim($content))
 		) {
 			return false;
 		}
@@ -75,12 +83,12 @@ class OpenGraphDistributor extends AbstractDistributor
 	protected static function getOgImagePropertiesMap(): array
 	{
 		return [
-			'og:image' => 'url',
-			'og:image:url' => 'url',
-			'og:image:secure_url' => 'secureUrl',
-			'og:image:type' => 'type',
-			'og:image:width' => 'width',
-			'og:image:height' => 'height',
+			'og:image' => Utils::assignPropertyAndGuessMimeType('url'),
+			'og:image:url' => Utils::assignPropertyAndGuessMimeType('url'),
+			'og:image:secure_url' => Utils::assignPropertyAndGuessMimeType('secureUrl'),
+			'og:image:type' => Utils::assignPropertyForceOverwrite('type'),
+			'og:image:width' => Utils::assignPropertyIgnoringErrors('width'),
+			'og:image:height' => Utils::assignPropertyIgnoringErrors('height'),
 			'og:image:alt' => 'alt'
 		];
 	}
@@ -88,28 +96,28 @@ class OpenGraphDistributor extends AbstractDistributor
 	protected static function getOgVideoPropertiesMap(): array
 	{
 		return [
-			'og:video' => 'url',
-			'og:video:url' => 'url',
-			'og:video:secure_url' => 'secureUrl',
-			'og:video:type' => 'type',
-			'og:video:width' => 'width',
-			'og:video:height' => 'height'
+			'og:video' => Utils::assignPropertyAndGuessMimeType('url'),
+			'og:video:url' => Utils::assignPropertyAndGuessMimeType('url'),
+			'og:video:secure_url' => Utils::assignPropertyAndGuessMimeType('secureUrl'),
+			'og:video:type' => Utils::assignPropertyForceOverwrite('type'),
+			'og:video:width' => Utils::assignPropertyIgnoringErrors('width'),
+			'og:video:height' => Utils::assignPropertyIgnoringErrors('height'),
 		];
 	}
 
 	protected static function getOgAudioPropertiesMap(): array
 	{
 		return [
-			'og:audio' => 'url',
-			'og:audio:url' => 'url',
-			'og:audio:secure_url' => 'secureUrl',
+			'og:audio' => Utils::assignPropertyAndGuessMimeType('url'),
+			'og:audio:url' => Utils::assignPropertyAndGuessMimeType('url'),
+			'og:audio:secure_url' => Utils::assignPropertyAndGuessMimeType('secureUrl'),
 			'og:audio:type' => 'type'
 		];
 	}
 
 	protected function setOg(): void
 	{
-		$assignmentResult = self::assignAccordingToTheMap(
+		$assignmentResult = Utils::assignAccordingToTheMap(
 			self::getOgPropertiesMap(),
 			$this->meta->openGraph,
 			$this->property,
@@ -150,10 +158,14 @@ class OpenGraphDistributor extends AbstractDistributor
 		if (str_ends_with($this->property, 'image') || str_ends_with($this->property, 'image:url')) {
 			$image = new Image();
 		} else {
+			if (!$this->meta->openGraph->images) {
+				return;
+			}
+
 			$image = array_pop($this->meta->openGraph->images);
 		}
 
-		self::assignAccordingToTheMap(
+		Utils::assignAccordingToTheMap(
 			self::getOgImagePropertiesMap(),
 			$image,
 			$this->property,
@@ -171,7 +183,7 @@ class OpenGraphDistributor extends AbstractDistributor
 			$video = array_pop($this->meta->openGraph->videos);
 		}
 
-		self::assignAccordingToTheMap(
+		Utils::assignAccordingToTheMap(
 			self::getOgVideoPropertiesMap(),
 			$video,
 			$this->property,
@@ -189,7 +201,7 @@ class OpenGraphDistributor extends AbstractDistributor
 			$audio = array_pop($this->meta->openGraph->audio);
 		}
 
-		self::assignAccordingToTheMap(
+		Utils::assignAccordingToTheMap(
 			self::getOgAudioPropertiesMap(),
 			$audio,
 			$this->property,
