@@ -7,6 +7,13 @@ use Osmuhin\HtmlMeta\Utils;
 
 class MetaDistributor extends AbstractDistributor
 {
+	/**
+	 * For testing purposes only
+	 *
+	 * @see \tests\Distributors\MetaDistributorTest
+	 */
+	private bool $testEmptyContent = false;
+
 	public function canHandle(Element $el): bool
 	{
 		return $el->name === 'meta' && $el->attributes;
@@ -19,7 +26,8 @@ class MetaDistributor extends AbstractDistributor
 		}
 
 		if ($name = @$el->attributes['name']) {
-			$this->handleNamedMeta($name, $el);
+			$name = mb_strtolower(trim($name), 'UTF-8');
+			$name && $this->handleNamedMeta($name, $el);
 		}
 	}
 
@@ -45,15 +53,13 @@ class MetaDistributor extends AbstractDistributor
 
 	protected function handleNamedMeta(string $name, Element $meta): void
 	{
-		// @codeCoverageIgnoreStart
-		if (!$name = mb_strtolower(trim($name), 'UTF-8')) {
-			return;
-		}
+		$content = @$meta->attributes['content'];
 
-		if (!$content = @$meta->attributes['content']) {
+		if (!$content || !$content = trim($content)) {
+			$this->testEmptyContent = true;
+
 			return;
 		}
-		// @codeCoverageIgnoreEnd
 
 		$assignmentResult = Utils::assignAccordingToTheMap(
 			self::getPropertiesMap(),

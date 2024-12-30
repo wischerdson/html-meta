@@ -101,7 +101,7 @@ class OpenGraphDistributor extends AbstractDistributor
 			'og:video:secure_url' => Utils::assignPropertyAndGuessMimeType('secureUrl'),
 			'og:video:type' => Utils::assignPropertyForceOverwrite('type'),
 			'og:video:width' => Utils::assignPropertyIgnoringErrors('width'),
-			'og:video:height' => Utils::assignPropertyIgnoringErrors('height'),
+			'og:video:height' => Utils::assignPropertyIgnoringErrors('height')
 		];
 	}
 
@@ -111,7 +111,7 @@ class OpenGraphDistributor extends AbstractDistributor
 			'og:audio' => Utils::assignPropertyAndGuessMimeType('url'),
 			'og:audio:url' => Utils::assignPropertyAndGuessMimeType('url'),
 			'og:audio:secure_url' => Utils::assignPropertyAndGuessMimeType('secureUrl'),
-			'og:audio:type' => 'type'
+			'og:audio:type' => Utils::assignPropertyForceOverwrite('type')
 		];
 	}
 
@@ -180,6 +180,10 @@ class OpenGraphDistributor extends AbstractDistributor
 		if (str_ends_with($this->property, 'video') || str_ends_with($this->property, 'video:url')) {
 			$video = new Video();
 		} else {
+			if (!$this->meta->openGraph->videos) {
+				return;
+			}
+
 			$video = array_pop($this->meta->openGraph->videos);
 		}
 
@@ -198,6 +202,10 @@ class OpenGraphDistributor extends AbstractDistributor
 		if (str_ends_with($this->property, 'audio') || str_ends_with($this->property, 'audio:url')) {
 			$audio = new Audio();
 		} else {
+			if (!$this->meta->openGraph->audio) {
+				return;
+			}
+
 			$audio = array_pop($this->meta->openGraph->audio);
 		}
 

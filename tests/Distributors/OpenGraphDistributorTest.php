@@ -4,6 +4,7 @@ namespace Tests\Distributors;
 
 use Osmuhin\HtmlMeta\Distributors\OpenGraphDistributor;
 use Osmuhin\HtmlMeta\Dto\Meta;
+use Osmuhin\HtmlMeta\Dto\OpenGraph\Audio;
 use Osmuhin\HtmlMeta\Dto\OpenGraph\Image;
 use Osmuhin\HtmlMeta\Dto\OpenGraph\Video;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -145,5 +146,52 @@ final class OpenGraphDistributorTest extends TestCase
 			'width' => null,
 			'height' => 1000,
 		], $video2->toArray());
+	}
+
+	public function test_og_audio(): void
+	{
+		$properties = [
+			['property' => 'og:audio', 'content' => '/storage/audio.mp3'],
+			['property' => 'og:audio:url', 'content' => '/storage/another-audio.wav'],
+			['property' => 'og:audio:secure_url', 'content' => 'https://example.com/storage/another-audio.wav'],
+			['property' => 'og:audio:type', 'content' => 'audio/wav']
+		];
+
+		foreach ($properties as ['property' => $property, 'content' => $content]) {
+			$element = self::makeMetaWithProperty($property, $content);
+
+			$this->distributor->canHandle($element);
+			$this->distributor->handle($element);
+		}
+
+		self::assertCount(2, $this->meta->openGraph->audio);
+		self::assertInstanceOf(Audio::class, $audio1 = $this->meta->openGraph->audio[0]);
+		self::assertInstanceOf(Audio::class, $audio2 = $this->meta->openGraph->audio[1]);
+
+		self::assertSame([
+			'url' => '/storage/audio.mp3',
+			'secureUrl' => null,
+			'type' => 'audio/mpeg'
+		], $audio1->toArray());
+
+		self::assertSame([
+			'url' => '/storage/another-audio.wav',
+			'secureUrl' => 'https://example.com/storage/another-audio.wav',
+			'type' => 'audio/wav'
+		], $audio2->toArray());
+	}
+
+	public function test_og_alternate_locales(): void
+	{
+		$element1 = self::makeMetaWithProperty('og:locale:alternate', 'fr_FR');
+		$element2 = self::makeMetaWithProperty('og:locale:alternate', 'es_ES');
+
+		$this->distributor->canHandle($element1);
+		$this->distributor->handle($element1);
+
+		$this->distributor->canHandle($element2);
+		$this->distributor->handle($element2);
+
+		self::assertSame(['fr_FR', 'es_ES'], $this->meta->openGraph->alternateLocales);
 	}
 }

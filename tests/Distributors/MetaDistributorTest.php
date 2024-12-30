@@ -8,9 +8,11 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
+use ReflectionProperty;
 use Tests\Traits\ElementCreator;
 
 use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertTrue;
 
 final class MetaDistributorTest extends TestCase
 {
@@ -63,10 +65,20 @@ final class MetaDistributorTest extends TestCase
 	public function test_can_distributor_handles_charset(): void
 	{
 		$element = self::makeElement('meta', ['charset' => 'CP1251']);
-		$this->distributor->canHandle($element);
 		$this->distributor->handle($element);
 
 		assertEquals('CP1251', $this->meta->charset);
+	}
+
+	public function test_can_distributor_handles_empty_content(): void
+	{
+		$element = self::makeNamedMetaElement('meta', "  \n   ");
+		$this->distributor->handle($element);
+
+		$reflection = new ReflectionProperty($this->distributor, 'testEmptyContent');
+		$reflection->setAccessible(true);
+
+		assertTrue($reflection->getValue($this->distributor));
 	}
 
 	public function test_how_distributor_fills_title(): void
