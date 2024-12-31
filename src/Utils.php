@@ -3,56 +3,9 @@
 namespace Osmuhin\HtmlMeta;
 
 use Symfony\Component\Mime\MimeTypes;
-use Throwable;
 
 class Utils
 {
-	public static function assignPropertyIgnoringErrors(string $property): callable
-	{
-		return function ($value, $object) use ($property) {
-			try {
-				$object->{$property} = $value;
-			} catch (Throwable $th) {
-
-			}
-		};
-	}
-
-	public static function assignPropertyForceOverwrite(string $property): callable
-	{
-		return function ($value, $object) use ($property) {
-			$object->{$property} = $value;
-		};
-	}
-
-	public static function assignPropertyAndGuessMimeType(string $property, string $propertyType = 'type'): callable
-	{
-		return function ($value, $object) use ($property, $propertyType) {
-			$object->{$property} = $value;
-
-			if ($maybeExtension = Utils::guessExtension($value)) {
-				$object->{$propertyType} ??= Utils::guessMimeType($maybeExtension);
-			}
-		};
-	}
-
-	public static function assignAccordingToTheMap(array $map, object $object, string $name, string $content): bool
-	{
-		if (isset($map[$name])) {
-			if (is_callable($map[$name])) {
-				call_user_func($map[$name], $content, $object);
-
-				return true;
-			}
-
-			$object->{$map[$name]} ??= $content;
-
-			return true;
-		}
-
-		return false;
-	}
-
 	public static function guessMimeType(string $extension): ?string
 	{
 		$types = MimeTypes::getDefault()->getMimeTypes($extension);
@@ -68,5 +21,42 @@ class Utils
 		$explodedName = explode('.', $file);
 
 		return \count($explodedName) > 1 ? array_pop($explodedName) : null;
+	}
+
+	public static function processUrl(string $url): string
+	{
+		/** @var \Osmuhin\HtmlMeta\Config $config */
+		$config = ServiceLocator::container()->get('config');
+
+		if (preg_match("/https?:\/\//i", $url)) {
+			return $url;
+		}
+
+		[$domain, $path] = $config->getBaseUrl();
+
+		if (str_starts_with($url, '/')) {
+			return $domain . $url;
+		}
+
+		return implode('/', [$domain, $path, $url]);
+	}
+
+	public static function splitUrl(string $url): array
+	{
+		if (str_contains($url, '://')) {
+			[$scheme, $url] = explode('://', $url, 2);
+			$scheme .= '://';
+		} else {
+			$scheme = '';
+		}
+
+		if (str_contains($url, '/')) {
+			[$domain, $path] = explode('/', $url, 2);
+		} else {
+			$domain = $url;
+			$path = '/';
+		}
+
+		return [$scheme . $domain, trim($path, '/')];
 	}
 }

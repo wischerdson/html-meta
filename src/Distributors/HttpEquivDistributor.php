@@ -2,14 +2,23 @@
 
 namespace Osmuhin\HtmlMeta\Distributors;
 
+use Osmuhin\HtmlMeta\DataMappers\HttpEquivDataMapper;
 use Osmuhin\HtmlMeta\Element;
-use Osmuhin\HtmlMeta\Utils;
 
 class HttpEquivDistributor extends AbstractDistributor
 {
 	protected string $name;
 
 	protected string $content;
+
+	protected HttpEquivDataMapper $dataMapper;
+
+	public function __construct()
+	{
+		parent::__construct();
+
+		$this->dataMapper = new HttpEquivDataMapper();
+	}
 
 	public function canHandle(Element $el): bool
 	{
@@ -35,27 +44,10 @@ class HttpEquivDistributor extends AbstractDistributor
 
 	public function handle(Element $el): void
 	{
-		Utils::assignAccordingToTheMap(
-			self::getPropertiesMap(),
-			$this->meta->httpEquiv,
-			$this->name,
-			$this->content
-		) || $this->meta->httpEquiv->other[$this->name] = $this->content;
-	}
+		if ($this->dataMapper->assign($this->name, $this->content)) {
+			return;
+		}
 
-	protected static function getPropertiesMap(): array
-	{
-		return [
-			'content-type' => 'contentType',
-			'x-ua-compatible' => 'xUaCompatible',
-			'cache-control' => 'cacheControl',
-			'content-language' => 'contentLanguage',
-			'pragma' => 'pragma',
-			'expires' => 'expires',
-			'refresh' => 'refresh',
-			'content-security-policy' => 'contentSecurityPolicy',
-			'x-dns-prefetch-control' => 'xDnsPrefetchControl',
-			'access-control-allow-origin' => 'accessControlAllowOrigin',
-		];
+		$this->meta->httpEquiv->other[$this->name] = $this->content;
 	}
 }

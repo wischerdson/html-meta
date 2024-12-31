@@ -3,6 +3,7 @@
 namespace Osmuhin\HtmlMeta\Distributors;
 
 use InvalidArgumentException;
+use Osmuhin\HtmlMeta\Config;
 use Osmuhin\HtmlMeta\Container;
 use Osmuhin\HtmlMeta\Contracts\Distributor;
 use Osmuhin\HtmlMeta\Dto\Meta;
@@ -13,6 +14,8 @@ abstract class AbstractDistributor implements Distributor
 {
 	protected Container $container;
 
+	protected Config $config;
+
 	protected Meta $meta;
 
 	/** @var \Osmuhin\HtmlMeta\Distributors\AbstractDistributor[] */
@@ -22,6 +25,7 @@ abstract class AbstractDistributor implements Distributor
 	{
 		$this->container = ServiceLocator::container();
 		$this->meta = $this->container->get(Meta::class);
+		$this->config = $this->container->get(Config::class);
 	}
 
 	public static function init(): self

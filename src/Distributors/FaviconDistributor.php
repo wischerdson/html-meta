@@ -28,6 +28,10 @@ class FaviconDistributor extends AbstractDistributor
 			return false;
 		}
 
+		if ($this->config->shouldProcessUrls()) {
+			$href = Utils::processUrl($href);
+		}
+
 		$this->rel = $rel;
 		$this->href = $href;
 

@@ -4,15 +4,24 @@ namespace Osmuhin\HtmlMeta;
 
 class Config
 {
-	private string $baseUrl = '/';
+	private array $baseUrl = ['', ''];
 
 	private bool $useDefaultDistributorsConfigurationFlag = true;
 
 	private bool $shouldProcessUrlsFlag = true;
 
-	public function disableUrlProcessing(): self
+	private bool $useTypeConversionFlag = true;
+
+	public function dontProcessUrls($doNot = true): self
 	{
-		$this->shouldProcessUrlsFlag = false;
+		$this->shouldProcessUrlsFlag = !$doNot;
+
+		return $this;
+	}
+
+	public function dontUseTypeConversions($doNot = true): self
+	{
+		$this->useTypeConversionFlag = !$doNot;
 
 		return $this;
 	}
@@ -20,16 +29,21 @@ class Config
 	public function processUrlsWith(string $baseUrl): self
 	{
 		$this->shouldProcessUrlsFlag = true;
-		$this->baseUrl = $baseUrl;
+		$this->setBaseUrl($baseUrl);
 
 		return $this;
 	}
 
-	public function dontUseDefaultDistributorsConfiguration(): self
+	public function dontUseDefaultDistributorsConfiguration($doNot = true): self
 	{
-		$this->useDefaultDistributorsConfigurationFlag = false;
+		$this->useDefaultDistributorsConfigurationFlag = !$doNot;
 
 		return $this;
+	}
+
+	public function shouldUseTypeConversion(): bool
+	{
+		return $this->useTypeConversionFlag;
 	}
 
 	public function shouldUseDefaultDistributorsConfiguration(): bool
@@ -44,12 +58,12 @@ class Config
 
 	public function setBaseUrl(string $baseUrl): self
 	{
-		$this->baseUrl = $baseUrl;
+		$this->baseUrl = Utils::splitUrl($baseUrl);
 
 		return $this;
 	}
 
-	public function getBaseUrl(): string
+	public function getBaseUrl(): array
 	{
 		return $this->baseUrl;
 	}
