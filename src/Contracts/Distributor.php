@@ -2,16 +2,11 @@
 
 namespace Osmuhin\HtmlMeta\Contracts;
 
-use Osmuhin\HtmlMeta\Dto\Meta;
 use Osmuhin\HtmlMeta\Element;
 
 interface Distributor
 {
 	public static function init(): self;
-
-	public function setMeta(Meta $meta): self;
-
-	public function getMeta(): Meta;
 
 	/**
 	 * @param \Osmuhin\HtmlMeta\Contracts\Distributor|string ...$args

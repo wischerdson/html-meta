@@ -3,36 +3,30 @@
 namespace Osmuhin\HtmlMeta\Distributors;
 
 use InvalidArgumentException;
+use Osmuhin\HtmlMeta\Container;
 use Osmuhin\HtmlMeta\Contracts\Distributor;
 use Osmuhin\HtmlMeta\Dto\Meta;
 use Osmuhin\HtmlMeta\Element;
+use Osmuhin\HtmlMeta\ServiceLocator;
 
 abstract class AbstractDistributor implements Distributor
 {
+	protected Container $container;
+
 	protected Meta $meta;
 
 	/** @var \Osmuhin\HtmlMeta\Distributors\AbstractDistributor[] */
 	private array $subDistributors = [];
 
+	public function __construct()
+	{
+		$this->container = ServiceLocator::container();
+		$this->meta = $this->container->get(Meta::class);
+	}
+
 	public static function init(): self
 	{
 		return new static();
-	}
-
-	public function setMeta(Meta $meta): self
-	{
-		$this->meta = $meta;
-
-		foreach ($this->subDistributors as $subDistributor) {
-			$subDistributor->setMeta($meta);
-		}
-
-		return $this;
-	}
-
-	public function getMeta(): Meta
-	{
-		return $this->meta;
 	}
 
 	public function useSubDistributors(...$args): self

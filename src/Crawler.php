@@ -12,19 +12,25 @@ class Crawler
 {
 	public readonly Distributor $distributor;
 
+	public readonly Config $config;
+
 	public string $xpath = '//html|//html/head/link|//html/head/meta|//html/head/title';
 
 	private string $html;
 
-	private Meta $meta;
+	private string $url;
 
-	private bool $useDefaultDistributorsConfigurationFlag = true;
+	private Meta $meta;
 
 	public function __construct()
 	{
-		$this->meta = new Meta();
-
 		$this->distributor = $this->makeAnonymousDistributor();
+		$this->meta = new Meta();
+		$this->config = new Config();
+
+		ServiceLocator::register(
+			$this->makeContainer()
+		);
 	}
 
 	public static function init(?string $html = null): self
@@ -35,14 +41,16 @@ class Crawler
 		return $crawler;
 	}
 
-	public function dontUseDefaultDistributorsConfiguration()
-	{
-		$this->useDefaultDistributorsConfigurationFlag = false;
-	}
-
 	public function setHtml(string $html): self
 	{
 		$this->html = $html;
+
+		return $this;
+	}
+
+	public function setUrl(string $url): self
+	{
+		$this->config->processUrlsWith($this->url = $url);
 
 		return $this;
 	}
@@ -56,10 +64,8 @@ class Crawler
 			throw new RuntimeException('An HTML string must be provided for parsing.');
 		}
 
-		$this->useDefaultDistributorsConfigurationFlag &&
+		$this->config->shouldUseDefaultDistributorsConfiguration() &&
 		$this->useDefaultDistributorsConfiguration();
-
-		$this->distributor->setMeta($this->meta);
 
 		$crawler = new DomCrawler($this->html);
 
@@ -101,5 +107,14 @@ class Crawler
 				\Osmuhin\HtmlMeta\Distributors\FaviconDistributor::init()
 			)
 		);
+	}
+
+	private function makeContainer(): Container
+	{
+		$container = new Container();
+		$container->bind(Meta::class, $this->meta);
+		$container->bind(Config::class, $this->config);
+
+		return $container;
 	}
 }
