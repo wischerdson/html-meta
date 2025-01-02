@@ -2,14 +2,23 @@
 
 namespace Osmuhin\HtmlMeta\Distributors;
 
+use Osmuhin\HtmlMeta\DataMappers\TwitterDataMapper;
 use Osmuhin\HtmlMeta\Element;
-use Osmuhin\HtmlMeta\Utils;
 
 class TwitterDistributor extends AbstractDistributor
 {
 	protected string $name;
 
 	protected string $content;
+
+	protected TwitterDataMapper $dataMapper;
+
+	public function __construct()
+	{
+		parent::__construct();
+
+		$this->dataMapper = new TwitterDataMapper();
+	}
 
 	public function canHandle(Element $el): bool
 	{
@@ -34,30 +43,10 @@ class TwitterDistributor extends AbstractDistributor
 
 	public function handle(Element $el): void
 	{
-		$assignmentResult = Utils::assignAccordingToTheMap(
-			self::getPropertiesMap(),
-			$this->meta->twitter,
-			$this->name,
-			$this->content
-		);
-
-		if ($assignmentResult) {
+		if ($this->dataMapper->assign($this->name, $this->content)) {
 			return;
 		}
 
 		$this->meta->twitter->other[$this->name] = $this->content;
-	}
-
-	protected static function getPropertiesMap(): array
-	{
-		return [
-			'twitter:card' => 'card',
-			'twitter:site' => 'site',
-			'twitter:title' => 'title',
-			'twitter:description' => 'description',
-			'twitter:image' => 'image',
-			'twitter:image:alt' => 'imageAlt',
-			'twitter:creator' => 'creator'
-		];
 	}
 }

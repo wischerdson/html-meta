@@ -23,7 +23,7 @@ abstract class AbstractDataMapper implements DataMapper
 		$this->config = $container->get(Config::class);
 	}
 
-	protected static function assignAccordingToTheMap(array $map, object $object, string $name, string $content): bool
+	public static function assignAccordingToTheMap(array $map, object $object, string $name, string $content): bool
 	{
 		if (isset($map[$name])) {
 			self::assignPropertyWithObject($object, $map[$name], $content);
@@ -34,7 +34,7 @@ abstract class AbstractDataMapper implements DataMapper
 		return false;
 	}
 
-	protected static function assignPropertyWithObject(object $object, string|callable $property, string $value)
+	public static function assignPropertyWithObject(object $object, string|callable $property, string $value)
 	{
 		if (is_callable($value)) {
 			$value($value, $object);
@@ -43,7 +43,7 @@ abstract class AbstractDataMapper implements DataMapper
 		}
 	}
 
-	protected static function ignoreErrors(string $property): callable
+	public static function ignoreErrors(string $property): callable
 	{
 		return function ($value, $object) use ($property) {
 			try {
@@ -54,7 +54,7 @@ abstract class AbstractDataMapper implements DataMapper
 		};
 	}
 
-	protected static function int(string $property): callable
+	public static function int(string|callable $property): callable
 	{
 		return function (string $value, object $object) use ($property) {
 			if ($this->config->shouldUseTypeConversion()) {
@@ -65,7 +65,7 @@ abstract class AbstractDataMapper implements DataMapper
 		};
 	}
 
-	protected static function url(string $property): callable
+	public static function url(string|callable $property): callable
 	{
 		return function (string $value, object $object) use ($property) {
 			if ($this->config->shouldProcessUrls()) {
@@ -76,14 +76,14 @@ abstract class AbstractDataMapper implements DataMapper
 		};
 	}
 
-	protected static function forceOverwrite(string $property): callable
+	public static function forceOverwrite(string $property): callable
 	{
 		return function ($value, $object) use ($property) {
 			$object->{$property} = $value;
 		};
 	}
 
-	protected static function guessMimeType(string $property, string $propertyType = 'type'): callable
+	public static function guessMimeType(string|callable $property, string|callable $propertyType = 'type'): callable
 	{
 		return function ($value, $object) use ($property, $propertyType) {
 			self::assignPropertyWithObject($object, $property, $value);

@@ -2,17 +2,26 @@
 
 namespace Osmuhin\HtmlMeta\Distributors;
 
+use Osmuhin\HtmlMeta\DataMappers\MetaDataMapper;
 use Osmuhin\HtmlMeta\Element;
-use Osmuhin\HtmlMeta\Utils;
 
 class MetaDistributor extends AbstractDistributor
 {
+	protected MetaDataMapper $dataMapper;
+
 	/**
 	 * For testing purposes only
 	 *
 	 * @see \tests\Distributors\MetaDistributorTest
 	 */
 	private bool $testEmptyContent = false;
+
+	public function __construct()
+	{
+		parent::__construct();
+
+		$this->dataMapper = new MetaDataMapper();
+	}
 
 	public function canHandle(Element $el): bool
 	{
@@ -31,26 +40,6 @@ class MetaDistributor extends AbstractDistributor
 		}
 	}
 
-	protected static function getPropertiesMap(): array
-	{
-		return [
-			'apple-itunes-app' => 'appleItunesApp',
-			'apple-mobile-web-app-capable' => 'appleMobileWebAppCapable',
-			'apple-mobile-web-app-status-bar-style' => 'appleMobileWebAppStatusBarStyle',
-			'application-name' => 'applicationName',
-			'author' => 'author',
-			'color-scheme' => 'colorScheme',
-			'copyright' => 'copyright',
-			'description' => 'description',
-			'format-detection' => 'formatDetection',
-			'generator' => 'generator',
-			'keywords' => 'keywords',
-			'referrer' => 'referrer',
-			'robots' => 'robots',
-			'viewport' => 'viewport',
-		];
-	}
-
 	protected function handleNamedMeta(string $name, Element $meta): void
 	{
 		$content = @$meta->attributes['content'];
@@ -61,14 +50,7 @@ class MetaDistributor extends AbstractDistributor
 			return;
 		}
 
-		$assignmentResult = Utils::assignAccordingToTheMap(
-			self::getPropertiesMap(),
-			$this->meta,
-			$name,
-			$content
-		);
-
-		if ($assignmentResult) {
+		if ($this->dataMapper->assign($name, $content)) {
 			return;
 		}
 
