@@ -33,10 +33,17 @@ class Crawler
 		);
 	}
 
-	public static function init(?string $html = null): self
+	public function __destruct()
+	{
+		ServiceLocator::destructContainer();
+	}
+
+	public static function init(?string $html = null, ?string $url = null): self
 	{
 		$crawler = new self();
-		$crawler->html = $html;
+
+		$html && $crawler->setHtml($html);
+		$url && $crawler->setUrl($url);
 
 		return $crawler;
 	}
