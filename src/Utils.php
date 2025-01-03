@@ -26,7 +26,7 @@ class Utils
 	public static function processUrl(string $url): string
 	{
 		/** @var \Osmuhin\HtmlMeta\Config $config */
-		$config = ServiceLocator::container()->get('config');
+		$config = ServiceLocator::container()->get(Config::class);
 
 		if (preg_match("/https?:\/\//i", $url)) {
 			return $url;

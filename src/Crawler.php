@@ -24,13 +24,14 @@ class Crawler
 
 	public function __construct()
 	{
-		$this->distributor = $this->makeAnonymousDistributor();
 		$this->meta = new Meta();
 		$this->config = new Config();
 
 		ServiceLocator::register(
 			$this->makeContainer()
 		);
+
+		$this->distributor = $this->makeAnonymousDistributor();
 	}
 
 	public function __destruct()

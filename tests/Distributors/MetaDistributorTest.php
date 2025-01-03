@@ -2,35 +2,28 @@
 
 namespace Tests\Distributors;
 
+use Osmuhin\HtmlMeta\DataMappers\MetaDataMapper;
 use Osmuhin\HtmlMeta\Distributors\MetaDistributor;
-use Osmuhin\HtmlMeta\Dto\Meta;
-use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use ReflectionMethod;
 use ReflectionProperty;
+use Tests\Traits\DataMapperInjector;
 use Tests\Traits\ElementCreator;
+use Tests\Traits\SetupContainer;
 
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertTrue;
 
 final class MetaDistributorTest extends TestCase
 {
-	use ElementCreator;
-
-	private Meta $meta;
+	use ElementCreator, SetupContainer, DataMapperInjector;
 
 	private MetaDistributor $distributor;
 
 	protected function setUp(): void
 	{
-		$this->meta = new Meta();
 		$this->distributor = new MetaDistributor();
-		$this->distributor->setMeta($this->meta);
 	}
 
-	#[Test]
-	#[TestDox('Test "canHandle" method of the distributor')]
 	public function test_can_handle_method(): void
 	{
 		$element = self::makeElement('title', innerText: 'Hello world');
@@ -43,23 +36,25 @@ final class MetaDistributorTest extends TestCase
 		self::assertTrue($this->distributor->canHandle($element));
 	}
 
-	#[Test]
-	#[TestDox('Can distributor fills Meta DTO by the map')]
-	public function test_can_distributor_fills_dto_by_the_map(): void
+	public function test_handle_method_uses_data_mapper(): void
 	{
-		$map = (new ReflectionMethod($this->distributor, 'getPropertiesMap'))->invoke(null);
+		$dataMapper = self::createMock(MetaDataMapper::class);
 
-		foreach ($map as $propertyInTag => $propertyInObject) {
-			$content1 = "Some content for the property {$propertyInTag}";
-			$content2 = "Duplicate property {$propertyInTag} with another content";
-			$element1 = self::makeNamedMetaElement($propertyInTag, $content1);
-			$element2 = self::makeNamedMetaElement($propertyInTag, $content2);
+		$dataMapper->expects($this->once())
+			->method('assign')
+			->with($this->identicalTo('viewport'), $this->identicalTo('user-scalable=no, width=device-width, initial-scale=1.0'))
+			->willReturn(true);
 
-			$this->distributor->handle($element1);
-			$this->distributor->handle($element2);
+		self::injectDataMapper($this->distributor, $dataMapper);
 
-			self::assertSame($content1, $this->meta->$propertyInObject);
-		}
+		$element = self::makeNamedMetaElement('viewport', 'user-scalable=no, width=device-width, initial-scale=1.0');
+
+		$this->distributor->handle($element);
+
+		$reflection = new ReflectionProperty($this->distributor, 'testAssignment');
+		$reflection->setAccessible(true);
+
+		assertTrue($reflection->getValue($this->distributor));
 	}
 
 	public function test_can_distributor_handles_charset(): void

@@ -2,28 +2,26 @@
 
 namespace Tests\Distributors;
 
+use Osmuhin\HtmlMeta\DataMappers\HttpEquivDataMapper;
 use Osmuhin\HtmlMeta\Distributors\HttpEquivDistributor;
-use Osmuhin\HtmlMeta\Dto\Meta;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use ReflectionMethod;
+use Tests\Traits\DataMapperInjector;
 use Tests\Traits\ElementCreator;
+use Tests\Traits\SetupContainer;
+
+use function PHPUnit\Framework\assertEmpty;
+use function PHPUnit\Framework\assertSame;
 
 final class HttpEquivDistributorTest extends TestCase
 {
-	use ElementCreator;
-
-	private Meta $meta;
+	use ElementCreator, SetupContainer, DataMapperInjector;
 
 	private HttpEquivDistributor $distributor;
 
 	protected function setUp(): void
 	{
-		$this->meta = new Meta();
 		$this->distributor = new HttpEquivDistributor();
-		$this->distributor->setMeta($this->meta);
 	}
 
 	public static function metaPropertiesProvider(): array
@@ -41,30 +39,47 @@ final class HttpEquivDistributorTest extends TestCase
 	}
 
 	#[DataProvider('metaPropertiesProvider')]
-	#[TestDox('Test "canHandle" method of the distributor')]
 	public function test_can_handle_method(array $attributes, bool $expected): void
 	{
 		$element = self::makeElement('meta', $attributes);
 		self::assertSame($expected, $this->distributor->canHandle($element));
 	}
 
-	#[Test]
-	#[TestDox('Can distributor fills Meta DTO by the map')]
-	public function test_can_distributor_fills_dto_by_the_map(): void
+	public function test_handle_method_uses_data_mapper(): void
 	{
-		$map = (new ReflectionMethod($this->distributor, 'getPropertiesMap'))->invoke(null);
+		$dataMapper = self::createMock(HttpEquivDataMapper::class);
 
-		foreach ($map as $propertyInTag => $propertyInObject) {
-			$element1 = self::makeMetaElement(['http-equiv' => $propertyInTag, 'content' => "  Some content for the property {$propertyInTag}  "]);
-			$element2 = self::makeMetaElement(['http-equiv' => $propertyInTag, 'content' => "Duplicate property {$propertyInTag} with another content"]);
+		$dataMapper->expects($this->once())
+			->method('assign')
+			->with($this->identicalTo('http-equiv-property'), $this->identicalTo('value1'))
+			->willReturn(true);
 
-			self::assertTrue($this->distributor->canHandle($element1));
-			$this->distributor->handle($element1);
+		self::injectDataMapper($this->distributor, $dataMapper);
 
-			self::assertTrue($this->distributor->canHandle($element2));
-			$this->distributor->handle($element2);
+		$element = self::makeMetaElement(['http-equiv' => 'http-equiv-property', 'content' => 'value1']);
 
-			self::assertSame("Some content for the property {$propertyInTag}", $this->meta->httpEquiv->$propertyInObject);
-		}
+		$this->distributor->canHandle($element);
+		$this->distributor->handle($element);
+
+		assertEmpty($this->meta->httpEquiv->other);
+	}
+
+	public function test_handle_method_write_other_property_of_dto()
+	{
+		$dataMapper = self::createMock(HttpEquivDataMapper::class);
+
+		$dataMapper->expects($this->once())
+			->method('assign')
+			->with($this->identicalTo('http-equiv-property', 'value2'))
+			->willReturn(false);
+
+		self::injectDataMapper($this->distributor, $dataMapper);
+
+		$element = self::makeMetaElement(['http-equiv' => 'http-equiv-property', 'content' => 'value2']);
+
+		$this->distributor->canHandle($element);
+		$this->distributor->handle($element);
+
+		assertSame(['http-equiv-property' => 'value2'], $this->meta->httpEquiv->other);
 	}
 }

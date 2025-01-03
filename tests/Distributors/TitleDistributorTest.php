@@ -3,25 +3,21 @@
 namespace Tests\Distributors;
 
 use Osmuhin\HtmlMeta\Distributors\TitleDistributor;
-use Osmuhin\HtmlMeta\Dto\Meta;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Tests\Traits\ElementCreator;
+use Tests\Traits\SetupContainer;
 
 final class TitleDistributorTest extends TestCase
 {
-	use ElementCreator;
-
-	private Meta $meta;
+	use ElementCreator, SetupContainer;
 
 	private TitleDistributor $distributor;
 
 	protected function setUp(): void
 	{
-		$this->meta = new Meta();
 		$this->distributor = new TitleDistributor();
-		$this->distributor->setMeta($this->meta);
 	}
 
 	#[Test]

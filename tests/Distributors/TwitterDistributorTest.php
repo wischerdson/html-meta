@@ -2,31 +2,27 @@
 
 namespace Tests\Distributors;
 
+use Osmuhin\HtmlMeta\DataMappers\TwitterDataMapper;
 use Osmuhin\HtmlMeta\Distributors\TwitterDistributor;
-use Osmuhin\HtmlMeta\Dto\Meta;
-use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use ReflectionMethod;
+use Tests\Traits\DataMapperInjector;
 use Tests\Traits\ElementCreator;
+use Tests\Traits\SetupContainer;
+
+use function PHPUnit\Framework\assertEmpty;
+use function PHPUnit\Framework\assertSame;
 
 final class TwitterDistributorTest extends TestCase
 {
-	use ElementCreator;
-
-	private Meta $meta;
+	use ElementCreator, SetupContainer, DataMapperInjector;
 
 	private TwitterDistributor $distributor;
 
 	protected function setUp(): void
 	{
-		$this->meta = new Meta();
 		$this->distributor = new TwitterDistributor();
-		$this->distributor->setMeta($this->meta);
 	}
 
-	#[Test]
-	#[TestDox('Test "canHandle" method of the distributor')]
 	public function test_can_handle_method(): void
 	{
 		$element = self::makeElement('meta');
@@ -54,32 +50,41 @@ final class TwitterDistributorTest extends TestCase
 		self::assertTrue($this->distributor->canHandle($element));
 	}
 
-	#[Test]
-	#[TestDox('Can distributor fills Meta DTO by the map')]
-	public function test_can_distributor_fills_dto_by_the_map(): void
+	public function test_handle_method_uses_data_mapper(): void
 	{
-		$map = (new ReflectionMethod($this->distributor, 'getPropertiesMap'))->invoke(null);
+		$dataMapper = self::createMock(TwitterDataMapper::class);
 
-		foreach ($map as $propertyInTag => $propertyInObject) {
-			$element = self::makeNamedMetaElement($propertyInTag, "  Some content for the property {$propertyInTag}  ");
-			$duplicatedElement = self::makeMetaWithProperty($propertyInTag, "Duplicate property {$propertyInTag} with another content");
+		$dataMapper->expects($this->once())
+			->method('assign')
+			->with($this->identicalTo('twitter:card'), $this->identicalTo('summary_large_image'))
+			->willReturn(true);
 
-			self::assertTrue($this->distributor->canHandle($element));
-			$this->distributor->handle($element);
+		self::injectDataMapper($this->distributor, $dataMapper);
 
-			self::assertTrue($this->distributor->canHandle($duplicatedElement));
-			$this->distributor->handle($duplicatedElement);
+		$element = self::makeMetaWithProperty('twitter:card', 'summary_large_image');
 
-			self::assertSame("Some content for the property {$propertyInTag}", $this->meta->twitter->$propertyInObject);
-		}
-	}
-
-	public function test_can_distributor_fills_other_dto_property(): void
-	{
-		$element = self::makeMetaWithProperty('twitter:app:id:iphone', '123456789');
-		self::assertTrue($this->distributor->canHandle($element));
+		$this->distributor->canHandle($element);
 		$this->distributor->handle($element);
 
-		self::assertSame(['twitter:app:id:iphone' => '123456789'], $this->meta->twitter->other);
+		assertEmpty($this->meta->twitter->other);
+	}
+
+	public function test_handle_method_write_other_property_of_dto(): void
+	{
+		$dataMapper = self::createMock(TwitterDataMapper::class);
+
+		$dataMapper->expects($this->once())
+			->method('assign')
+			->with($this->identicalTo('twitter:app:id:iphone', '123456789'))
+			->willReturn(false);
+
+		self::injectDataMapper($this->distributor, $dataMapper);
+
+		$element = self::makeMetaWithProperty('twitter:app:id:iphone', '123456789');
+
+		$this->distributor->canHandle($element);
+		$this->distributor->handle($element);
+
+		assertSame(['twitter:app:id:iphone' => '123456789'], $this->meta->twitter->other);
 	}
 }

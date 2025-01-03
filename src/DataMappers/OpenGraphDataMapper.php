@@ -66,18 +66,60 @@ class OpenGraphDataMapper extends AbstractDataMapper
 		);
 	}
 
-	public function assignImage(Image $image, string $key, string $content): bool
+	public function assignImage(string $key, string $content, bool $asNew): bool
 	{
-		return self::assignAccordingToTheMap(self::getImageMap(), $image, $key, $content);
+		if ($asNew) {
+			$image = new Image();
+		} else {
+			if (!$this->meta->openGraph->images) {
+				return false;
+			}
+
+			$image = array_pop($this->meta->openGraph->images);
+		}
+
+		$assignmentResult = self::assignAccordingToTheMap(self::getImageMap(), $image, $key, $content);
+
+		$this->meta->openGraph->images[] = $image;
+
+		return $assignmentResult;
 	}
 
-	public function assignVideo(Video $video, string $key, string $content): bool
+	public function assignVideo(string $key, string $content, bool $asNew): bool
 	{
-		return self::assignAccordingToTheMap(self::getVideoMap(), $video, $key, $content);
+		if ($asNew) {
+			$video = new Video();
+		} else {
+			if (!$this->meta->openGraph->videos) {
+				return false;
+			}
+
+			$video = array_pop($this->meta->openGraph->videos);
+		}
+
+		$assignmentResult = self::assignAccordingToTheMap(self::getVideoMap(), $video, $key, $content);
+
+		$this->meta->openGraph->videos[] = $video;
+
+		return $assignmentResult;
 	}
 
-	public function assignAudio(Audio $audio, string $key, string $content): bool
+	public function assignAudio(string $key, string $content, bool $asNew): bool
 	{
-		return self::assignAccordingToTheMap(self::getAudioMap(), $audio, $key, $content);
+		if ($asNew) {
+			$audio = new Audio();
+		} else {
+			if (!$this->meta->openGraph->audio) {
+				return false;
+			}
+
+			$audio = array_pop($this->meta->openGraph->audio);
+		}
+
+		$assignmentResult = self::assignAccordingToTheMap(self::getAudioMap(), $audio, $key, $content);
+
+		$this->meta->openGraph->audio[] = $audio;
+
+		return $assignmentResult;
 	}
 }

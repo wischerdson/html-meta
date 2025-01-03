@@ -1,0 +1,19 @@
+<?php
+
+namespace Tests\Traits;
+
+use Osmuhin\HtmlMeta\Contracts\DataMapper;
+use Osmuhin\HtmlMeta\Contracts\Distributor;
+use ReflectionClass;
+
+trait DataMapperInjector
+{
+	protected static function injectDataMapper(Distributor $distributor, DataMapper $dataMapper)
+	{
+		$reflection = new ReflectionClass($distributor);
+
+		$property = $reflection->getProperty('dataMapper');
+		$property->setAccessible(true);
+		$property->setValue($distributor, $dataMapper);
+	}
+}

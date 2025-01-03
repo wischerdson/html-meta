@@ -3,9 +3,6 @@
 namespace Osmuhin\HtmlMeta\Distributors;
 
 use Osmuhin\HtmlMeta\DataMappers\OpenGraphDataMapper;
-use Osmuhin\HtmlMeta\Dto\OpenGraph\Audio;
-use Osmuhin\HtmlMeta\Dto\OpenGraph\Image;
-use Osmuhin\HtmlMeta\Dto\OpenGraph\Video;
 use Osmuhin\HtmlMeta\Element;
 
 class OpenGraphDistributor extends AbstractDistributor
@@ -83,7 +80,11 @@ class OpenGraphDistributor extends AbstractDistributor
 		}
 
 		if (str_starts_with($property, 'og:image')) {
-			$this->setOgImage($property, $content);
+			$this->dataMapper->assignImage(
+				key: $property,
+				content: $content,
+				asNew: str_ends_with($property, 'image') || str_ends_with($property, 'image:url')
+			);
 
 			return;
 		}
@@ -95,66 +96,23 @@ class OpenGraphDistributor extends AbstractDistributor
 		}
 
 		if (str_starts_with($property, 'og:video')) {
-			$this->setOgVideo($property, $content);
+			$this->dataMapper->assignVideo(
+				key: $property,
+				content: $content,
+				asNew: str_ends_with($property, 'video') || str_ends_with($property, 'video:url')
+			);
 
 			return;
 		}
 
 		if (str_starts_with($property, 'og:audio')) {
-			$this->setOgAudio($property, $content);
+			$this->dataMapper->assignAudio(
+				key: $property,
+				content: $content,
+				asNew: str_ends_with($property, 'audio') || str_ends_with($property, 'audio:url')
+			);
 
 			return;
 		}
-	}
-
-	protected function setOgImage(string $property, string $content)
-	{
-		if (str_ends_with($property, 'image') || str_ends_with($property, 'image:url')) {
-			$image = new Image();
-		} else {
-			if (!$this->meta->openGraph->images) {
-				return;
-			}
-
-			$image = array_pop($this->meta->openGraph->images);
-		}
-
-		$this->dataMapper->assignImage($image, $property, $content);
-
-		$this->meta->openGraph->images[] = $image;
-	}
-
-	protected function setOgVideo(string $property, string $content)
-	{
-		if (str_ends_with($property, 'video') || str_ends_with($property, 'video:url')) {
-			$video = new Video();
-		} else {
-			if (!$this->meta->openGraph->videos) {
-				return;
-			}
-
-			$video = array_pop($this->meta->openGraph->videos);
-		}
-
-		$this->dataMapper->assignVideo($video, $property, $content);
-
-		$this->meta->openGraph->videos[] = $video;
-	}
-
-	protected function setOgAudio(string $property, string $content)
-	{
-		if (str_ends_with($property, 'audio') || str_ends_with($property, 'audio:url')) {
-			$audio = new Audio();
-		} else {
-			if (!$this->meta->openGraph->audio) {
-				return;
-			}
-
-			$audio = array_pop($this->meta->openGraph->audio);
-		}
-
-		$this->dataMapper->assignAudio($audio, $property, $content);
-
-		$this->meta->openGraph->audio[] = $audio;
 	}
 }

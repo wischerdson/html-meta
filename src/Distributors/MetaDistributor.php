@@ -16,6 +16,13 @@ class MetaDistributor extends AbstractDistributor
 	 */
 	private bool $testEmptyContent = false;
 
+	/**
+	 * For testing purposes only
+	 *
+	 * @see \tests\Distributors\MetaDistributorTest
+	 */
+	private bool $testAssignment = false;
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -51,6 +58,8 @@ class MetaDistributor extends AbstractDistributor
 		}
 
 		if ($this->dataMapper->assign($name, $content)) {
+			$this->testAssignment = true;
+
 			return;
 		}
 

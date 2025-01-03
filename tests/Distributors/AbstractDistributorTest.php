@@ -6,7 +6,6 @@ use InvalidArgumentException;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Osmuhin\HtmlMeta\Distributors\AbstractDistributor;
-use Osmuhin\HtmlMeta\Dto\Meta;
 use Osmuhin\HtmlMeta\Element;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -15,19 +14,17 @@ use Tests\Fixtures\Distributors\SubDistributor1;
 use Tests\Fixtures\Distributors\SubDistributor2;
 use Tests\Fixtures\Distributors\SubDistributor3;
 use Tests\Traits\ElementCreator;
+use Tests\Traits\SetupContainer;
 
 use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertInstanceOf;
-use function PHPUnit\Framework\assertIsObject;
-use function PHPUnit\Framework\assertNotSame;
 use function PHPUnit\Framework\assertNull;
 use function PHPUnit\Framework\assertSame;
 use function PHPUnit\Framework\assertTrue;
 
 final class AbstractDistributorTest extends TestCase
 {
-	use ElementCreator;
-	use MockeryPHPUnitIntegration;
+	use ElementCreator, MockeryPHPUnitIntegration, SetupContainer;
 
 	private AbstractDistributor $distributor;
 
@@ -50,7 +47,6 @@ final class AbstractDistributorTest extends TestCase
 	{
 		$distributor = $this->distributor::init();
 
-		assertIsObject($distributor);
 		assertInstanceOf(AbstractDistributor::class, $distributor);
 	}
 
@@ -93,37 +89,6 @@ final class AbstractDistributorTest extends TestCase
 		assertSame($sd1, $this->distributor->getSubDistributor(SubDistributor1::class));
 		assertSame($sd2, $this->distributor->getSubDistributor(SubDistributor2::class));
 		assertSame($sd3, $sd2->getSubDistributor(SubDistributor3::class));
-	}
-
-	public function test_can_set_meta(): void
-	{
-		$this->distributor->useSubDistributors(
-			SubDistributor1::init(),
-			$sd = SubDistributor2::init()->useSubDistributors(
-				SubDistributor3::init(),
-			)
-		);
-
-		$meta = new Meta();
-		$fakeMeta = new Meta();
-
-		$this->distributor->setMeta($fakeMeta);
-		$this->distributor->setMeta($meta);
-
-		assertSame(
-			$meta,
-			$this->distributor->getSubDistributor(SubDistributor1::class)->getMeta()
-		);
-		assertSame(
-			$meta,
-			$this->distributor->getSubDistributor(SubDistributor2::class)->getMeta()
-		);
-		assertSame(
-			$meta,
-			$sd->getSubDistributor(SubDistributor3::class)->getMeta()
-		);
-
-		assertNotSame($fakeMeta, $sd->getSubDistributor(SubDistributor3::class)->getMeta());
 	}
 
 	public function test_polling_subDistributors_1(): void

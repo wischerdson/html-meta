@@ -2,30 +2,23 @@
 
 namespace Tests\Distributors;
 
+use Osmuhin\HtmlMeta\DataMappers\OpenGraphDataMapper;
 use Osmuhin\HtmlMeta\Distributors\OpenGraphDistributor;
-use Osmuhin\HtmlMeta\Dto\Meta;
-use Osmuhin\HtmlMeta\Dto\OpenGraph\Audio;
-use Osmuhin\HtmlMeta\Dto\OpenGraph\Image;
-use Osmuhin\HtmlMeta\Dto\OpenGraph\Video;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use ReflectionMethod;
+use Tests\Traits\DataMapperInjector;
 use Tests\Traits\ElementCreator;
+use Tests\Traits\SetupContainer;
 
 final class OpenGraphDistributorTest extends TestCase
 {
-	use ElementCreator;
-
-	private Meta $meta;
+	use ElementCreator, SetupContainer, DataMapperInjector;
 
 	private OpenGraphDistributor $distributor;
 
 	protected function setUp(): void
 	{
-		$this->meta = new Meta();
 		$this->distributor = new OpenGraphDistributor();
-		$this->distributor->setMeta($this->meta);
 	}
 
 	public static function metaPropertiesProvider(): array
@@ -44,141 +37,72 @@ final class OpenGraphDistributorTest extends TestCase
 		];
 	}
 
+	public static function assigningInDataMapperProvider(): array
+	{
+		return [
+			// method, asNew, key, content
+			['assignImage', true, 'og:image', '/storage/picture.png'],
+			['assignImage', true, 'og:image:url', '/storage/another-picture.jpg'],
+			['assignImage', false, 'og:image:secure_url', 'https://example.com/storage/another-picture.jpg'],
+			['assignImage', false, 'og:image:type', 'image/pjpeg'],
+			['assignImage', false, 'og:image:width', '200'],
+			['assignImage', false, 'og:image:height', '400'],
+			['assignImage', false, 'og:image:alt', 'Picture with "png" extension'],
+
+			['assignVideo', true, 'og:video', '/storage/video.mov'],
+			['assignVideo', true, 'og:video:url', '/storage/another-video.mp4'],
+			['assignVideo', false, 'og:video:secure_url', 'https://example.com/storage/another-video.mp4'],
+			['assignVideo', false, 'og:video:type', 'video/mp4'],
+			['assignVideo', false, 'og:video:width', '80dfgdf0'],
+			['assignVideo', false, 'og:video:height', '1000'],
+
+			['assignAudio', true, 'og:audio', '/storage/audio.mp3'],
+			['assignAudio', true, 'og:audio:url', '/storage/another-audio.wav'],
+			['assignAudio', false, 'og:audio:secure_url', 'https://example.com/storage/another-audio.wav'],
+			['assignAudio', false, 'og:audio:type', 'audio/wav']
+		];
+	}
+
 	#[DataProvider('metaPropertiesProvider')]
-	#[TestDox('Test "canHandle" method of the distributor')]
 	public function test_can_handle_method(?string $property, ?string $value, bool $expected): void
 	{
 		$element = self::makeMetaWithProperty($property, $value);
 		self::assertSame($expected, $this->distributor->canHandle($element));
 	}
 
-	public function test_og_properties_map(): void
+	public function test_handle_method_uses_data_mapper(): void
 	{
-		$map = (new ReflectionMethod($this->distributor, 'getOgPropertiesMap'))->invoke(null);
+		$dataMapper = self::createMock(OpenGraphDataMapper::class);
 
-		foreach ($map as $propertyInTag => $propertyInObject) {
-			$element = self::makeMetaWithProperty($propertyInTag, "  Some content for the property {$propertyInTag}  ");
+		$dataMapper->expects($this->once())
+			->method('assign')
+			->with($this->identicalTo('og:title'), $this->identicalTo('value1'))
+			->willReturn(true);
 
-			$this->distributor->canHandle($element);
-			$this->distributor->handle($element);
+		self::injectDataMapper($this->distributor, $dataMapper);
 
-			self::assertSame("Some content for the property {$propertyInTag}", $this->meta->openGraph->$propertyInObject);
-		}
+		$element = self::makeMetaWithProperty('og:title', 'value1');
+
+		$this->distributor->canHandle($element);
+		$this->distributor->handle($element);
 	}
 
-	public function test_og_image(): void
+	#[DataProvider('assigningInDataMapperProvider')]
+	public function test_handle_method_uses_data_mapper_objects_assigning(string $method, bool $asNew, string $key, string $content): void
 	{
-		$properties = [
-			['property' => 'og:image', 'content' => '/storage/picture.png'],
-			['property' => 'og:image:alt', 'content' => 'Picture with "png" extension'],
-			['property' => 'og:image:url', 'content' => '/storage/another-picture.jpg'],
-			['property' => 'og:image:secure_url', 'content' => 'https://example.com/storage/another-picture.jpg'],
-			['property' => 'og:image:type', 'content' => 'image/pjpeg'],
-			['property' => 'og:image:width', 'content' => '200'],
-			['property' => 'og:image:height', 'content' => '400'],
-			['property' => 'og:image:alt', 'content' => 'Another picture with "jpg" extension']
-		];
+		$dataMapper = self::createMock(OpenGraphDataMapper::class);
 
-		foreach ($properties as ['property' => $property, 'content' => $content]) {
-			$element = self::makeMetaWithProperty($property, $content);
+		$dataMapper->expects($this->once())
+			->method($method)
+			->with($this->identicalTo($key), $this->identicalTo($content), $this->identicalTo($asNew))
+			->willReturn(true);
 
-			$this->distributor->canHandle($element);
-			$this->distributor->handle($element);
-		}
+		self::injectDataMapper($this->distributor, $dataMapper);
 
-		self::assertCount(2, $this->meta->openGraph->images);
-		self::assertInstanceOf(Image::class, $image1 = $this->meta->openGraph->images[0]);
-		self::assertInstanceOf(Image::class, $image2 = $this->meta->openGraph->images[1]);
+		$element = self::makeMetaWithProperty($key, $content);
 
-		self::assertSame([
-			'url' => '/storage/picture.png',
-			'secureUrl' => null,
-			'type' => 'image/png',
-			'width' => null,
-			'height' => null,
-			'alt' => 'Picture with "png" extension',
-		], $image1->toArray());
-
-		self::assertSame([
-			'url' => '/storage/another-picture.jpg',
-			'secureUrl' => 'https://example.com/storage/another-picture.jpg',
-			'type' => 'image/pjpeg',
-			'width' => 200,
-			'height' => 400,
-			'alt' => 'Another picture with "jpg" extension',
-		], $image2->toArray());
-	}
-
-	public function test_og_video(): void
-	{
-		$properties = [
-			['property' => 'og:video', 'content' => '/storage/video.mov'],
-			['property' => 'og:video:url', 'content' => '/storage/another-video.mp4'],
-			['property' => 'og:video:secure_url', 'content' => 'https://example.com/storage/another-video.mp4'],
-			['property' => 'og:video:type', 'content' => 'video/mp4'],
-			['property' => 'og:video:width', 'content' => '80dfgdf0'],
-			['property' => 'og:video:height', 'content' => '1000']
-		];
-
-		foreach ($properties as ['property' => $property, 'content' => $content]) {
-			$element = self::makeMetaWithProperty($property, $content);
-
-			$this->distributor->canHandle($element);
-			$this->distributor->handle($element);
-		}
-
-		self::assertCount(2, $this->meta->openGraph->videos);
-		self::assertInstanceOf(Video::class, $video1 = $this->meta->openGraph->videos[0]);
-		self::assertInstanceOf(Video::class, $video2 = $this->meta->openGraph->videos[1]);
-
-		self::assertSame([
-			'url' => '/storage/video.mov',
-			'secureUrl' => null,
-			'type' => 'video/quicktime',
-			'width' => null,
-			'height' => null,
-		], $video1->toArray());
-
-		self::assertSame([
-			'url' => '/storage/another-video.mp4',
-			'secureUrl' => 'https://example.com/storage/another-video.mp4',
-			'type' => 'video/mp4',
-			'width' => null,
-			'height' => 1000,
-		], $video2->toArray());
-	}
-
-	public function test_og_audio(): void
-	{
-		$properties = [
-			['property' => 'og:audio', 'content' => '/storage/audio.mp3'],
-			['property' => 'og:audio:url', 'content' => '/storage/another-audio.wav'],
-			['property' => 'og:audio:secure_url', 'content' => 'https://example.com/storage/another-audio.wav'],
-			['property' => 'og:audio:type', 'content' => 'audio/wav']
-		];
-
-		foreach ($properties as ['property' => $property, 'content' => $content]) {
-			$element = self::makeMetaWithProperty($property, $content);
-
-			$this->distributor->canHandle($element);
-			$this->distributor->handle($element);
-		}
-
-		self::assertCount(2, $this->meta->openGraph->audio);
-		self::assertInstanceOf(Audio::class, $audio1 = $this->meta->openGraph->audio[0]);
-		self::assertInstanceOf(Audio::class, $audio2 = $this->meta->openGraph->audio[1]);
-
-		self::assertSame([
-			'url' => '/storage/audio.mp3',
-			'secureUrl' => null,
-			'type' => 'audio/mpeg'
-		], $audio1->toArray());
-
-		self::assertSame([
-			'url' => '/storage/another-audio.wav',
-			'secureUrl' => 'https://example.com/storage/another-audio.wav',
-			'type' => 'audio/wav'
-		], $audio2->toArray());
+		$this->distributor->canHandle($element);
+		$this->distributor->handle($element);
 	}
 
 	public function test_og_alternate_locales(): void

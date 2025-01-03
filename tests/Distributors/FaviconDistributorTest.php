@@ -4,10 +4,10 @@ namespace Tests\Distributors;
 
 use Osmuhin\HtmlMeta\Distributors\FaviconDistributor;
 use Osmuhin\HtmlMeta\Dto\Icon;
-use Osmuhin\HtmlMeta\Dto\Meta;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Tests\Traits\ElementCreator;
+use Tests\Traits\SetupContainer;
 
 use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertInstanceOf;
@@ -16,17 +16,13 @@ use function PHPUnit\Framework\assertSame;
 
 final class FaviconDistributorTest extends TestCase
 {
-	use ElementCreator;
-
-	private Meta $meta;
+	use ElementCreator, SetupContainer;
 
 	private FaviconDistributor $distributor;
 
 	protected function setUp(): void
 	{
-		$this->meta = new Meta();
 		$this->distributor = new FaviconDistributor();
-		$this->distributor->setMeta($this->meta);
 	}
 
 	public static function metaAttributesProvider(): array
