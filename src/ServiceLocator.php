@@ -45,6 +45,11 @@ class ServiceLocator
 		);
 
 		unset(self::$containers[$class][$objectId]);
+		self::$count--;
+
+		if (!self::$containers[$class]) {
+			unset(self::$containers[$class]);
+		}
 	}
 
 	/**

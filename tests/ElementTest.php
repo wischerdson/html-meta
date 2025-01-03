@@ -1,5 +1,8 @@
 <?php
 
+namespace Tests;
+
+use DOMDocument;
 use Osmuhin\HtmlMeta\Element;
 use PHPUnit\Framework\TestCase;
 

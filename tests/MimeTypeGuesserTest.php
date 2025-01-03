@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests;
+
 use Osmuhin\HtmlMeta\Utils;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;

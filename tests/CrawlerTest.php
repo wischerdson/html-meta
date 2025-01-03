@@ -1,8 +1,11 @@
 <?php
 
+namespace Tests;
+
 use Osmuhin\HtmlMeta\Crawler;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 class CrawlerTest extends TestCase
 {
