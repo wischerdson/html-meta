@@ -54,7 +54,7 @@ class Utils
 			[$domain, $path] = explode('/', $url, 2);
 		} else {
 			$domain = $url;
-			$path = '/';
+			$path = '';
 		}
 
 		return [$scheme . $domain, trim($path, '/')];
