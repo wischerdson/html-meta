@@ -4,7 +4,7 @@ namespace Osmuhin\HtmlMeta\DataMappers;
 
 class HttpEquivDataMapper extends AbstractDataMapper
 {
-	protected static function getMap(): array
+	protected function getMap(): array
 	{
 		return [
 			'content-type' => 'contentType',
@@ -22,8 +22,8 @@ class HttpEquivDataMapper extends AbstractDataMapper
 
 	public function assign(string $key, string $content)
 	{
-		return self::assignAccordingToTheMap(
-			self::getMap(),
+		return $this->assignAccordingToTheMap(
+			$this->getMap(),
 			$this->meta->httpEquiv,
 			$key,
 			$content

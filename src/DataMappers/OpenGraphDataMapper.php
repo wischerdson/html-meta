@@ -8,12 +8,12 @@ use Osmuhin\HtmlMeta\Dto\OpenGraph\Video;
 
 class OpenGraphDataMapper extends AbstractDataMapper
 {
-	protected static function getMap(): array
+	protected function getMap(): array
 	{
 		return [
 			'og:title' => 'title',
 			'og:type' => 'type',
-			'og:url' => self::url('url'),
+			'og:url' => $this->url('url'),
 			'og:description' => 'description',
 			'og:determiner' => 'determiner',
 			'og:site_name' => 'siteName',
@@ -21,45 +21,45 @@ class OpenGraphDataMapper extends AbstractDataMapper
 		];
 	}
 
-	protected static function getImageMap(): array
+	protected function getImageMap(): array
 	{
 		return [
-			'og:image' => self::guessMimeType(self::url('url')),
-			'og:image:url' => self::guessMimeType(self::url('url')),
-			'og:image:secure_url' => self::guessMimeType(self::url('secureUrl')),
-			'og:image:type' => self::forceOverwrite('type'),
-			'og:image:width' => self::int('width'),
-			'og:image:height' => self::int('height'),
+			'og:image' => $this->guessMimeType($this->url('url')),
+			'og:image:url' => $this->guessMimeType($this->url('url')),
+			'og:image:secure_url' => $this->guessMimeType($this->url('secureUrl')),
+			'og:image:type' => $this->forceOverwrite('type'),
+			'og:image:width' => $this->int('width'),
+			'og:image:height' => $this->int('height'),
 			'og:image:alt' => 'alt'
 		];
 	}
 
-	protected static function getVideoMap(): array
+	protected function getVideoMap(): array
 	{
 		return [
-			'og:video' => self::guessMimeType(self::url('url')),
-			'og:video:url' => self::guessMimeType(self::url('url')),
-			'og:video:secure_url' => self::guessMimeType(self::url('secureUrl')),
-			'og:video:type' => self::forceOverwrite('type'),
-			'og:video:width' => self::int('width'),
-			'og:video:height' => self::int('height')
+			'og:video' => $this->guessMimeType($this->url('url')),
+			'og:video:url' => $this->guessMimeType($this->url('url')),
+			'og:video:secure_url' => $this->guessMimeType($this->url('secureUrl')),
+			'og:video:type' => $this->forceOverwrite('type'),
+			'og:video:width' => $this->int('width'),
+			'og:video:height' => $this->int('height')
 		];
 	}
 
-	protected static function getAudioMap(): array
+	protected function getAudioMap(): array
 	{
 		return [
-			'og:audio' => self::guessMimeType(self::url('url')),
-			'og:audio:url' => self::guessMimeType(self::url('url')),
-			'og:audio:secure_url' => self::guessMimeType(self::url('secureUrl')),
-			'og:audio:type' => self::forceOverwrite('type'),
+			'og:audio' => $this->guessMimeType($this->url('url')),
+			'og:audio:url' => $this->guessMimeType($this->url('url')),
+			'og:audio:secure_url' => $this->guessMimeType($this->url('secureUrl')),
+			'og:audio:type' => $this->forceOverwrite('type'),
 		];
 	}
 
 	public function assign(string $key, string $content): bool
 	{
-		return self::assignAccordingToTheMap(
-			self::getMap(),
+		return $this->assignAccordingToTheMap(
+			$this->getMap(),
 			$this->meta->openGraph,
 			$key,
 			$content
@@ -78,7 +78,7 @@ class OpenGraphDataMapper extends AbstractDataMapper
 			$image = array_pop($this->meta->openGraph->images);
 		}
 
-		$assignmentResult = self::assignAccordingToTheMap(self::getImageMap(), $image, $key, $content);
+		$assignmentResult = $this->assignAccordingToTheMap($this->getImageMap(), $image, $key, $content);
 
 		$this->meta->openGraph->images[] = $image;
 
@@ -97,7 +97,7 @@ class OpenGraphDataMapper extends AbstractDataMapper
 			$video = array_pop($this->meta->openGraph->videos);
 		}
 
-		$assignmentResult = self::assignAccordingToTheMap(self::getVideoMap(), $video, $key, $content);
+		$assignmentResult = $this->assignAccordingToTheMap($this->getVideoMap(), $video, $key, $content);
 
 		$this->meta->openGraph->videos[] = $video;
 
@@ -116,7 +116,7 @@ class OpenGraphDataMapper extends AbstractDataMapper
 			$audio = array_pop($this->meta->openGraph->audio);
 		}
 
-		$assignmentResult = self::assignAccordingToTheMap(self::getAudioMap(), $audio, $key, $content);
+		$assignmentResult = $this->assignAccordingToTheMap($this->getAudioMap(), $audio, $key, $content);
 
 		$this->meta->openGraph->audio[] = $audio;
 

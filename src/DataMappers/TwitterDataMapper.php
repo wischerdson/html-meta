@@ -4,14 +4,14 @@ namespace Osmuhin\HtmlMeta\DataMappers;
 
 class TwitterDataMapper extends AbstractDataMapper
 {
-	protected static function getMap(): array
+	protected function getMap(): array
 	{
 		return [
 			'twitter:card' => 'card',
 			'twitter:site' => 'site',
 			'twitter:title' => 'title',
 			'twitter:description' => 'description',
-			'twitter:image' => self::url('image'),
+			'twitter:image' => $this->url('image'),
 			'twitter:image:alt' => 'imageAlt',
 			'twitter:creator' => 'creator'
 		];
@@ -19,8 +19,8 @@ class TwitterDataMapper extends AbstractDataMapper
 
 	public function assign(string $key, string $content): bool
 	{
-		return self::assignAccordingToTheMap(
-			self::getMap(),
+		return $this->assignAccordingToTheMap(
+			$this->getMap(),
 			$this->meta->twitter,
 			$key,
 			$content

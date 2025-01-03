@@ -23,10 +23,10 @@ abstract class AbstractDataMapper implements DataMapper
 		$this->config = $container->get(Config::class);
 	}
 
-	public static function assignAccordingToTheMap(array $map, object $object, string $name, string $content): bool
+	public function assignAccordingToTheMap(array $map, object $object, string $name, string $content): bool
 	{
 		if (isset($map[$name])) {
-			self::assignPropertyWithObject($object, $map[$name], $content);
+			$this->assignPropertyWithObject($object, $map[$name], $content);
 
 			return true;
 		}
@@ -34,62 +34,62 @@ abstract class AbstractDataMapper implements DataMapper
 		return false;
 	}
 
-	public static function assignPropertyWithObject(object $object, string|callable $property, string $value)
+	public function assignPropertyWithObject(object $object, string|callable $property, mixed $value)
 	{
-		if (is_callable($value)) {
-			$value($value, $object);
+		if (is_callable($property)) {
+			$property($value, $object);
 		} else {
 			$object->{$property} ??= $value;
 		}
 	}
 
-	public static function ignoreErrors(string $property): callable
+	public function ignoreErrors(string $property): callable
 	{
 		return function ($value, $object) use ($property) {
 			try {
-				self::assignPropertyWithObject($object, $property, $value);
+				$this->assignPropertyWithObject($object, $property, $value);
 			} catch (Throwable $th) {
 
 			}
 		};
 	}
 
-	public static function int(string|callable $property): callable
+	public function int(string|callable $property): callable
 	{
 		return function (string $value, object $object) use ($property) {
 			if ($this->config->shouldUseTypeConversion()) {
 				$value = ctype_digit($value) ? (int) $value : null;
 			}
 
-			self::assignPropertyWithObject($object, $property, $value);
+			$this->assignPropertyWithObject($object, $property, $value);
 		};
 	}
 
-	public static function url(string|callable $property): callable
+	public function url(string|callable $property): callable
 	{
 		return function (string $value, object $object) use ($property) {
 			if ($this->config->shouldProcessUrls()) {
 				$value = Utils::processUrl($value);
 			}
 
-			self::assignPropertyWithObject($object, $property, $value);
+			$this->assignPropertyWithObject($object, $property, $value);
 		};
 	}
 
-	public static function forceOverwrite(string $property): callable
+	public function forceOverwrite(string $property): callable
 	{
 		return function ($value, $object) use ($property) {
 			$object->{$property} = $value;
 		};
 	}
 
-	public static function guessMimeType(string|callable $property, string|callable $propertyType = 'type'): callable
+	public function guessMimeType(string|callable $property, string|callable $propertyType = 'type'): callable
 	{
 		return function ($value, $object) use ($property, $propertyType) {
-			self::assignPropertyWithObject($object, $property, $value);
+			$this->assignPropertyWithObject($object, $property, $value);
 
 			if ($maybeExtension = Utils::guessExtension($value)) {
-				self::assignPropertyWithObject($object, $propertyType, Utils::guessMimeType($maybeExtension));
+				$this->assignPropertyWithObject($object, $propertyType, Utils::guessMimeType($maybeExtension));
 			}
 		};
 	}

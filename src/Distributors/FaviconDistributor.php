@@ -2,6 +2,7 @@
 
 namespace Osmuhin\HtmlMeta\Distributors;
 
+use Osmuhin\HtmlMeta\DataMappers\AbstractDataMapper;
 use Osmuhin\HtmlMeta\Dto\Icon;
 use Osmuhin\HtmlMeta\Element;
 use Osmuhin\HtmlMeta\Utils;
@@ -11,6 +12,15 @@ class FaviconDistributor extends AbstractDistributor
 	protected string $rel;
 
 	protected string $href;
+
+	protected AbstractDataMapper $dataMapper;
+
+	public function __construct()
+	{
+		parent::__construct();
+
+		$this->dataMapper = new class extends AbstractDataMapper {};
+	}
 
 	public function canHandle(Element $el): bool
 	{
@@ -65,8 +75,17 @@ class FaviconDistributor extends AbstractDistributor
 			$explodedSizes = explode('x', $icon->sizes);
 
 			if (\count($explodedSizes) === 2) {
-				$icon->width = $explodedSizes[0];
-				$icon->height = $explodedSizes[1];
+				$this->dataMapper->assignPropertyWithObject(
+					$icon,
+					$this->dataMapper->int('width'),
+					$explodedSizes[0]
+				);
+
+				$this->dataMapper->assignPropertyWithObject(
+					$icon,
+					$this->dataMapper->int('height'),
+					$explodedSizes[1]
+				);
 			}
 		}
 

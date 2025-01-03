@@ -4,7 +4,7 @@ namespace Osmuhin\HtmlMeta\DataMappers;
 
 class MetaDataMapper extends AbstractDataMapper
 {
-	protected static function getMap(): array
+	protected function getMap(): array
 	{
 		return [
 			'apple-itunes-app' => 'appleItunesApp',
@@ -26,8 +26,8 @@ class MetaDataMapper extends AbstractDataMapper
 
 	public function assign(string $key, string $content): bool
 	{
-		return self::assignAccordingToTheMap(
-			self::getMap(),
+		return $this->assignAccordingToTheMap(
+			$this->getMap(),
 			$this->meta->httpEquiv,
 			$key,
 			$content

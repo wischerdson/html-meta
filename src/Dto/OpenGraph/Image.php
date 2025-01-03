@@ -12,9 +12,9 @@ class Image implements Dto
 
 	public ?string $type = null;
 
-	public ?int $width = null;
+	public int|string|null $width = null;
 
-	public ?int $height = null;
+	public int|string|null $height = null;
 
 	public ?string $alt = null;
 
