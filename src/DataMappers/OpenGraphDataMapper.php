@@ -6,6 +6,9 @@ use Osmuhin\HtmlMeta\Dto\OpenGraph\Audio;
 use Osmuhin\HtmlMeta\Dto\OpenGraph\Image;
 use Osmuhin\HtmlMeta\Dto\OpenGraph\Video;
 
+/**
+ * @codeCoverageIgnore
+ */
 class OpenGraphDataMapper extends AbstractDataMapper
 {
 	protected function getMap(): array

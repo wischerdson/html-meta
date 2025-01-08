@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Fixtures\Distributors;
+namespace Tests\Unit\Fixtures\Distributors;
 
 use Osmuhin\HtmlMeta\Distributors\AbstractDistributor;
 use Osmuhin\HtmlMeta\Element;
 
-class SubDistributor2 extends AbstractDistributor
+class SubDistributor3 extends AbstractDistributor
 {
 	public function canHandle(Element $el): bool
 	{

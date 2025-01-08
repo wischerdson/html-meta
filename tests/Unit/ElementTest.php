@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Tests\Unit;
 
 use DOMDocument;
 use Osmuhin\HtmlMeta\Element;

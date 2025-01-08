@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Tests\Unit;
 
 use Osmuhin\HtmlMeta\Crawler;
 use PHPUnit\Framework\Attributes\Test;

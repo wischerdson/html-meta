@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Tests\Unit;
 
 use Osmuhin\HtmlMeta\Container;
 use Osmuhin\HtmlMeta\ServiceLocator;
@@ -9,8 +9,8 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use RuntimeException;
-use Tests\Fixtures\ServiceLocatorTestSubject1;
-use Tests\Fixtures\ServiceLocatorTestSubject2;
+use Tests\Unit\Fixtures\ServiceLocatorTestSubject1;
+use Tests\Unit\Fixtures\ServiceLocatorTestSubject2;
 
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertNotSame;

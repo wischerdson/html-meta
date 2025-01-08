@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Traits;
+namespace Tests\Unit\Traits;
 
 use Osmuhin\HtmlMeta\Contracts\DataMapper;
 use Osmuhin\HtmlMeta\Contracts\Distributor;

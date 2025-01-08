@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Fixtures;
+namespace Tests\Unit\Fixtures;
 
 use Osmuhin\HtmlMeta\Container;
 use Osmuhin\HtmlMeta\ServiceLocator;
 
-class ServiceLocatorTestSubject1
+class ServiceLocatorTestSubject2
 {
 	public Container $container;
 

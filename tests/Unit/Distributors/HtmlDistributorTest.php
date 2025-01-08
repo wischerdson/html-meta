@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Distributors;
+namespace Tests\Unit\Distributors;
 
 use Osmuhin\HtmlMeta\Distributors\HtmlDistributor;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Tests\Traits\ElementCreator;
-use Tests\Traits\SetupContainer;
+use Tests\Unit\Traits\ElementCreator;
+use Tests\Unit\Traits\SetupContainer;
 
 final class HtmlDistributorTest extends TestCase
 {

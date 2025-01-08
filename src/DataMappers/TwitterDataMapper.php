@@ -2,6 +2,9 @@
 
 namespace Osmuhin\HtmlMeta\DataMappers;
 
+/**
+ * @codeCoverageIgnore
+ */
 class TwitterDataMapper extends AbstractDataMapper
 {
 	protected function getMap(): array

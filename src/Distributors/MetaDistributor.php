@@ -12,14 +12,14 @@ class MetaDistributor extends AbstractDistributor
 	/**
 	 * For testing purposes only
 	 *
-	 * @see \tests\Distributors\MetaDistributorTest
+	 * @see \tests\Unit\Distributors\MetaDistributorTest
 	 */
 	private bool $testEmptyContent = false;
 
 	/**
 	 * For testing purposes only
 	 *
-	 * @see \tests\Distributors\MetaDistributorTest
+	 * @see \tests\Unit\Distributors\MetaDistributorTest
 	 */
 	private bool $testAssignment = false;
 

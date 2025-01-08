@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Distributors;
+namespace Tests\Unit\Distributors;
 
 use InvalidArgumentException;
 use Mockery;
@@ -10,11 +10,11 @@ use Osmuhin\HtmlMeta\Element;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
-use Tests\Fixtures\Distributors\SubDistributor1;
-use Tests\Fixtures\Distributors\SubDistributor2;
-use Tests\Fixtures\Distributors\SubDistributor3;
-use Tests\Traits\ElementCreator;
-use Tests\Traits\SetupContainer;
+use Tests\Unit\Fixtures\Distributors\SubDistributor1;
+use Tests\Unit\Fixtures\Distributors\SubDistributor2;
+use Tests\Unit\Fixtures\Distributors\SubDistributor3;
+use Tests\Unit\Traits\ElementCreator;
+use Tests\Unit\Traits\SetupContainer;
 
 use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertInstanceOf;

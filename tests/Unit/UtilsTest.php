@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests;
+namespace Tests\Unit;
 
 use Osmuhin\HtmlMeta\Config;
 use Osmuhin\HtmlMeta\ServiceLocator;
 use Osmuhin\HtmlMeta\Utils;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Tests\Traits\SetupContainer;
+use Tests\Unit\Traits\SetupContainer;
 
 use function PHPUnit\Framework\assertNull;
 use function PHPUnit\Framework\assertSame;

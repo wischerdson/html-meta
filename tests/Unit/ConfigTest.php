@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Tests\Unit;
 
 use Osmuhin\HtmlMeta\Config;
 use PHPUnit\Framework\TestCase;

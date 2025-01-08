@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\DataMappers;
+namespace Tests\Unit\DataMappers;
 
 use Osmuhin\HtmlMeta\DataMappers\AbstractDataMapper;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Tests\Traits\SetupContainer;
+use Tests\Unit\Traits\SetupContainer;
 
 use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertSame;

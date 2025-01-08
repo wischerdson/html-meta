@@ -1,14 +1,14 @@
 <?php
 
-namespace Tests\Distributors;
+namespace Tests\Unit\Distributors;
 
 use Osmuhin\HtmlMeta\DataMappers\HttpEquivDataMapper;
 use Osmuhin\HtmlMeta\Distributors\HttpEquivDistributor;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Tests\Traits\DataMapperInjector;
-use Tests\Traits\ElementCreator;
-use Tests\Traits\SetupContainer;
+use Tests\Unit\Traits\DataMapperInjector;
+use Tests\Unit\Traits\ElementCreator;
+use Tests\Unit\Traits\SetupContainer;
 
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertSame;

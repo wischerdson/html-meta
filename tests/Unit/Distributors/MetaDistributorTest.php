@@ -1,14 +1,14 @@
 <?php
 
-namespace Tests\Distributors;
+namespace Tests\Unit\Distributors;
 
 use Osmuhin\HtmlMeta\DataMappers\MetaDataMapper;
 use Osmuhin\HtmlMeta\Distributors\MetaDistributor;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
-use Tests\Traits\DataMapperInjector;
-use Tests\Traits\ElementCreator;
-use Tests\Traits\SetupContainer;
+use Tests\Unit\Traits\DataMapperInjector;
+use Tests\Unit\Traits\ElementCreator;
+use Tests\Unit\Traits\SetupContainer;
 
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertTrue;
