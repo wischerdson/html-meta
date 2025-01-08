@@ -32,9 +32,4 @@ class Container
 
 		return $this->instances[$key] = is_callable($binding) ? $binding($this) : $binding;
 	}
-
-	public function has(string $key): bool
-	{
-		return isset($this->instances[$key]);
-	}
 }

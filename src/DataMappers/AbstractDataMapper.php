@@ -43,17 +43,6 @@ abstract class AbstractDataMapper implements DataMapper
 		}
 	}
 
-	public function ignoreErrors(string $property): callable
-	{
-		return function ($value, $object) use ($property) {
-			try {
-				$this->assignPropertyWithObject($object, $property, $value);
-			} catch (Throwable $th) {
-
-			}
-		};
-	}
-
 	public function int(string|callable $property): callable
 	{
 		return function (string $value, object $object) use ($property) {
