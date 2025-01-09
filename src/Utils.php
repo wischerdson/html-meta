@@ -28,7 +28,10 @@ class Utils
 		/** @var \Osmuhin\HtmlMeta\Config $config */
 		$config = ServiceLocator::container()->get(Config::class);
 
-		if (preg_match("/https?:\/\//i", $url)) {
+		/**
+		 * true if the domain part is found and the string has at least one slash "/"
+		 */
+		if (str_contains($url, '/') && self::splitUrl($url)[0] !== '') {
 			return $url;
 		}
 

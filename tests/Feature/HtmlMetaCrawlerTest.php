@@ -83,4 +83,51 @@ class HtmlMetaCrawlerTest extends TestCase
 			'non-standart-meta-3' => 'some-value 3'
 		], $meta->httpEquiv->other);
 	}
+
+	public function test_parsing_favicon(): void
+	{
+		$html = file_get_contents(__DIR__ . '/resources/favicon.html');
+
+		$meta = Crawler::init(html: $html, url: 'http://example.com/path')->run();
+
+		assertSame([
+			'manifest' => 'http://example.com/manifest.webmanifest',
+			'icons' => [
+				[
+					'url' => 'http://example.com/path/favicon-small.ico',
+					'mime' => 'application/ico',
+					'extension' => 'ico',
+					'width' => 16,
+					'height' => 14,
+					'sizes' => '16x14'
+				],
+				[
+					'url' => 'http://example.com/favicon.ico',
+					'mime' => 'application/ico',
+					'extension' => 'ico',
+					'width' => null,
+					'height' => null,
+					'sizes' => 'any'
+				],
+				[
+					'url' => 'http://example.com/icon.xsvg',
+					'mime' => 'image/svg+xml',
+					'extension' => 'xsvg',
+					'width' => null,
+					'height' => null,
+					'sizes' => null
+				]
+			],
+			'appleTouchIcons' => [
+				[
+					'url' => 'apple.com/apple-touch-icon.png',
+					'mime' => 'image/png',
+					'extension' => 'png',
+					'width' => null,
+					'height' => null,
+					'sizes' => null
+				]
+			],
+		], $meta->favicon->toArray());
+	}
 }
