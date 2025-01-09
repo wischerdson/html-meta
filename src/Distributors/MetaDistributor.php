@@ -37,7 +37,9 @@ class MetaDistributor extends AbstractDistributor
 
 	public function handle(Element $el): void
 	{
-		if ($this->meta->charset = @$el->attributes['charset']) {
+		if ($charset = @$el->attributes['charset']) {
+			$this->meta->charset = $charset;
+
 			return;
 		}
 

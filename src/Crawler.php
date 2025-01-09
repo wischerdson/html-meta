@@ -174,7 +174,7 @@ class Crawler
 	 */
 	private function resolveHtmlString(): string
 	{
-		if (!isset($this->html) || !isset($this->url) || !isset($this->guzzleRequest)) {
+		if (!isset($this->html) && !isset($this->url) && !isset($this->guzzleRequest)) {
 			throw new RuntimeException('An HTML string or a url, or a guzzle request object must be provided for parsing.');
 		}
 

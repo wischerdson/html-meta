@@ -31,7 +31,7 @@ class MetaDataMapper extends AbstractDataMapper
 	{
 		return $this->assignAccordingToTheMap(
 			$this->getMap(),
-			$this->meta->httpEquiv,
+			$this->meta,
 			$key,
 			$content
 		);
