@@ -61,4 +61,26 @@ class HtmlMetaCrawlerTest extends TestCase
 			'dir' => 'rtl'
 		], $meta->htmlAttributes);
 	}
+
+	public function test_parsing_http_equiv(): void
+	{
+		$html = file_get_contents(__DIR__ . '/resources/http-equiv.html');
+
+		$meta = Crawler::init(html: $html)->run();
+
+		assertSame('text/html; charset=UTF-8', $meta->httpEquiv->contentType);
+		assertSame('IE=edge', $meta->httpEquiv->xUaCompatible);
+		assertSame('no-cache', $meta->httpEquiv->cacheControl);
+		assertSame('en', $meta->httpEquiv->contentLanguage);
+		assertSame('no-cache', $meta->httpEquiv->pragma);
+		assertSame('Tue, January 01, 2025, 12:00:00 GMT', $meta->httpEquiv->expires);
+		assertSame('5; url=https://example.com', $meta->httpEquiv->refresh);
+		assertSame('default-src \'self\';', $meta->httpEquiv->contentSecurityPolicy);
+		assertSame('on', $meta->httpEquiv->xDnsPrefetchControl);
+		assertSame('*', $meta->httpEquiv->accessControlAllowOrigin);
+		assertSame([
+			'non-standart-meta' => 'some-value 2',
+			'non-standart-meta-3' => 'some-value 3'
+		], $meta->httpEquiv->other);
+	}
 }
