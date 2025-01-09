@@ -130,4 +130,25 @@ class HtmlMetaCrawlerTest extends TestCase
 			],
 		], $meta->favicon->toArray());
 	}
+
+	public function test_parsing_twitter(): void
+	{
+		$html = file_get_contents(__DIR__ . '/resources/twitter.html');
+
+		$crawler = Crawler::init(html: $html, url: 'http://example.com/path');
+		$crawler->config->dontProcessUrls();
+
+		$meta = $crawler->run();
+
+		assertSame('summary', $meta->twitter->card);
+		assertSame('@username', $meta->twitter->site);
+		assertSame('Laravel - The PHP Framework For Web Artisans', $meta->twitter->title);
+		assertSame('Some description for twitter card.', $meta->twitter->description);
+		assertSame('/image.jpg', $meta->twitter->image);
+		assertSame('A description of the image', $meta->twitter->imageAlt);
+		assertSame('@author', $meta->twitter->creator);
+		assertSame([
+			'twitter:app:id:iphone' => '123456789'
+		], $meta->twitter->other);
+	}
 }
