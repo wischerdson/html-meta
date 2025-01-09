@@ -17,8 +17,8 @@
 	"require": {
 		"php": ">=8.0",
 		"ext-mbstring": "*",
-		"guzzlehttp/guzzle": ">=7",
-		"symfony/dom-crawler": ">=7",
+		"guzzlehttp/guzzle": ">=7.0",
+		"symfony/dom-crawler": ">=7.0",
 		"symfony/mime": "*"
 	},
 	"require-dev": {
