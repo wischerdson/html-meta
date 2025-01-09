@@ -1,0 +1,41 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '45 5 * * 0'
+
+jobs:
+  tests:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        php: ['8.2', '8.3', '8.4']
+        dependency-version: [prefer-lowest, prefer-stable]
+
+    name: PHP ${{ matrix.php }} - ${{ matrix.os }} - ${{ matrix.dependency-version }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php }}
+        extensions: dom, json, mbstring
+        tools: composer:v2
+        coverage: xdebug
+
+    - name: Setup Problem Matchers
+      run: |
+        echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+        echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+    - name: Install PHP dependencies
+      run: composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist --no-progress --ansi
+
+    - name: Run Unit With PHPUnit
+      run: composer test:phpunit
