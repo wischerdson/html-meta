@@ -2,6 +2,9 @@
 
 namespace Osmuhin\HtmlMeta;
 
+use Composer\InstalledVersions as ComposerInstalledVersions;
+use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use Osmuhin\HtmlMeta\Contracts\Distributor;
 use Osmuhin\HtmlMeta\Distributors\AbstractDistributor;
 use Osmuhin\HtmlMeta\Dto\Meta;
@@ -22,6 +25,10 @@ class Crawler
 
 	private Meta $meta;
 
+	private GuzzleClient $guzzleClient;
+
+	private GuzzleRequest $guzzleRequest;
+
 	public function __construct()
 	{
 		$this->meta = new Meta();
@@ -39,12 +46,13 @@ class Crawler
 		ServiceLocator::destructContainer();
 	}
 
-	public static function init(?string $html = null, ?string $url = null): self
+	public static function init(?string $html = null, ?string $url = null, ?GuzzleRequest $request = null): self
 	{
 		$crawler = new self();
 
 		$html && $crawler->setHtml($html);
 		$url && $crawler->setUrl($url);
+		$request && $crawler->setRequest($request);
 
 		return $crawler;
 	}
@@ -63,19 +71,29 @@ class Crawler
 		return $this;
 	}
 
-	/**
-	 * @throws \RuntimeException
-	 */
+	public function setRequest(GuzzleRequest $request): self
+	{
+		$this->guzzleRequest = $request;
+
+		return $this;
+	}
+
+	public function setGuzzleClient(GuzzleClient $guzzleClient): self
+	{
+		$this->guzzleClient = $guzzleClient;
+
+		return $this;
+	}
+
+
 	public function run(): Meta
 	{
-		if (!isset($this->html)) {
-			throw new RuntimeException('An HTML string must be provided for parsing.');
-		}
+		$html = $this->resolveHtmlString();
 
 		$this->config->shouldUseDefaultDistributorsConfiguration() &&
 		$this->useDefaultDistributorsConfiguration();
 
-		$crawler = new DomCrawler($this->html);
+		$crawler = new DomCrawler($html);
 
 		foreach ($crawler->filterXPath($this->xpath) as $node) {
 			$this->distributor->handle(
@@ -124,5 +142,50 @@ class Crawler
 		$container->bind(Config::class, $this->config);
 
 		return $container;
+	}
+
+	private function makeGuzzleClient(): GuzzleClient
+	{
+		if (isset($this->guzzleClient)) {
+			return $this->guzzleClient;
+		}
+
+		$version = ComposerInstalledVersions::getPrettyVersion('osmuhin/html-meta');
+
+		return new GuzzleClient([
+			'headers' => [
+				'User-Agent' => "OsmuhinHtmlMetaCrawler/{$version}",
+				'Accept' => 'text/html,application/xhtml+xml,application/xml'
+			]
+		]);
+	}
+
+	private function makeGuzzleRequest(): GuzzleRequest
+	{
+		if (isset($this->guzzleRequest)) {
+			return $this->guzzleRequest;
+		}
+
+		return new GuzzleRequest('GET', $this->url);
+	}
+
+	/**
+	 * @throws \RuntimeException
+	 */
+	private function resolveHtmlString(): string
+	{
+		if (!isset($this->html) || !isset($this->url) || !isset($this->guzzleRequest)) {
+			throw new RuntimeException('An HTML string or a url, or a guzzle request object must be provided for parsing.');
+		}
+
+		if (isset($this->html)) {
+			return $this->html;
+		}
+
+		$response = $this->makeGuzzleClient()->send(
+			$this->makeGuzzleRequest()
+		);
+
+		return $response->getBody();
 	}
 }
