@@ -26,7 +26,7 @@ class CrawlerTest extends TestCase
 		$crawler = new Crawler();
 
 		$this->expectException(RuntimeException::class);
-		$this->expectExceptionMessage('An HTML string must be provided for parsing.');
+		$this->expectExceptionMessage('An HTML string or a url, or a guzzle request object must be provided for parsing.');
 
 		$crawler->run();
 	}

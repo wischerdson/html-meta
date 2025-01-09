@@ -4,6 +4,7 @@
 array_shift($argv);
 
 putenv('XDEBUG_MODE=coverage');
+putenv('SKIP_GUZZLE_TESTS=true');
 
 $files = [];
 

@@ -46,6 +46,12 @@ class MetaDistributor extends AbstractDistributor
 		if ($name = @$el->attributes['name']) {
 			$name = mb_strtolower(trim($name), 'UTF-8');
 			$name && $this->handleNamedMeta($name, $el);
+
+			return;
+		}
+
+		if ($property = @$el->attributes['property']) {
+			$this->meta->unrecognizedMeta[$property] = @$el->attributes['content'];
 		}
 	}
 
@@ -79,5 +85,7 @@ class MetaDistributor extends AbstractDistributor
 
 				return;
 		}
+
+		$this->meta->unrecognizedMeta[$name] = $content;
 	}
 }

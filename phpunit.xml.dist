@@ -31,4 +31,7 @@
 			<directory>src/Dto</directory>
 		</exclude>
 	</source>
+	<php>
+		<env name="SKIP_GUZZLE_TESTS" value="false"/>
+	</php>
 </phpunit>

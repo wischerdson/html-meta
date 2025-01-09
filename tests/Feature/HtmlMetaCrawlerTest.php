@@ -14,6 +14,12 @@ class HtmlMetaCrawlerTest extends TestCase
 {
 	public function test_fetching_via_url(): void
 	{
+		if ($_ENV['SKIP_GUZZLE_TESTS']) {
+			$this->markTestSkipped('Guzzle tests are disabled');
+
+			return;
+		}
+
 		$meta = Crawler::init(url: 'https://github.com')->run();
 
 		assertInstanceOf(Meta::class, $meta);
@@ -21,6 +27,12 @@ class HtmlMetaCrawlerTest extends TestCase
 
 	public function test_fetching_via_guzzle_request(): void
 	{
+		if ($_ENV['SKIP_GUZZLE_TESTS']) {
+			$this->markTestSkipped('Guzzle tests are disabled');
+
+			return;
+		}
+
 		$request = new GuzzleRequest('GET', 'https://github.com');
 		$meta = Crawler::init(request: $request)->run();
 
@@ -150,5 +162,57 @@ class HtmlMetaCrawlerTest extends TestCase
 		assertSame([
 			'twitter:app:id:iphone' => '123456789'
 		], $meta->twitter->other);
+	}
+
+	public function test_parsing_opengraph(): void
+	{
+		$html = file_get_contents(__DIR__ . '/resources/opengraph.html');
+
+		$crawler = Crawler::init(html: $html, url: 'http://yandex.ru/path');
+
+		$meta = $crawler->run();
+
+		assertSame([
+			'title' => 'Page title',
+			'type' => 'website',
+			'url' => 'http://yandex.ru/path/products',
+			'description' => 'Description of the page that will be displayed in the posts.',
+			'determiner' => 'a',
+			'siteName' => 'Site name',
+			'locale' => 'ru_RU',
+			'alternateLocales' => ['en_US'],
+			'images' => [
+				[
+					'url' => 'http://yandex.ru/image.jpg',
+					'secureUrl' => null,
+					'type' => 'image/jpeg',
+					'width' => 1200,
+					'height' => 630,
+					'alt' => 'Image description',
+				]
+			],
+			'videos' => [
+				[
+					'url' => 'https://example.com/video.mp4',
+					'secureUrl' => 'https://example.com/video.mp4',
+					'type' => 'video/mp4',
+					'width' => 1280,
+					'height' => 720
+				]
+			],
+			'audio' => [
+				[
+					'url' => 'https://example.com/audio.mp3',
+					'secureUrl' => 'https://example.com/audio.mp3',
+					'type' => 'audio/mpeg'
+				]
+			]
+		], $meta->openGraph->toArray());
+
+		assertSame([
+			'place:location:latitude' => '59.9343',
+			'place:location:longitude' => '30.3351',
+			'fb:app_id' => '123456789012345',
+		], $meta->unrecognizedMeta);
 	}
 }
