@@ -17,13 +17,14 @@
 	"require": {
 		"php": ">=8.0",
 		"ext-mbstring": "*",
-		"guzzlehttp/guzzle": ">=7.0",
-		"symfony/dom-crawler": ">=7.0",
+		"guzzlehttp/guzzle": ">=6.3",
+		"symfony/dom-crawler": ">=6.0",
+		"masterminds/html5": ">=2.8",
 		"symfony/mime": "*"
 	},
 	"require-dev": {
-		"mockery/mockery": "^1.6",
-		"phpunit/phpunit": "^11.4",
+		"mockery/mockery": "^1.6.12",
+		"phpunit/phpunit": "^11.5",
 		"symfony/var-dumper": "^7.1"
 	},
 	"autoload": {
