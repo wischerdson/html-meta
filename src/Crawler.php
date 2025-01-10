@@ -75,6 +75,8 @@ class Crawler
 	{
 		$this->guzzleRequest = $request;
 
+		$this->setUrl((string) $request->getUri());
+
 		return $this;
 	}
 
@@ -84,7 +86,6 @@ class Crawler
 
 		return $this;
 	}
-
 
 	public function run(): Meta
 	{

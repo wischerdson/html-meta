@@ -1,5 +1,5 @@
 <p align="center">
-	<img src="data:image/svg+xml,%3Csvg%20width%3D%22106%22%20height%3D%2213%22%20viewBox%3D%220%200%20106%2013%22%20fill%3D%22%23a3a3a3%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M0.409091%2012V0.363636H1.81818V5.54545H8.02273V0.363636H9.43182V12H8.02273V6.79545H1.81818V12H0.409091ZM11.6165%201.61364V0.363636H20.3438V1.61364H16.6847V12H15.2756V1.61364H11.6165ZM22.5185%200.363636H24.2003L28.1548%2010.0227H28.2912L32.2457%200.363636H33.9276V12H32.6094V3.15909H32.4957L28.8594%2012H27.5866L23.9503%203.15909H23.8366V12H22.5185V0.363636ZM36.7528%2012V0.363636H38.1619V10.75H43.571V12H36.7528ZM57.2278%2011.104L50.0598%207.728V5.728L57.2278%202.352V4.192L52.5878%206.336C52.3744%206.432%2052.1611%206.51733%2051.9478%206.592C51.7451%206.656%2051.5851%206.69867%2051.4678%206.72C51.5851%206.74133%2051.7504%206.784%2051.9638%206.848C52.1771%206.912%2052.3851%206.992%2052.5878%207.088L57.2278%209.232V11.104ZM98.0285%2011.104V9.264L102.669%207.12C102.882%207.024%20103.09%206.944%20103.293%206.88C103.506%206.80533%20103.671%206.75733%20103.789%206.736C103.671%206.71467%20103.506%206.67733%20103.293%206.624C103.079%206.56%20102.871%206.48%20102.669%206.384L98.0285%204.224V2.352L105.197%205.728V7.728L98.0285%2011.104Z%22%20fill%3D%22%23a3a3a3%22%2F%3E%3Cpath%20d%3D%22M59.2695%2012V3.2H60.9015V4.384H61.2375L60.9655%204.672C60.9655%204.18133%2061.1042%203.78667%2061.3815%203.488C61.6588%203.18933%2062.0162%203.04%2062.4535%203.04C62.9228%203.04%2063.2855%203.232%2063.5415%203.616C63.8082%204%2063.9415%204.51733%2063.9415%205.168L63.5895%204.384H64.1335L63.9255%204.672C63.9255%204.18133%2064.0642%203.78667%2064.3415%203.488C64.6188%203.18933%2064.9868%203.04%2065.4455%203.04C65.9895%203.04%2066.4215%203.24267%2066.7415%203.648C67.0615%204.05333%2067.2215%204.60267%2067.2215%205.296V12H65.4615V5.376C65.4615%205.088%2065.3975%204.864%2065.2695%204.704C65.1415%204.53333%2064.9548%204.448%2064.7095%204.448C64.4748%204.448%2064.2882%204.528%2064.1495%204.688C64.0215%204.848%2063.9575%205.07733%2063.9575%205.376V12H62.5175V5.376C62.5175%205.07733%2062.4535%204.848%2062.3255%204.688C62.1975%204.528%2062.0108%204.448%2061.7655%204.448C61.5202%204.448%2061.3335%204.528%2061.2055%204.688C61.0882%204.848%2061.0295%205.07733%2061.0295%205.376V12H59.2695ZM72.8473%2012.16C72.1006%2012.16%2071.4499%2012.016%2070.8953%2011.728C70.3406%2011.44%2069.9086%2011.04%2069.5993%2010.528C69.3006%2010.0053%2069.1513%209.39733%2069.1513%208.704V6.496C69.1513%205.80267%2069.3006%205.2%2069.5993%204.688C69.9086%204.16533%2070.3406%203.76%2070.8953%203.472C71.4499%203.184%2072.1006%203.04%2072.8473%203.04C73.5833%203.04%2074.2233%203.184%2074.7673%203.472C75.3219%203.76%2075.7486%204.16533%2076.0473%204.688C76.3566%205.2%2076.5113%205.80267%2076.5113%206.496V8.08H71.0873V8.704C71.0873%209.32267%2071.2366%209.792%2071.5353%2010.112C71.8339%2010.4213%2072.2766%2010.576%2072.8633%2010.576C73.3113%2010.576%2073.6739%2010.5013%2073.9513%2010.352C74.2286%2010.192%2074.4046%209.96267%2074.4793%209.664H76.4473C76.2979%2010.4213%2075.8926%2011.0293%2075.2313%2011.488C74.5806%2011.936%2073.7859%2012.16%2072.8473%2012.16ZM74.5753%206.96V6.48C74.5753%205.872%2074.4313%205.408%2074.1433%205.088C73.8553%204.75733%2073.4233%204.592%2072.8473%204.592C72.2713%204.592%2071.8339%204.75733%2071.5353%205.088C71.2366%205.41867%2071.0873%205.888%2071.0873%206.496V6.832L74.7193%206.8L74.5753%206.96ZM83.385%2012C82.5423%2012%2081.881%2011.7653%2081.401%2011.296C80.9317%2010.8267%2080.697%2010.1813%2080.697%209.36V5.008H78.313V3.2H80.697V0.719999H82.713V3.2H86.089V5.008H82.713V9.36C82.713%209.91467%2082.985%2010.192%2083.529%2010.192H85.929V12H83.385ZM91.0428%2012.16C90.1361%2012.16%2089.4214%2011.92%2088.8988%2011.44C88.3761%2010.96%2088.1148%2010.3147%2088.1148%209.504C88.1148%208.64%2088.4028%207.97333%2088.9788%207.504C89.5548%207.03467%2090.3708%206.8%2091.4268%206.8H93.6188V6.048C93.6188%205.62133%2093.4801%205.29067%2093.2028%205.056C92.9254%204.81067%2092.5468%204.688%2092.0668%204.688C91.6294%204.688%2091.2668%204.784%2090.9788%204.976C90.6908%205.168%2090.5201%205.42933%2090.4668%205.76H88.5148C88.6108%204.928%2088.9841%204.26667%2089.6348%203.776C90.2854%203.28533%2091.1174%203.04%2092.1308%203.04C93.2081%203.04%2094.0561%203.312%2094.6748%203.856C95.3041%204.38933%2095.6188%205.11467%2095.6188%206.032V12H93.6828V10.464H93.3628L93.6828%2010.032C93.6828%2010.6827%2093.4428%2011.2%2092.9628%2011.584C92.4828%2011.968%2091.8428%2012.16%2091.0428%2012.16ZM91.6988%2010.656C92.2641%2010.656%2092.7228%2010.512%2093.0748%2010.224C93.4374%209.936%2093.6188%209.56267%2093.6188%209.104V8.032H91.4588C91.0534%208.032%2090.7281%208.14933%2090.4828%208.384C90.2374%208.61867%2090.1148%208.928%2090.1148%209.312C90.1148%209.728%2090.2534%2010.0587%2090.5308%2010.304C90.8188%2010.5387%2091.2081%2010.656%2091.6988%2010.656Z%22%20fill%3D%22%23348BFC%22%2F%3E%3C%2Fsvg%3E" alt="HTML meta logo" width="320">
+	<img src="https://raw.githubusercontent.com/wischerdson/html-meta/refs/heads/master/logo.svg" alt="HTML meta logo" width="320">
 </p>
 
 <p align="center">
@@ -26,8 +26,125 @@ composer require osmuhin/html-meta
 
 > You must require the **vendor/autoload.php** file in your code to enable the class autoloading mechanism provided by [Composer](https://getcomposer.org/doc/01-basic-usage.md).
 
-## Usage
-ToDo
+## Basic usage
+
+```php
+use Osmuhin\HtmlMeta\Crawler;
+
+$meta = Crawler::init(url: 'https://google.com')->run();
+
+echo $meta->title; // Google
+```
+
+Instead of a URL, you can pass raw HTML as string:
+
+```php
+
+$html = <<<END
+<html lang="en">
+	<head>
+		<title>Google</title>
+		<meta charset="UTF-8">
+		<link rel="icon" href="/favicon.ico">
+	</head>
+</html>
+END;
+
+$meta = Crawler::init(html: $html, url: 'https://google.com')->run();
+
+$icon = $meta->favicon->icons[0];
+
+echo $icon->url // https://google.com/favicon.ico
+```
+
+> Pass the `url` parameter to convert relative URLs to absolute URLs.
+
+Under the hood, the [GuzzleHttp](https://docs.guzzlephp.org/en/stable/) library is used to get html, so you can create your own request object and pass it as a request parameter:
+
+```php
+$request = new \GuzzleHttp\Psr7\Request('GET', 'https://google.com');
+
+$meta = Crawler::init(request: $request)->run();
+```
+
+## Configuration
+
+```php
+
+$crawler = Crawler::init(url: 'https://google.com');
+$crawler->config
+	->dontProcessUrls()
+	->dontUseTypeConversions()
+	->processUrlsWith('https://yandex.ru')
+	->dontUseDefaultDistributorsConfiguration();
+```
+
+| Setting | Description |
+|---------|-------------|
+| ```dontProcessUrls()``` | Disable the conversion of relative URLs to absolute URLs. |
+| ```dontUseTypeConversions()``` | Disable conversions string to int: <br><br> ```<meta property="og:image:height" content="630">``` <br> Using type conversions: ```int(630)``` <br> Disabled type conversions: ```string(3) "630"``` <br><br> ```<meta property="og:image:height" content="630.5">``` <br> Using type conversions: ```NULL``` <br> Disabled type conversions: ```string(5) "630.5"``` |
+| ```processUrlsWith(string $url)``` | Sets the base URL for converting relative paths to absolute paths.<br> *Automatically enables URL processing and cancels the ```dontProcessUrls``` setting*. |
+| ```dontUseDefaultDistributorsConfiguration()``` | Cancels the default configuration of the distributers. <br> |
+|
+
+## Core concepts
+### Operating procedure
+
+Взаимодействие с библиотекой происходит через основной объект ```$crawler``` типа ```\Osmuhin\HtmlMeta\Crawler```. С момента инициализации и до вызова метода ```run()``` происходит конфигурация работы. <br>
+
+После вызова метода ```run()```:
+
+* запрашивается HTML по указанному URL (если HTML не был установлен изначально). <br>
+Приоритет параметров, если их больше 1: ```string $html``` ➡ ```\GuzzleHttp\Psr7\Request $request``` ➡ ```string $url```;
+
+* HTML строка начинает разбираться по элементам в соответствии со свойством ```xpath```:<br>
+	```php
+	$crawler->xpath = '//html|//html/head/link|//html/head/meta|//html/head/title';
+	```
+
+
+* найденный HTML-элемент отдается в стек дитрибьютеров;
+
+* если HTML-элемент проходит условия, то его значение записывается в [DTO (Data Transfer Object)](https://en.wikipedia.org/wiki/Data_transfer_object) типа ```\Osmuhin\HtmlMeta\Contracts\Dto```;
+
+* после окончания парсинга HTML-строки формируется DTO ```\Osmuhin\HtmlMeta\Dto\Meta```.
+
+### Distributors
+
+```php
+// Default configuration:
+$crawler->distributor->useSubDistributors(
+	\Osmuhin\HtmlMeta\Distributors\HtmlDistributor::init(),
+	\Osmuhin\HtmlMeta\Distributors\TitleDistributor::init(),
+	\Osmuhin\HtmlMeta\Distributors\MetaDistributor::init()->useSubDistributors(
+		\Osmuhin\HtmlMeta\Distributors\HttpEquivDistributor::init(),
+		\Osmuhin\HtmlMeta\Distributors\TwitterDistributor::init(),
+		\Osmuhin\HtmlMeta\Distributors\OpenGraphDistributor::init()
+	),
+	\Osmuhin\HtmlMeta\Distributors\LinkDistributor::init()->useSubDistributors(
+		\Osmuhin\HtmlMeta\Distributors\FaviconDistributor::init()
+	)
+);
+```
+
+---
+## Custom initializing:
+```php
+
+$crawler = new Crawler();
+
+$crawler->setHtml(string $html);
+$crawler->setUrl(string $url);
+$crawler->setRequest(\GuzzleHttp\Psr7\Request $request);
+$crawler->setGuzzleClient(\GuzzleHttp\Client $guzzleClient);
+
+$crawler->xpath = '//html|//html/head/link|//html/head/meta|//html/head/title';
+
+$crawler->
+
+setGuzzleClient
+```
+
 
 ## Contributing
 
