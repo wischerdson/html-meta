@@ -81,7 +81,6 @@ $crawler->config
 | ```dontUseTypeConversions()``` | Disable conversions string to int: <br><br> ```<meta property="og:image:height" content="630">``` <br> Using type conversions: ```int(630)``` <br> Disabled type conversions: ```string(3) "630"``` <br><br> ```<meta property="og:image:height" content="630.5">``` <br> Using type conversions: `null` <br> Disabled type conversions: ```string(5) "630.5"``` |
 | ```processUrlsWith(string $url)``` | Sets the base URL for converting relative paths to absolute paths.<br> *Automatically enables URL processing and cancels the ```dontProcessUrls``` setting*. |
 | ```dontUseDefaultDistributorsConfiguration()``` | Cancels the default configuration of the distributers. <br> |
-|
 
 ## Core concepts
 ### Operating procedure
