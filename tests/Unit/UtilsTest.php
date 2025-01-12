@@ -2,8 +2,6 @@
 
 namespace Tests\Unit;
 
-use Osmuhin\HtmlMeta\Config;
-use Osmuhin\HtmlMeta\ServiceLocator;
 use Osmuhin\HtmlMeta\Utils;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -23,6 +21,7 @@ class UtilsTest extends TestCase
 			['path/to/file.with.dots.png', 'png'],
 			['/anotherfilename.nonexistentext', 'nonexistentext'],
 			['without-slashes.pdf', 'pdf'],
+			['/a.sd.//filewithoutextension', null],
 			['filewithoutextension', null]
 		];
 	}
@@ -67,7 +66,7 @@ class UtilsTest extends TestCase
 
 	public function test_url_processing(): void
 	{
-		ServiceLocator::container()->get(Config::class)->processUrlsWith('https://x.com/some-path');
+		$this->config->processUrlsWith('https://x.com/some-path');
 
 		assertSame('https://x.com/some-path/favicon.ico', Utils::processUrl('favicon.ico'));
 		assertSame('https://x.com/favicon.ico', Utils::processUrl('/favicon.ico'));

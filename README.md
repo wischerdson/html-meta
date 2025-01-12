@@ -1,18 +1,13 @@
 <p align="center">
-	<img src="https://raw.githubusercontent.com/wischerdson/html-meta/refs/heads/master/logo.svg" alt="HTML meta logo" width="320">
+	<img src="https://raw.githubusercontent.com/wischerdson/html-meta/refs/heads/master/docs/logo.svg" alt="HTML meta logo" width="320">
 </p>
 
 <p align="center">
-	<a href="https://github.com/wischerdson/html-meta/actions">
-		<img src="https://github.com/wischerdson/html-meta/actions/workflows/tests.yml/badge.svg" alt="Tests status">
-	</a>
-<!-- <a href="https://packagist.org/packages/laravel/framework">
-<img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a> -->
-<!-- <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a> -->
-	<a href="https://packagist.org/packages/osmuhin/html-meta">
-		<img src="https://badgen.net/github/license/wischerdson/html-meta" alt="License">
-	</a>
+	<img src="https://github.com/wischerdson/html-meta/actions/workflows/tests.yml/badge.svg" alt="Tests status">
+	<img src="https://badgen.net/github/license/wischerdson/html-meta" alt="License">
 </p>
+
+"HTML meta" is a php package for parsing website metadata such as site title, favicons, opengraph and other.
 
 ---
 
@@ -24,6 +19,7 @@ You can install the package via composer:
 composer require osmuhin/html-meta
 ```
 
+> [!NOTE]
 > You must require the **vendor/autoload.php** file in your code to enable the class autoloading mechanism provided by [Composer](https://getcomposer.org/doc/01-basic-usage.md).
 
 ## Basic usage
@@ -68,9 +64,9 @@ $meta = Crawler::init(request: $request)->run();
 ```
 
 ## Configuration
+<a name="config"></a>
 
 ```php
-
 $crawler = Crawler::init(url: 'https://google.com');
 $crawler->config
 	->dontProcessUrls()
@@ -82,7 +78,7 @@ $crawler->config
 | Setting | Description |
 |---------|-------------|
 | ```dontProcessUrls()``` | Disable the conversion of relative URLs to absolute URLs. |
-| ```dontUseTypeConversions()``` | Disable conversions string to int: <br><br> ```<meta property="og:image:height" content="630">``` <br> Using type conversions: ```int(630)``` <br> Disabled type conversions: ```string(3) "630"``` <br><br> ```<meta property="og:image:height" content="630.5">``` <br> Using type conversions: ```NULL``` <br> Disabled type conversions: ```string(5) "630.5"``` |
+| ```dontUseTypeConversions()``` | Disable conversions string to int: <br><br> ```<meta property="og:image:height" content="630">``` <br> Using type conversions: ```int(630)``` <br> Disabled type conversions: ```string(3) "630"``` <br><br> ```<meta property="og:image:height" content="630.5">``` <br> Using type conversions: `null` <br> Disabled type conversions: ```string(5) "630.5"``` |
 | ```processUrlsWith(string $url)``` | Sets the base URL for converting relative paths to absolute paths.<br> *Automatically enables URL processing and cancels the ```dontProcessUrls``` setting*. |
 | ```dontUseDefaultDistributorsConfiguration()``` | Cancels the default configuration of the distributers. <br> |
 |

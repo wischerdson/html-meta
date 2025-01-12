@@ -134,7 +134,6 @@ class Meta implements Dto
 
 	public HttpEquiv $httpEquiv;
 
-	/** @var \Osmuhin\HtmlMeta\Element[] */
 	public array $unrecognizedMeta = [];
 
 	public function __construct()
