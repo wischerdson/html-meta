@@ -2,7 +2,8 @@
 
 ## Root object
 
-### appleItunesApp <small>`string` `null`</small>
+### appleItunesApp
+`string` `null`
 
 <!-- ### appleItunesApp `string` `null` -->
 
@@ -18,7 +19,8 @@ $meta->appleItunesApp === 'app-id=myAppStoreID, app-argument=myURL';
 ```
 </details>
 
-### appleMobileWebAppCapable <small>`string` `null`</small>
+### appleMobileWebAppCapable
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -32,7 +34,8 @@ $meta->appleMobileWebAppCapable === 'yes';
 ```
 </details>
 
-### appleMobileWebAppStatusBarStyle <small>`string` `null`</small>
+### appleMobileWebAppStatusBarStyle
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -46,7 +49,8 @@ $meta->appleMobileWebAppStatusBarStyle === 'black';
 ```
 </details>
 
-### applicationName <small>`string` `null`</small>
+### applicationName
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -60,7 +64,8 @@ $meta->applicationName === 'Amazon';
 ```
 </details>
 
-### author <small>`string` `null`</small>
+### author
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -74,7 +79,8 @@ $meta->author === 'Osmuhin Daniil';
 ```
 </details>
 
-### charset <small>`string` `null`</small>
+### charset
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -88,7 +94,8 @@ $meta->charset === 'utf-8';
 ```
 </details>
 
-### colorScheme <small>`string` `null`</small>
+### colorScheme
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -102,7 +109,8 @@ $meta->colorScheme === 'light dark';
 ```
 </details>
 
-### copyright <small>`string` `null`</small>
+### copyright
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -116,7 +124,8 @@ $meta->copyright === 'Apple Inc.';
 ```
 </details>
 
-### description <small>`string` `null`</small>
+### description
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -130,7 +139,8 @@ $meta->description === 'Some description.';
 ```
 </details>
 
-### dir <small>`string` `null`</small>
+### dir
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -144,7 +154,8 @@ $meta->dir === 'ltr';
 ```
 </details>
 
-### favicon [<small>`Favicon`</small>](#favicon-object)
+### favicon
+[`Favicon`](#favicon-object)
 
 <details>
 <summary>Example</summary>
@@ -158,7 +169,8 @@ $meta->dir === 'ltr';
 ```
 </details>
 
-### formatDetection <small>`string` `null`</small>
+### formatDetection
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -172,7 +184,8 @@ $meta->formatDetection === 'telephone=no';
 ```
 </details>
 
-### generator <small>`string` `null`</small>
+### generator
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -186,7 +199,8 @@ $meta->generator === 'telephone=no';
 ```
 </details>
 
-### htmlAttributes <small>`array<string>`</small>
+### htmlAttributes
+`array<string>`
 
 <details>
 <summary>Example</summary>
@@ -204,7 +218,8 @@ $meta->htmlAttributes === [
 ```
 </details>
 
-### httpEquiv [<small>`HttpEquiv`</small>](#httpequiv-object)
+### httpEquiv
+[`HttpEquiv`](#httpequiv-object)
 
 <details>
 <summary>Example</summary>
@@ -240,7 +255,8 @@ $meta->httpEquiv->toArray() === [
 ```
 </details>
 
-### keywords <small>`string` `null`</small>
+### keywords
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -254,7 +270,8 @@ $meta->keywords === 'money, exchange';
 ```
 </details>
 
-### lang <small>`string` `null`</small>
+### lang
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -268,7 +285,8 @@ $meta->lang === 'en_US';
 ```
 </details>
 
-### openGraph [<small>`OpenGraph`</small>](#opengraph-object)
+### openGraph
+[`OpenGraph`](#opengraph-object)
 
 <details>
 <summary>Example</summary>
@@ -341,7 +359,8 @@ $meta->openGraph->toArray() === [
 ```
 </details>
 
-### referrer <small>`string` `null`</small>
+### referrer
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -355,7 +374,8 @@ $meta->referrer === 'origin';
 ```
 </details>
 
-### robots <small>`string` `null`</small>
+### robots
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -369,7 +389,8 @@ $meta->robots === 'noindex';
 ```
 </details>
 
-### themeColor <small>`array<string>`</small>
+### themeColor
+`array<string>`
 
 <details>
 <summary>Example</summary>
@@ -387,7 +408,8 @@ $meta->themeColor === [
 ```
 </details>
 
-### title <small>`string` `null`</small>
+### title
+`string` `null`
 
 > [!NOTE]
 > The title can be set in two ways: via the `title` tag or via the `meta` tag. Priority is given to the `title` tag if both variants are present in the html document.
@@ -405,7 +427,8 @@ $meta->title === 'Google';
 ```
 </details>
 
-### twitter [<small>`Twitter`</small>](#twitter-object)
+### twitter
+[`Twitter`](#twitter-object)
 
 <details>
 <summary>Example</summary>
@@ -435,7 +458,8 @@ $meta->twitter->toArray() === [
 ```
 </details>
 
-### viewport <small>`string` `null`</small>
+### viewport
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -449,7 +473,8 @@ $meta->viewport === 'width=device-width, initial-scale=1';
 ```
 </details>
 
-### unrecognizedMeta <small>`array<string>`</small>
+### unrecognizedMeta
+`array<string>`
 
 <details>
 <summary>Example</summary>
@@ -465,7 +490,8 @@ $meta->unrecognizedMeta === ['fb:app_id' => '123456789012345'];
 
 <a name="favicon-object"><h2>Favicon object</h2></a>
 
-### manifest <small>`string` `null`</small>
+### manifest
+`string` `null`
 
 > [!NOTE]
 > The property process as a URL if not disabled via the `dontProcessUrls` setting.
@@ -482,18 +508,19 @@ $meta->favicon->manifest === 'https://example.com/manifest.webmanifest';
 ```
 </details>
 
-### icons <small><code>array<<a href="#icon-object">Icon</a>></code></small>
+### icons
+<code>array<<a href="#icon-object">Icon</a>></code>
 
 <details>
 <summary>Example</summary>
 
 ```html
-<link rel="shortcut icon" href="favicon-small.ico" sizes="16X14">
+<link rel="shortcut icon" href="favicon.ico" sizes="16X14">
 ```
 
 ```php
 $meta->favicon->icons[0]->toArray() === [
-	'url' => 'http://example.com/path/favicon-small.ico',
+	'url' => 'http://example.com/path/favicon.ico',
 	'mime' => 'application/ico',
 	'extension' => 'ico',
 	'width' => 16,
@@ -503,7 +530,8 @@ $meta->favicon->icons[0]->toArray() === [
 ```
 </details>
 
-### appleTouchIcons <small><code>array<<a href="#icon-object">Icon</a>></code></small>
+### appleTouchIcons
+<code>array<<a href="#icon-object">Icon</a>></code>
 
 <details>
 <summary>Example</summary>
@@ -526,7 +554,8 @@ $meta->favicon->appleTouchIcons[0]->toArray() === [
 
 <a name="httpequiv-object"><h2>HttpEquiv object</h2></a>
 
-### contentType <small>`string` `null`</small>
+### contentType
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -540,7 +569,8 @@ $meta->httpEquiv->contentType === 'text/html; charset=UTF-8';
 ```
 </details>
 
-### xUaCompatible <small>`string` `null`</small>
+### xUaCompatible
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -554,7 +584,8 @@ $meta->httpEquiv->xUaCompatible === 'IE=edge';
 ```
 </details>
 
-### cacheControl <small>`string` `null`</small>
+### cacheControl
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -568,7 +599,8 @@ $meta->httpEquiv->cacheControl === 'no-cache';
 ```
 </details>
 
-### contentLanguage <small>`string` `null`</small>
+### contentLanguage
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -582,7 +614,8 @@ $meta->httpEquiv->contentLanguage === 'en';
 ```
 </details>
 
-### pragma <small>`string` `null`</small>
+### pragma
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -596,7 +629,8 @@ $meta->httpEquiv->pragma === 'no-cache';
 ```
 </details>
 
-### expires <small>`string` `null`</small>
+### expires
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -610,7 +644,8 @@ $meta->httpEquiv->expires === 'Tue, January 01, 2025, 12:00:00 GMT';
 ```
 </details>
 
-### refresh <small>`string` `null`</small>
+### refresh
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -624,7 +659,8 @@ $meta->httpEquiv->expires === '5; url=https://example.com';
 ```
 </details>
 
-### contentSecurityPolicy <small>`string` `null`</small>
+### contentSecurityPolicy
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -638,7 +674,8 @@ $meta->httpEquiv->contentSecurityPolicy === "default-src 'self';";
 ```
 </details>
 
-### xDnsPrefetchControl <small>`string` `null`</small>
+### xDnsPrefetchControl
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -652,7 +689,8 @@ $meta->httpEquiv->xDnsPrefetchControl === 'on';
 ```
 </details>
 
-### accessControlAllowOrigin <small>`string` `null`</small>
+### accessControlAllowOrigin
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -666,7 +704,8 @@ $meta->httpEquiv->accessControlAllowOrigin === '*';
 ```
 </details>
 
-### other <small>`array<string>`</small>
+### other
+`array<string>`
 
 <details>
 <summary>Example</summary>
@@ -682,7 +721,8 @@ $meta->httpEquiv->other === ['non-standart-meta' => 'some-value'];
 
 <a name="opengraph-object"><h2>OpenGraph object</h2></a>
 
-### title <small>`string` `null`</small>
+### title
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -696,7 +736,8 @@ $meta->openGraph->title === 'Page title';
 ```
 </details>
 
-### type <small>`string` `null`</small>
+### type
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -710,7 +751,8 @@ $meta->openGraph->type === 'website';
 ```
 </details>
 
-### url <small>`string` `null`</small>
+### url
+`string` `null`
 
 > [!NOTE]
 > The property process as a URL if not disabled via the `dontProcessUrls` setting.
@@ -727,7 +769,8 @@ $meta->openGraph->url === 'https://example.com/products';
 ```
 </details>
 
-### description <small>`string` `null`</small>
+### description
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -741,7 +784,8 @@ $meta->openGraph->description === 'Description of the page.';
 ```
 </details>
 
-### determiner <small>`string` `null`</small>
+### determiner
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -755,7 +799,8 @@ $meta->openGraph->determiner === 'a';
 ```
 </details>
 
-### siteName <small>`string` `null`</small>
+### siteName
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -769,7 +814,8 @@ $meta->openGraph->siteName === 'Site name';
 ```
 </details>
 
-### locale <small>`string` `null`</small>
+### locale
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -783,7 +829,8 @@ $meta->openGraph->siteName === 'ru_RU';
 ```
 </details>
 
-### alternateLocales <small>`array<string>`</small>
+### alternateLocales
+`array<string>`
 
 <details>
 <summary>Example</summary>
@@ -797,7 +844,8 @@ $meta->openGraph->alternateLocales === ['en_US'];
 ```
 </details>
 
-### images <small><code>array<<a href="#og-image-object">OpenGraph\Image</a>></code></small>
+### images
+<code>array<<a href="#og-image-object">OpenGraph\Image</a>></code>
 
 <details>
 <summary>Example</summary>
@@ -821,7 +869,8 @@ $meta->openGraph->images[0]->toArray() === [
 ```
 </details>
 
-### videos <small><code>array<<a href="#og-video-object">OpenGraph\Video</a>></code></small>
+### videos
+<code>array<<a href="#og-video-object">OpenGraph\Video</a>></code>
 
 <details>
 <summary>Example</summary>
@@ -844,7 +893,8 @@ $meta->openGraph->video[0]->toArray() === [
 ```
 </details>
 
-### audio <small><code>array<<a href="#og-audio-object">OpenGraph\Audio</a>></code></small>
+### audio
+<code>array<<a href="#og-audio-object">OpenGraph\Audio</a>></code>
 
 <details>
 <summary>Example</summary>
@@ -867,7 +917,8 @@ $meta->openGraph->audio[0]->toArray() === [
 
 <a name="twitter-object"><h2>Twitter object</h2></a>
 
-### card <small>`string` `null`</small>
+### card
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -881,7 +932,8 @@ $meta->twitter->card === 'summary';
 ```
 </details>
 
-### site <small>`string` `null`</small>
+### site
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -895,7 +947,8 @@ $meta->twitter->site === '@username';
 ```
 </details>
 
-### title <small>`string` `null`</small>
+### title
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -909,7 +962,8 @@ $meta->twitter->title === 'Laravel - The PHP Framework For Web Artisans';
 ```
 </details>
 
-### description <small>`string` `null`</small>
+### description
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -923,7 +977,8 @@ $meta->twitter->description === 'Laravel is a PHP web application framework with
 ```
 </details>
 
-### image <small>`string` `null`</small>
+### image
+`string` `null`
 
 > [!NOTE]
 > The property process as a URL if not disabled via the `dontProcessUrls` setting.
@@ -940,7 +995,8 @@ $meta->twitter->image === 'https://example.com/image.jpg';
 ```
 </details>
 
-### imageAlt <small>`string` `null`</small>
+### imageAlt
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -954,7 +1010,8 @@ $meta->twitter->imageAlt === 'A description of the image';
 ```
 </details>
 
-### creator <small>`string` `null`</small>
+### creator
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -968,7 +1025,8 @@ $meta->twitter->creator === '@author';
 ```
 </details>
 
-### other <small>`array<string>`</small>
+### other
+`array<string>`
 
 <details>
 <summary>Example</summary>
@@ -984,7 +1042,8 @@ $meta->twitter->other === ['twitter:app:id:iphone' => '123456789'];
 
 <a name="icon-object"><h2>Icon object</h2></a>
 
-### url <small>`string`</small>
+### url
+`string`
 
 > [!NOTE]
 > The property process as a URL if not disabled via the `dontProcessUrls` setting.
@@ -1001,7 +1060,8 @@ $icon->url === 'https://example.com/favicon.ico';
 ```
 </details>
 
-### mime <small>`string` `null`</small>
+### mime
+`string` `null`
 
 > [!NOTE]
 > The mime type will be set automatically based on the file extension if the "type" attribute is not specified.
@@ -1018,7 +1078,8 @@ $icon->mime === 'application/ico';
 ```
 </details>
 
-### extension <small>`string` `null`</small>
+### extension
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -1032,7 +1093,8 @@ $icon->extension === 'ico';
 ```
 </details>
 
-### sizes <small>`string` `null`</small>
+### sizes
+`string` `null`
 
 <details>
 <summary>Example</summary>
@@ -1046,7 +1108,8 @@ $icon->sizes === '16x14';
 ```
 </details>
 
-### width <small>`int` `string` `null`</small>
+### width
+`int` `string` `null`
 
 The property is computed from the "sizes" attribute (First number before "**x**").
 
@@ -1065,7 +1128,8 @@ $icon->width === 16;
 ```
 </details>
 
-### height <small>`int` `string` `null`</small>
+### height
+`int` `string` `null`
 
 The property is computed from the "sizes" attribute (Last number after "**x**").
 
@@ -1085,5 +1149,256 @@ $icon->height === 14;
 </details>
 
 <a name="og-image-object"><h2>OpenGraph\Image object</h2></a>
+
+### url
+`string` `null`
+
+> [!NOTE]
+> The property process as a URL if not disabled via the `dontProcessUrls` setting.
+
+<details>
+<summary>Example</summary>
+
+```html
+<meta property="og:image" content="/image.jpg">
+```
+
+```php
+$icon->url === 'https://example.com/image.jpg';
+```
+</details>
+
+### secureUrl
+`string` `null`
+
+> [!NOTE]
+> The property process as a URL if not disabled via the `dontProcessUrls` setting.
+
+<details>
+<summary>Example</summary>
+
+```html
+<meta property="og:image:secure_url" content="https://example.com/image.jpg">
+```
+
+```php
+$icon->secureUrl === 'https://example.com/image.jpg';
+```
+</details>
+
+### type
+`string` `null`
+
+> [!NOTE]
+> If the type is not explicitly specified via the meta tag "og:image:type", it will be guessed based on the file extension.
+
+<details>
+<summary>Example</summary>
+
+```html
+<meta property="og:image:type" content="image/jpeg">
+```
+
+```php
+$icon->type === 'image/jpeg';
+```
+</details>
+
+### width
+`int` `string` `null`
+
+> [!NOTE]
+> The property will try to converse the value to `int`. In case of an incorrect value, `null` will be written. You can disable this behavior with the `dontUseTypeConversions` function (See [configuration](/README.md#config)).
+
+<details>
+<summary>Example</summary>
+
+```html
+<meta property="og:image:width" content="1200">
+```
+
+```php
+$icon->width === 1200;
+```
+</details>
+
+### height
+`int` `string` `null`
+
+> [!NOTE]
+> The property will try to converse the value to `int`. In case of an incorrect value, `null` will be written. You can disable this behavior with the `dontUseTypeConversions` function (See [configuration](/README.md#config)).
+
+<details>
+<summary>Example</summary>
+
+```html
+<meta property="og:image:height" content="630">
+```
+
+```php
+$icon->height === 630;
+```
+</details>
+
+### alt
+`string` `null`
+
+<details>
+<summary>Example</summary>
+
+```html
+<meta property="og:image:alt" content="Image description">
+```
+
+```php
+$icon->alt === 'Image description';
+```
+</details>
+
 <a name="og-video-object"><h2>OpenGraph\Video object</h2></a>
+
+### url
+`string` `null`
+
+> [!NOTE]
+> The property process as a URL if not disabled via the `dontProcessUrls` setting.
+
+<details>
+<summary>Example</summary>
+
+```html
+<meta property="og:video" content="/video.mp4">
+```
+
+```php
+$video->url === 'https://example.com/video.mp4';
+```
+</details>
+
+### secureUrl
+`string` `null`
+
+> [!NOTE]
+> The property process as a URL if not disabled via the `dontProcessUrls` setting.
+
+<details>
+<summary>Example</summary>
+
+```html
+<meta property="og:video:secure_url" content="https://example.com/video.mp4">
+```
+
+```php
+$video->secureUrl === 'https://example.com/video.mp4';
+```
+</details>
+
+### type
+`string` `null`
+
+> [!NOTE]
+> If the type is not explicitly specified via the meta tag "og:video:type", it will be guessed based on the file extension.
+
+<details>
+<summary>Example</summary>
+
+```html
+<meta property="og:video:type" content="video/mp4">
+```
+
+```php
+$video->type === 'video/mp4';
+```
+</details>
+
+### width
+`int` `string` `null`
+
+> [!NOTE]
+> The property will try to converse the value to `int`. In case of an incorrect value, `null` will be written. You can disable this behavior with the `dontUseTypeConversions` function (See [configuration](/README.md#config)).
+
+<details>
+<summary>Example</summary>
+
+```html
+<meta property="og:video:width" content="1200">
+```
+
+```php
+$video->width === 1200;
+```
+</details>
+
+### height
+`int` `string` `null`
+
+> [!NOTE]
+> The property will try to converse the value to `int`. In case of an incorrect value, `null` will be written. You can disable this behavior with the `dontUseTypeConversions` function (See [configuration](/README.md#config)).
+
+<details>
+<summary>Example</summary>
+
+```html
+<meta property="og:video:height" content="630">
+```
+
+```php
+$video->height === 630;
+```
+</details>
+
 <a name="og-audio-object"><h2>OpenGraph\Audio object</h2></a>
+
+### url
+`string` `null`
+
+> [!NOTE]
+> The property process as a URL if not disabled via the `dontProcessUrls` setting.
+
+<details>
+<summary>Example</summary>
+
+```html
+<meta property="og:audio" content="/audio.mp3">
+```
+
+```php
+$audio->url === 'https://example.com/audio.mp3';
+```
+</details>
+
+### secureUrl
+`string` `null`
+
+> [!NOTE]
+> The property process as a URL if not disabled via the `dontProcessUrls` setting.
+
+<details>
+<summary>Example</summary>
+
+```html
+<meta property="og:audio:secure_url" content="https://example.com/audio.mp3">
+```
+
+```php
+$audio->secureUrl === 'https://example.com/audio.mp3';
+```
+</details>
+
+### type
+`string` `null`
+
+> [!NOTE]
+> If the type is not explicitly specified via the meta tag "og:audio:type", it will be guessed based on the file extension.
+
+<details>
+<summary>Example</summary>
+
+```html
+<meta property="og:audio:type" content="audio/mpeg">
+```
+
+```php
+$audio->type === 'audio/mpeg';
+```
+</details>
