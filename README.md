@@ -7,22 +7,24 @@
 	<img src="https://badgen.net/github/license/wischerdson/html-meta" alt="License">
 </p>
 
-"HTML meta" is a php package for parsing website metadata such as site title, favicons, opengraph and other.
+**HTML Meta** is a PHP package for parsing website metadata, such as titles, favicons, OpenGraph tags, and more.
 
 ---
 
 ## Installation
 
-You can install the package via composer:
+To install the package via Composer, run:
 
 ```bash
 composer require osmuhin/html-meta
 ```
 
 > [!NOTE]
-> You must require the **vendor/autoload.php** file in your code to enable the class autoloading mechanism provided by [Composer](https://getcomposer.org/doc/01-basic-usage.md).
+> Ensure that the vendor/autoload.php file is required in your code to enable the autoloading mechanism provided by [Composer](https://getcomposer.org/doc/01-basic-usage.md).
 
 ## Basic usage
+
+### Parsing Metadata from a URL
 
 ```php
 use Osmuhin\HtmlMeta\Crawler;
@@ -32,10 +34,11 @@ $meta = Crawler::init(url: 'https://google.com')->run();
 echo $meta->title; // Google
 ```
 
-Instead of a URL, you can pass raw HTML as string:
+### Parsing Metadata from Raw HTML
+
+Instead of a URL, you can parse metadata from Raw HTML pass it as a string:
 
 ```php
-
 $html = <<<END
 <html lang="en">
 	<head>
@@ -53,7 +56,9 @@ $icon = $meta->favicon->icons[0];
 echo $icon->url // https://google.com/favicon.ico
 ```
 
-> Pass the `url` parameter to convert relative URLs to absolute URLs.
+> Always pass the `url` parameter when using raw HTML to correctly resolve relative paths.
+
+### Using a Custom Request Object
 
 Under the hood, the [GuzzleHttp](https://docs.guzzlephp.org/en/stable/) library is used to get html, so you can create your own request object and pass it as a `$request` parameter:
 
@@ -68,6 +73,8 @@ All properties of the `meta` object describes [**here**](/docs/meta-object-prope
 ## Configuration
 <a name="config"></a>
 
+You can customize the crawler’s behavior using its configuration methods:
+
 ```php
 $crawler = Crawler::init(url: 'https://google.com');
 $crawler->config
@@ -79,36 +86,41 @@ $crawler->config
 
 | Setting | Description |
 |---------|-------------|
-| ```dontProcessUrls()``` | Disable the conversion of relative URLs to absolute URLs. |
-| ```dontUseTypeConversions()``` | Disable conversions string to int: <br><br> ```<meta property="og:image:height" content="630">``` <br> Using type conversions: ```int(630)``` <br> Disabled type conversions: ```string(3) "630"``` <br><br> ```<meta property="og:image:height" content="630.5">``` <br> Using type conversions: `null` <br> Disabled type conversions: ```string(5) "630.5"``` |
-| ```processUrlsWith(string $url)``` | Sets the base URL for converting relative paths to absolute paths.<br> *Automatically enables URL processing and cancels the ```dontProcessUrls``` setting*. |
-| ```dontUseDefaultDistributorsConfiguration()``` | Cancels the default configuration of the distributors. |
+| ```dontProcessUrls()``` | Disables the conversion of relative URLs to absolute URLs. |
+| ```dontUseTypeConversions()``` | Disables automatic type conversions (e.g., string to int): <br><br> ```<meta property="og:image:height" content="630">``` <br> Using type conversions: ```int(630)``` <br> Disabled type conversions: ```string(3) "630"``` <br><br> ```<meta property="og:image:height" content="630.5">``` <br> Using type conversions: `null` <br> Disabled type conversions: ```string(5) "630.5"``` |
+| ```processUrlsWith(string $url)``` | Sets a base URL for resolving relative paths (automatically enables URL processing). |
+| ```dontUseDefaultDistributorsConfiguration()``` | Disables the default distributor configuration. |
 
 ## Core concepts
 
-Interaction with the library takes place through the main object `$crawler` of the type `\Osmuhin\HtmlMeta\Crawler`. From the moment of initialization to the call of the `run()` method, the configuration of the work takes place. <br>
+### The Crawler object
 
-What happens after calling the `run()` method:
+The main interaction happens through the $crawler object of type \Osmuhin\HtmlMeta\Crawler. <br>
 
-* HTML string is requested at the specified URL (if HTML was not installed initially). <br>
-The priority of the parameters, if they are more than 1: `string $html` ➡ `\GuzzleHttp\Psr7\Request $request` ➡ `string $url`;
+1. Initialization: Configure the crawler before calling `run()`.
 
-* The HTML string begins to be parsed according to the `xpath` property:
+2. Execution: After calling run(), the crawler performs the following steps:
+	* Fetches the HTML string from the URL (if raw HTML is not provided). <br>
+	The priority of the parameters, if they are more than 1: `string $html` ➡ `\GuzzleHttp\Psr7\Request $request` ➡ `string $url`;
 
-	```php
-	$crawler->xpath = '//html|//html/head/link|//html/head/meta|//html/head/title';
-	```
+	* Parses the HTML using the configured xpath:
+  
+		```php
+		$crawler->xpath = '//html|//html/head/link|//html/head/meta|//html/head/title';
+		```
 
-	You are free to overwrite xpath property;
+		> You are free to overwrite xpath property;
 
-* the found HTML element is pass to the distributor stack. <br>
-If the HTML element passes the conditions, then its value is written to [DTO (Data Transfer Object)](https://en.wikipedia.org/wiki/Data_transfer_object ) of the type `\Osmuhin\HtmlMeta\Contracts\Dto`;
+	* Passes the parsed elements to the distributor stack.
+  
+	* the found HTML element is pass to the distributor stack <br>
+	If the HTML element passes the conditions, then its value is written to [DTO (Data Transfer Object)](https://en.wikipedia.org/wiki/Data_transfer_object ) of the type `\Osmuhin\HtmlMeta\Contracts\Dto`;
 
-* after parsing the HTML string, the root DTO `\Osmuhin\HtmlMeta\Dto\Meta` is formed in output.
+	* after parsing the HTML string, the root DTO `\Osmuhin\HtmlMeta\Dto\Meta` is formed in output.
 
 ### Distributors
 
-A **Distributor** is an object that validates html elements and distributes data over DTOs.
+A Distributor validates HTML elements and distributes their data into DTOs.
 
 Distributor must implements the interface `\Osmuhin\HtmlMeta\Contracts\Distributor` and has 2 main methods:
 
@@ -207,10 +219,10 @@ $crawler->distributor->useSubDistributors(
 
 ## Contributing
 
-Thank you for considering to contribute. All the contribution guidelines are mentioned [here](CONTRIBUTING.md).
+Thank you for considering contributing to this package! Please refer to the [Contributing Guidelines](CONTRIBUTING.md) for more details.
 
 You can contact me or just come say hi in Telegram: [@wischerdson](https://t.me/wischerdson)
 
 ## License
 
-"HTML meta" package is an open-sourced software licensed under the [MIT license](LICENSE.md).
+This package is open-sourced software licensed under the [MIT license](LICENSE.md).
