@@ -3,11 +3,11 @@
 namespace Osmuhin\HtmlMeta\DataMappers;
 
 use Osmuhin\HtmlMeta\Config;
+use Osmuhin\HtmlMeta\Container;
 use Osmuhin\HtmlMeta\Contracts\DataMapper;
 use Osmuhin\HtmlMeta\Dto\Meta;
 use Osmuhin\HtmlMeta\ServiceLocator;
 use Osmuhin\HtmlMeta\Utils;
-use Throwable;
 
 abstract class AbstractDataMapper implements DataMapper
 {
@@ -15,9 +15,9 @@ abstract class AbstractDataMapper implements DataMapper
 
 	protected Config $config;
 
-	public function __construct()
+	public function __construct(?Container $container = null)
 	{
-		$container = ServiceLocator::container();
+		$container ??= ServiceLocator::container();
 
 		$this->meta = $container->get(Meta::class);
 		$this->config = $container->get(Config::class);

@@ -15,6 +15,8 @@ trait SetupContainer
 
 	protected Config $config;
 
+	protected Container $container;
+
 	#[Before]
 	protected function setUpContainer(): void
 	{
@@ -22,7 +24,7 @@ trait SetupContainer
 		$this->config = new Config();
 
 		ServiceLocator::register(
-			$this->makeContainer()
+			$this->container = $this->makeContainer()
 		);
 
 		parent::setUp();

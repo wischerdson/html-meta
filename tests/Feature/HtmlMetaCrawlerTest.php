@@ -4,8 +4,11 @@ namespace Tests\Feature;
 
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use Osmuhin\HtmlMeta\Crawler;
+use Osmuhin\HtmlMeta\Distributors\TitleDistributor;
 use Osmuhin\HtmlMeta\Dto\Meta;
+use Osmuhin\HtmlMeta\Element;
 use PHPUnit\Framework\TestCase;
+use Tests\Feature\Fixtures\CustomTitleDistributor;
 
 use function PHPUnit\Framework\assertInstanceOf;
 use function PHPUnit\Framework\assertSame;
@@ -214,5 +217,37 @@ class HtmlMetaCrawlerTest extends TestCase
 			'place:location:longitude' => '30.3351',
 			'fb:app_id' => '123456789012345',
 		], $meta->unrecognizedMeta);
+	}
+
+	public function test_replacing_one_distributor_by_anon_another(): void
+	{
+		$html = '<html><head><title>Google</title></head></html>';
+
+		$crawler = Crawler::init(html: $html);
+
+		$customDistributor = new class($crawler->container) extends TitleDistributor
+		{
+			public function handle(Element $el): void
+			{
+				$this->meta->title = 'Prefix for title ' . $el->innerText;
+			}
+		};
+
+		$crawler->distributor->setSubDistributor($customDistributor, TitleDistributor::class);
+
+		$meta = $crawler->run();
+		assertSame('Prefix for title Google', $meta->title);
+	}
+
+	public function test_replacing_one_distributor_by_another(): void
+	{
+		$html = '<html><head><title>Google</title></head></html>';
+
+		$crawler = Crawler::init(html: $html);
+
+		$crawler->distributor->setSubDistributor(CustomTitleDistributor::class, TitleDistributor::class);
+
+		$meta = $crawler->run();
+		assertSame('Google title suffix', $meta->title);
 	}
 }

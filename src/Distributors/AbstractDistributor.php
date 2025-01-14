@@ -21,16 +21,16 @@ abstract class AbstractDistributor implements Distributor
 	/** @var \Osmuhin\HtmlMeta\Distributors\AbstractDistributor[] */
 	private array $subDistributors = [];
 
-	public function __construct()
+	public function __construct(?Container $container = null)
 	{
-		$this->container = ServiceLocator::container();
+		$this->container = $container ?: ServiceLocator::container();
 		$this->meta = $this->container->get(Meta::class);
 		$this->config = $this->container->get(Config::class);
 	}
 
-	public static function init(): self
+	public static function init(?Container $container = null): self
 	{
-		return new static();
+		return new static($container);
 	}
 
 	public function useSubDistributors(...$args): self
@@ -49,16 +49,20 @@ abstract class AbstractDistributor implements Distributor
 	 */
 	public function setSubDistributor(Distributor|string $distributor, ?string $key = null): self
 	{
-		$distributor = is_string($distributor) ? new $distributor() : $distributor;
+		$distributor = is_string($distributor) ? new $distributor($this->container) : $distributor;
 
 		if (!($distributor instanceof Distributor)) {
 			$class = $distributor::class;
 			throw new InvalidArgumentException("{$class} must implements \Osmuhin\HtmlMeta\Contracts\Distributor interface");
 		}
 
-		$key ??= $distributor::class;
+		if ($key) {
+			$this->subDistributors[$key] = $distributor;
+		} else {
+			$key = $distributor::class;
 
-		$this->subDistributors[$key] = $distributor;
+			!isset($this->subDistributors[$key]) && $this->subDistributors[$key] = $distributor;
+		}
 
 		return $this;
 	}

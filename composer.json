@@ -47,6 +47,11 @@
 		"test:phpunit": [
 			"@putenv XDEBUG_MODE=coverage",
 			"phpunit --colors=always"
+		],
+		"test:phpunit:partial": [
+			"@putenv SKIP_GUZZLE_TESTS=true",
+			"@putenv XDEBUG_MODE=coverage",
+			"phpunit --colors=always"
 		]
 	}
 }

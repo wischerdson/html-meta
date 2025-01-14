@@ -17,6 +17,8 @@ class Crawler
 
 	public readonly Config $config;
 
+	public readonly Container $container;
+
 	public string $xpath = '//html|//html/head/link|//html/head/meta|//html/head/title';
 
 	private string $html;
@@ -35,7 +37,7 @@ class Crawler
 		$this->config = new Config();
 
 		ServiceLocator::register(
-			$this->makeContainer()
+			$this->container = $this->makeContainer()
 		);
 
 		$this->distributor = $this->makeAnonymousDistributor();
