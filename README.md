@@ -55,13 +55,15 @@ echo $icon->url // https://google.com/favicon.ico
 
 > Pass the `url` parameter to convert relative URLs to absolute URLs.
 
-Under the hood, the [GuzzleHttp](https://docs.guzzlephp.org/en/stable/) library is used to get html, so you can create your own request object and pass it as a request parameter:
+Under the hood, the [GuzzleHttp](https://docs.guzzlephp.org/en/stable/) library is used to get html, so you can create your own request object and pass it as a `$request` parameter:
 
 ```php
 $request = new \GuzzleHttp\Psr7\Request('GET', 'https://google.com');
 
 $meta = Crawler::init(request: $request)->run();
 ```
+
+All properties of the `meta` object describes [**here**](/docs/meta-object-properties.md).
 
 ## Configuration
 <a name="config"></a>
@@ -80,34 +82,114 @@ $crawler->config
 | ```dontProcessUrls()``` | Disable the conversion of relative URLs to absolute URLs. |
 | ```dontUseTypeConversions()``` | Disable conversions string to int: <br><br> ```<meta property="og:image:height" content="630">``` <br> Using type conversions: ```int(630)``` <br> Disabled type conversions: ```string(3) "630"``` <br><br> ```<meta property="og:image:height" content="630.5">``` <br> Using type conversions: `null` <br> Disabled type conversions: ```string(5) "630.5"``` |
 | ```processUrlsWith(string $url)``` | Sets the base URL for converting relative paths to absolute paths.<br> *Automatically enables URL processing and cancels the ```dontProcessUrls``` setting*. |
-| ```dontUseDefaultDistributorsConfiguration()``` | Cancels the default configuration of the distributers. <br> |
+| ```dontUseDefaultDistributorsConfiguration()``` | Cancels the default configuration of the distributors. |
 
 ## Core concepts
-### Operating procedure
 
-Взаимодействие с библиотекой происходит через основной объект ```$crawler``` типа ```\Osmuhin\HtmlMeta\Crawler```. С момента инициализации и до вызова метода ```run()``` происходит конфигурация работы. <br>
+Interaction with the library takes place through the main object `$crawler` of the type `\Osmuhin\HtmlMeta\Crawler`. From the moment of initialization to the call of the `run()` method, the configuration of the work takes place. <br>
 
-После вызова метода ```run()```:
+What happens after calling the `run()` method:
 
-* запрашивается HTML по указанному URL (если HTML не был установлен изначально). <br>
-Приоритет параметров, если их больше 1: ```string $html``` ➡ ```\GuzzleHttp\Psr7\Request $request``` ➡ ```string $url```;
+* HTML string is requested at the specified URL (if HTML was not installed initially). <br>
+The priority of the parameters, if they are more than 1: `string $html` ➡ `\GuzzleHttp\Psr7\Request $request` ➡ `string $url`;
 
-* HTML строка начинает разбираться по элементам в соответствии со свойством ```xpath```:<br>
+* The HTML string begins to be parsed according to the `xpath` property:
+
 	```php
 	$crawler->xpath = '//html|//html/head/link|//html/head/meta|//html/head/title';
 	```
 
+	You are free to overwrite xpath property;
 
-* найденный HTML-элемент отдается в стек дитрибьютеров;
+* the found HTML element is pass to the distributor stack. <br>
+If the HTML element passes the conditions, then its value is written to [DTO (Data Transfer Object)](https://en.wikipedia.org/wiki/Data_transfer_object ) of the type `\Osmuhin\HtmlMeta\Contracts\Dto`;
 
-* если HTML-элемент проходит условия, то его значение записывается в [DTO (Data Transfer Object)](https://en.wikipedia.org/wiki/Data_transfer_object) типа ```\Osmuhin\HtmlMeta\Contracts\Dto```;
-
-* после окончания парсинга HTML-строки формируется DTO ```\Osmuhin\HtmlMeta\Dto\Meta```.
+* after parsing the HTML string, the root DTO `\Osmuhin\HtmlMeta\Dto\Meta` is formed in output.
 
 ### Distributors
 
+A **Distributor** is an object that validates html elements and distributes data over DTOs.
+
+Distributor must implements the interface `\Osmuhin\HtmlMeta\Contracts\Distributor` and has 2 main methods:
+
 ```php
-// Default configuration:
+public function canHandle(\Osmuhin\HtmlMeta\Element $el): bool
+{
+
+}
+
+public function handle(\Osmuhin\HtmlMeta\Element $el): void
+{
+
+}
+```
+
+```canHandle()``` - Checks whether the distributor can handle the current element.
+If returns true, then all sub-distributors are polled, and then the handle method is called.
+
+```handle()``` - Distributes the HTML element data by DTOs according to its own rules.
+
+You can view the structure of the simplest [TitleDistributor](/src/Distributors/TitleDistributor.php) distributor:
+
+```php
+use Osmuhin\HtmlMeta\Element;
+
+class TitleDistributor extends \Osmuhin\HtmlMeta\Distributors\AbstractDistributor
+{
+	public function canHandle(Element $el): bool
+	{
+		return $el->name === 'title';
+	}
+
+	public function handle(Element $el): void
+	{
+		$this->meta->title = $el->innerText;
+	}
+}
+```
+
+You are free to replace some kind distributor your own, example:
+
+```php
+use Osmuhin\HtmlMeta\Element;
+use Osmuhin\HtmlMeta\Distributors\TitleDistributor;
+
+class MyCustomTitleDistributor extends TitleDistributor
+{
+	public function handle(Element $el): void
+	{
+		$this->meta->title = 'Prefix for title ' . $el->innerText;
+	}
+}
+
+$crawler = Crawler::init(url: 'https://google.com');
+$crawler->distributor->setSubDistributor(
+	MyCustomTitleDistributor::class,
+	TitleDistributor::class
+);
+
+$meta = $crawler->run();
+$meta->title === 'Prefix for title Google';
+```
+
+... or even completely overwrite the distributors tree:
+
+```php
+$crawler = Crawler::init(url: 'https://google.com');
+$crawler->xpath = '//html/head/title';
+$crawler->config->dontUseDefaultDistributorsConfiguration();
+
+$crawler->distributor->useSubDistributors(
+	MyCustomTitleDistributor::init($crawler->container)
+);
+
+$meta = $crawler->run();
+```
+
+<details>
+<summary>Default distributors configuration</summary>
+
+```php
 $crawler->distributor->useSubDistributors(
 	\Osmuhin\HtmlMeta\Distributors\HtmlDistributor::init(),
 	\Osmuhin\HtmlMeta\Distributors\TitleDistributor::init(),
@@ -121,25 +203,7 @@ $crawler->distributor->useSubDistributors(
 	)
 );
 ```
-
----
-## Custom initializing:
-```php
-
-$crawler = new Crawler();
-
-$crawler->setHtml(string $html);
-$crawler->setUrl(string $url);
-$crawler->setRequest(\GuzzleHttp\Psr7\Request $request);
-$crawler->setGuzzleClient(\GuzzleHttp\Client $guzzleClient);
-
-$crawler->xpath = '//html|//html/head/link|//html/head/meta|//html/head/title';
-
-$crawler->
-
-setGuzzleClient
-```
-
+</details>
 
 ## Contributing
 
