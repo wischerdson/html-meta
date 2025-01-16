@@ -161,11 +161,35 @@ $meta->dir === 'ltr';
 <summary>Example</summary>
 
 ```html
-<html dir="ltr"></html>
+<link rel="shortcut icon" href="favicon-small.ico" sizes="16X14">
+<link rel="apple-touch-icon" href="apple.com/apple-touch-icon.png" sizes="any">
+<link rel="manifest" href="/manifest.webmanifest">
 ```
 
 ```php
-$meta->dir === 'ltr';
+$meta->favicon->toArray() === [
+    'manifest' => 'http://example.com/manifest.webmanifest',
+    'icons' => [
+        [
+            'url' => 'http://example.com/path/favicon-small.ico',
+            'mime' => 'application/ico',
+            'extension' => 'ico',
+            'width' => 16,
+            'height' => 14,
+            'sizes' => '16x14'
+        ]
+    ],
+    'appleTouchIcons' => [
+        [
+            'url' => 'apple.com/apple-touch-icon.png',
+            'mime' => 'image/png',
+            'extension' => 'png',
+            'width' => null,
+            'height' => null,
+            'sizes' => 'any'
+        ]
+    ],
+];
 ```
 </details>
 
@@ -195,7 +219,7 @@ $meta->formatDetection === 'telephone=no';
 ```
 
 ```php
-$meta->generator === 'telephone=no';
+$meta->generator === 'WordPress.com';
 ```
 </details>
 
@@ -211,9 +235,9 @@ $meta->generator === 'telephone=no';
 
 ```php
 $meta->htmlAttributes === [
-	'lang' => 'en',
-	'data-theme' => 'dark',
-	'dir' => 'rtl'
+    'lang' => 'en',
+    'data-theme' => 'dark',
+    'dir' => 'rtl'
 ];
 ```
 </details>
@@ -240,17 +264,17 @@ $meta->htmlAttributes === [
 
 ```php
 $meta->httpEquiv->toArray() === [
-	'contentType' => 'text/html; charset=UTF-8',
-	'xUaCompatible' => 'IE=edge',
-	'cacheControl' => 'no-cache',
-	'contentLanguage' => 'en',
-	'pragma' => 'no-cache',
-	'expires' => 'Tue, January 01, 2025, 12:00:00 GMT',
-	'refresh' => '5; url=https://example.com',
-	'contentSecurityPolicy' => "default-src 'self';",
-	'xDnsPrefetchControl' => 'on',
-	'accessControlAllowOrigin' => '*',
-	'non-standart-meta' => 'some-value'
+    'contentType' => 'text/html; charset=UTF-8',
+    'xUaCompatible' => 'IE=edge',
+    'cacheControl' => 'no-cache',
+    'contentLanguage' => 'en',
+    'pragma' => 'no-cache',
+    'expires' => 'Tue, January 01, 2025, 12:00:00 GMT',
+    'refresh' => '5; url=https://example.com',
+    'contentSecurityPolicy' => "default-src 'self';",
+    'xDnsPrefetchControl' => 'on',
+    'accessControlAllowOrigin' => '*',
+    'non-standart-meta' => 'some-value'
 ];
 ```
 </details>
@@ -321,40 +345,40 @@ $meta->lang === 'en_US';
 
 ```php
 $meta->openGraph->toArray() === [
-	'title' => 'Page title',
-	'type' => 'website',
-	'url' => 'https://example.com/path/products',
-	'description' => 'Description of the page that will be displayed in the posts.',
-	'determiner' => 'a',
-	'siteName' => 'Site name',
-	'locale' => 'ru_RU',
-	'alternateLocales' => ['en_US'],
-	'images' => [
-		[
-			'url' => 'https://example.com/image.jpg',
-			'secureUrl' => null,
-			'type' => 'image/jpeg',
-			'width' => 1200,
-			'height' => 630,
-			'alt' => 'Image description',
-		]
-	],
-	'videos' => [
-		[
-			'url' => 'https://example.com/video.mp4',
-			'secureUrl' => 'https://example.com/video.mp4',
-			'type' => 'video/mp4',
-			'width' => 1280,
-			'height' => 720
-		]
-	],
-	'audio' => [
-		[
-			'url' => 'https://example.com/audio.mp3',
-			'secureUrl' => 'https://example.com/audio.mp3',
-			'type' => 'audio/mpeg'
-		]
-	]
+    'title' => 'Page title',
+    'type' => 'website',
+    'url' => 'https://example.com/path/products',
+    'description' => 'Description of the page that will be displayed in the posts.',
+    'determiner' => 'a',
+    'siteName' => 'Site name',
+    'locale' => 'ru_RU',
+    'alternateLocales' => ['en_US'],
+    'images' => [
+        [
+            'url' => 'https://example.com/image.jpg',
+            'secureUrl' => null,
+            'type' => 'image/jpeg',
+            'width' => 1200,
+            'height' => 630,
+            'alt' => 'Image description',
+        ]
+    ],
+    'videos' => [
+        [
+            'url' => 'https://example.com/video.mp4',
+            'secureUrl' => 'https://example.com/video.mp4',
+            'type' => 'video/mp4',
+            'width' => 1280,
+            'height' => 720
+        ]
+    ],
+    'audio' => [
+        [
+            'url' => 'https://example.com/audio.mp3',
+            'secureUrl' => 'https://example.com/audio.mp3',
+            'type' => 'audio/mpeg'
+        ]
+    ]
 ];
 ```
 </details>
@@ -402,8 +426,8 @@ $meta->robots === 'noindex';
 
 ```php
 $meta->themeColor === [
-	0 => '#eb0c0c',
-	'(prefers-color-scheme: light)' => '#fff'
+    0 => '#eb0c0c',
+    '(prefers-color-scheme: light)' => '#fff'
 ];
 ```
 </details>
@@ -446,14 +470,14 @@ $meta->title === 'Google';
 
 ```php
 $meta->twitter->toArray() === [
-	'card' => 'summary',
-	'site' => '@username',
-	'title' => 'Laravel - The PHP Framework For Web Artisans',
-	'description' => 'Some description for twitter card.',
-	'image' => 'https://example.com/image.jpg',
-	'imageAlt' => 'A description of the image',
-	'creator' => '@author',
-	'other' => ['twitter:app:id:iphone' => '123456789'],
+    'card' => 'summary',
+    'site' => '@username',
+    'title' => 'Laravel - The PHP Framework For Web Artisans',
+    'description' => 'Some description for twitter card.',
+    'image' => 'https://example.com/image.jpg',
+    'imageAlt' => 'A description of the image',
+    'creator' => '@author',
+    'other' => ['twitter:app:id:iphone' => '123456789'],
 ];
 ```
 </details>
@@ -520,12 +544,12 @@ $meta->favicon->manifest === 'https://example.com/manifest.webmanifest';
 
 ```php
 $meta->favicon->icons[0]->toArray() === [
-	'url' => 'http://example.com/path/favicon.ico',
-	'mime' => 'application/ico',
-	'extension' => 'ico',
-	'width' => 16,
-	'height' => 14,
-	'sizes' => '16x14'
+    'url' => 'http://example.com/path/favicon.ico',
+    'mime' => 'application/ico',
+    'extension' => 'ico',
+    'width' => 16,
+    'height' => 14,
+    'sizes' => '16x14'
 ];
 ```
 </details>
@@ -542,12 +566,12 @@ $meta->favicon->icons[0]->toArray() === [
 
 ```php
 $meta->favicon->appleTouchIcons[0]->toArray() === [
-	'url' => 'apple.com/apple-touch-icon.png',
-	'mime' => 'image/png',
-	'extension' => 'png',
-	'width' => null,
-	'height' => null,
-	'sizes' => null
+    'url' => 'apple.com/apple-touch-icon.png',
+    'mime' => 'image/png',
+    'extension' => 'png',
+    'width' => null,
+    'height' => null,
+    'sizes' => null
 ];
 ```
 </details>
@@ -825,7 +849,7 @@ $meta->openGraph->siteName === 'Site name';
 ```
 
 ```php
-$meta->openGraph->siteName === 'ru_RU';
+$meta->openGraph->locale === 'ru_RU';
 ```
 </details>
 
@@ -857,14 +881,14 @@ $meta->openGraph->alternateLocales === ['en_US'];
 
 ```php
 $meta->openGraph->images[0]->toArray() === [
-	[
-		'url' => 'https://example.com/image.jpg',
-		'secureUrl' => null,
-		'type' => 'image/jpeg',
-		'width' => null,
-		'height' => null,
-		'alt' => 'Image description',
-	]
+    [
+        'url' => 'https://example.com/image.jpg',
+        'secureUrl' => null,
+        'type' => 'image/jpeg',
+        'width' => null,
+        'height' => null,
+        'alt' => 'Image description',
+    ]
 ];
 ```
 </details>
@@ -876,19 +900,18 @@ $meta->openGraph->images[0]->toArray() === [
 <summary>Example</summary>
 
 ```html
-<meta property="og:image" content="/image.jpg">
-<meta property="og:image:alt" content="Image description">
+<meta property="og:video" content="/video.mp4">
 ```
 
 ```php
-$meta->openGraph->video[0]->toArray() === [
-	[
-		'url' => 'https://example.com/image.jpg',
-		'secureUrl' => null,
-		'type' => 'image/jpeg',
-		'width' => null,
-		'height' => null
-	]
+$meta->openGraph->videos[0]->toArray() === [
+    [
+        'url' => 'https://example.com/video.mp4',
+        'secureUrl' => null,
+        'type' => 'video/mp4',
+        'width' => null,
+        'height' => null
+    ]
 ];
 ```
 </details>
@@ -900,17 +923,16 @@ $meta->openGraph->video[0]->toArray() === [
 <summary>Example</summary>
 
 ```html
-<meta property="og:image" content="/image.jpg">
-<meta property="og:image:alt" content="Image description">
+<meta property="og:audio" content="/audio.mp3">
 ```
 
 ```php
 $meta->openGraph->audio[0]->toArray() === [
-	[
-		'url' => 'https://example.com/image.jpg',
-		'secureUrl' => null,
-		'type' => 'image/jpeg'
-	]
+    [
+        'url' => 'https://example.com/audio.mp3',
+        'secureUrl' => null,
+        'type' => 'audio/mpeg'
+    ]
 ];
 ```
 </details>

@@ -34,7 +34,7 @@ abstract class AbstractDataMapper implements DataMapper
 		return false;
 	}
 
-	public function assignPropertyWithObject(object $object, string|callable $property, mixed $value)
+	public function assignPropertyWithObject(object $object, string|callable $property, mixed $value): void
 	{
 		if (is_callable($property)) {
 			$property($value, $object);

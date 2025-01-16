@@ -1,10 +1,10 @@
 <p align="center">
-	<img src="https://raw.githubusercontent.com/wischerdson/html-meta/refs/heads/master/docs/logo.svg" alt="HTML meta logo" width="320">
+    <img src="https://raw.githubusercontent.com/wischerdson/html-meta/refs/heads/master/docs/logo.svg" alt="HTML meta logo" width="320">
 </p>
 
 <p align="center">
-	<img src="https://github.com/wischerdson/html-meta/actions/workflows/tests.yml/badge.svg" alt="Tests status">
-	<img src="https://badgen.net/github/license/wischerdson/html-meta" alt="License">
+    <img src="https://github.com/wischerdson/html-meta/actions/workflows/tests.yml/badge.svg" alt="Tests status">
+    <img src="https://badgen.net/github/license/wischerdson/html-meta" alt="License">
 </p>
 
 **HTML Meta** is a PHP package for parsing website metadata, such as titles, favicons, OpenGraph tags, and more.
@@ -41,11 +41,11 @@ Instead of a URL, you can parse metadata from Raw HTML pass it as a string:
 ```php
 $html = <<<END
 <html lang="en">
-	<head>
-		<title>Google</title>
-		<meta charset="UTF-8">
-		<link rel="icon" href="/favicon.ico">
-	</head>
+    <head>
+        <title>Google</title>
+        <meta charset="UTF-8">
+        <link rel="icon" href="/favicon.ico">
+    </head>
 </html>
 END;
 
@@ -78,10 +78,10 @@ You can customize the crawler’s behavior using its configuration methods:
 ```php
 $crawler = Crawler::init(url: 'https://google.com');
 $crawler->config
-	->dontProcessUrls()
-	->dontUseTypeConversions()
-	->processUrlsWith('https://yandex.ru')
-	->dontUseDefaultDistributorsConfiguration();
+    ->dontProcessUrls()
+    ->dontUseTypeConversions()
+    ->processUrlsWith('https://yandex.ru')
+    ->dontUseDefaultDistributorsConfiguration();
 ```
 
 | Setting | Description |
@@ -100,23 +100,23 @@ The main interaction happens through the $crawler object of type \Osmuhin\HtmlMe
 1. Initialization: Configure the crawler before calling `run()`.
 
 2. Execution: After calling run(), the crawler performs the following steps:
-	* Fetches the HTML string from the URL (if raw HTML is not provided). <br>
-	The priority of the parameters, if they are more than 1: `string $html` ➡ `\GuzzleHttp\Psr7\Request $request` ➡ `string $url`;
+    * Fetches the HTML string from the URL (if raw HTML is not provided). <br>
+    The priority of the parameters, if they are more than 1: `string $html` ➡ `\GuzzleHttp\Psr7\Request $request` ➡ `string $url`;
 
-	* Parses the HTML using the configured xpath:
-  
-		```php
-		$crawler->xpath = '//html|//html/head/link|//html/head/meta|//html/head/title';
-		```
+    * Parses the HTML using the configured xpath:
 
-		> You are free to overwrite xpath property;
+        ```php
+        $crawler->xpath = '//html|//html/head/link|//html/head/meta|//html/head/title';
+        ```
 
-	* Passes the parsed elements to the distributor stack.
-  
-	* the found HTML element is pass to the distributor stack <br>
-	If the HTML element passes the conditions, then its value is written to [DTO (Data Transfer Object)](https://en.wikipedia.org/wiki/Data_transfer_object ) of the type `\Osmuhin\HtmlMeta\Contracts\Dto`;
+        > You are free to overwrite xpath property;
 
-	* after parsing the HTML string, the root DTO `\Osmuhin\HtmlMeta\Dto\Meta` is formed in output.
+    * Passes the parsed elements to the distributor stack.
+
+    * the found HTML element is pass to the distributor stack <br>
+    If the HTML element passes the conditions, then its value is written to [DTO (Data Transfer Object)](https://en.wikipedia.org/wiki/Data_transfer_object ) of the type `\Osmuhin\HtmlMeta\Contracts\Dto`;
+
+    * after parsing the HTML string, the root DTO `\Osmuhin\HtmlMeta\Dto\Meta` is formed in output.
 
 ### Distributors
 
@@ -148,15 +148,15 @@ use Osmuhin\HtmlMeta\Element;
 
 class TitleDistributor extends \Osmuhin\HtmlMeta\Distributors\AbstractDistributor
 {
-	public function canHandle(Element $el): bool
-	{
-		return $el->name === 'title';
-	}
+    public function canHandle(Element $el): bool
+    {
+        return $el->name === 'title';
+    }
 
-	public function handle(Element $el): void
-	{
-		$this->meta->title = $el->innerText;
-	}
+    public function handle(Element $el): void
+    {
+        $this->meta->title = $el->innerText;
+    }
 }
 ```
 
@@ -168,16 +168,16 @@ use Osmuhin\HtmlMeta\Distributors\TitleDistributor;
 
 class MyCustomTitleDistributor extends TitleDistributor
 {
-	public function handle(Element $el): void
-	{
-		$this->meta->title = 'Prefix for title ' . $el->innerText;
-	}
+    public function handle(Element $el): void
+    {
+        $this->meta->title = 'Prefix for title ' . $el->innerText;
+    }
 }
 
 $crawler = Crawler::init(url: 'https://google.com');
 $crawler->distributor->setSubDistributor(
-	MyCustomTitleDistributor::class,
-	TitleDistributor::class
+    MyCustomTitleDistributor::class,
+    TitleDistributor::class
 );
 
 $meta = $crawler->run();
@@ -192,7 +192,7 @@ $crawler->xpath = '//html/head/title';
 $crawler->config->dontUseDefaultDistributorsConfiguration();
 
 $crawler->distributor->useSubDistributors(
-	MyCustomTitleDistributor::init($crawler->container)
+    MyCustomTitleDistributor::init($crawler->container)
 );
 
 $meta = $crawler->run();
@@ -203,16 +203,16 @@ $meta = $crawler->run();
 
 ```php
 $crawler->distributor->useSubDistributors(
-	\Osmuhin\HtmlMeta\Distributors\HtmlDistributor::init(),
-	\Osmuhin\HtmlMeta\Distributors\TitleDistributor::init(),
-	\Osmuhin\HtmlMeta\Distributors\MetaDistributor::init()->useSubDistributors(
-		\Osmuhin\HtmlMeta\Distributors\HttpEquivDistributor::init(),
-		\Osmuhin\HtmlMeta\Distributors\TwitterDistributor::init(),
-		\Osmuhin\HtmlMeta\Distributors\OpenGraphDistributor::init()
-	),
-	\Osmuhin\HtmlMeta\Distributors\LinkDistributor::init()->useSubDistributors(
-		\Osmuhin\HtmlMeta\Distributors\FaviconDistributor::init()
-	)
+    \Osmuhin\HtmlMeta\Distributors\HtmlDistributor::init(),
+    \Osmuhin\HtmlMeta\Distributors\TitleDistributor::init(),
+    \Osmuhin\HtmlMeta\Distributors\MetaDistributor::init()->useSubDistributors(
+        \Osmuhin\HtmlMeta\Distributors\HttpEquivDistributor::init(),
+        \Osmuhin\HtmlMeta\Distributors\TwitterDistributor::init(),
+        \Osmuhin\HtmlMeta\Distributors\OpenGraphDistributor::init()
+    ),
+    \Osmuhin\HtmlMeta\Distributors\LinkDistributor::init()->useSubDistributors(
+        \Osmuhin\HtmlMeta\Distributors\FaviconDistributor::init()
+    )
 );
 ```
 </details>
