@@ -71,8 +71,7 @@ final class AbstractDataMapperTest extends TestCase
 				$this->identicalTo($object),
 				$this->identicalTo('property1'),
 				$this->identicalTo('foo')
-			)
-			->willReturn(true);
+			);
 
 		assertTrue(
 			$dataMapper->assignAccordingToTheMap($map, $object, 'key1', 'foo')

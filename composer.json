@@ -1,7 +1,6 @@
 {
 	"name": "osmuhin/html-meta",
 	"type": "library",
-	"version": "1.0.0",
 	"license": "MIT",
 	"authors": [
 		{
@@ -37,7 +36,7 @@
 			"Tests\\": "tests/"
 		}
 	},
-	"minimum-stability": "dev",
+	"minimum-stability": "stable",
 	"prefer-stable": true,
 	"config": {
 		"preferred-install": "dist",
