@@ -412,7 +412,7 @@ $meta->themeColor === [
 `string` `null`
 
 > [!NOTE]
-> The title can be set in two ways: via the `title` tag or via the `meta` tag. Priority is given to the `title` tag if both variants are present in the html document.
+> The title can be set in two ways: via the `title` tag or via the `meta` tag. Priority is given to the `title` tag if both variants are presented in the html document.
 
 <details>
 <summary>Example</summary>

@@ -7,7 +7,7 @@
 	<img src="https://badgen.net/github/license/wischerdson/html-meta" alt="License">
 </p>
 
-**HTML Meta** is a PHP package for parsing website metadata, such as titles, favicons, OpenGraph tags, and more.
+**HTML Meta** is a PHP package for parsing website metadata, such as titles, favicons, OpenGraph tags and others.
 
 ---
 
@@ -24,7 +24,7 @@ composer require osmuhin/html-meta
 
 ## Basic usage
 
-### Parsing Metadata from a URL
+### Parsing Metadata from URL
 
 ```php
 use Osmuhin\HtmlMeta\Crawler;
@@ -36,7 +36,7 @@ echo $meta->title; // Google
 
 ### Parsing Metadata from Raw HTML
 
-Instead of a URL, you can parse metadata from Raw HTML pass it as a string:
+Instead of URL, you can parse metadata from Raw HTML passing it as a string:
 
 ```php
 $html = <<<END
@@ -56,7 +56,7 @@ $icon = $meta->favicon->icons[0];
 echo $icon->url // https://google.com/favicon.ico
 ```
 
-> Always pass the `url` parameter when using raw HTML to correctly resolve relative paths.
+> Always pass the `url` parameter when using raw HTML to resolve relative paths correctly.
 
 ### Using a Custom Request Object
 
@@ -68,7 +68,7 @@ $request = new \GuzzleHttp\Psr7\Request('GET', 'https://google.com');
 $meta = Crawler::init(request: $request)->run();
 ```
 
-All properties of the `meta` object describes [**here**](/docs/meta-object-properties.md).
+All properties of the `meta` object are described [**here**](/docs/meta-object-properties.md).
 
 ## Configuration
 <a name="config"></a>
@@ -95,15 +95,15 @@ $crawler->config
 
 ### The Crawler object
 
-The main interaction happens through the $crawler object of type \Osmuhin\HtmlMeta\Crawler. <br>
+The main interaction happens through the `$crawler` object of type `\Osmuhin\HtmlMeta\Crawler`. <br>
 
-1. Initialization: Configure the crawler before calling `run()`.
+1. Initialization: Configure the crawler before `run()` calling.
 
-2. Execution: After calling run(), the crawler performs the following steps:
-	* Fetches the HTML string from the URL (if raw HTML is not provided). <br>
-	The priority of the parameters, if they are more than 1: `string $html` ➡ `\GuzzleHttp\Psr7\Request $request` ➡ `string $url`;
+2. Execution: After `run()` calling, the crawler performs the following steps:
+	* fetches the HTML string from the URL (if raw HTML is not provided). <br>
+	The priority of the parameters, if they are more than 1 is following: `string $html` ➡ `\GuzzleHttp\Psr7\Request $request` ➡ `string $url`;
 
-	* Parses the HTML using the configured xpath:
+	* parses the HTML using the configured xpath:
   
 		```php
 		$crawler->xpath = '//html|//html/head/link|//html/head/meta|//html/head/title';
@@ -111,10 +111,10 @@ The main interaction happens through the $crawler object of type \Osmuhin\HtmlMe
 
 		> You are free to overwrite xpath property;
 
-	* Passes the parsed elements to the distributor stack.
+	* passes the parsed elements to the distributor stack;
   
 	* the found HTML element is pass to the distributor stack <br>
-	If the HTML element passes the conditions, then its value is written to [DTO (Data Transfer Object)](https://en.wikipedia.org/wiki/Data_transfer_object ) of the type `\Osmuhin\HtmlMeta\Contracts\Dto`;
+	If the HTML element passed the conditions, then its value is written to [DTO (Data Transfer Object)](https://en.wikipedia.org/wiki/Data_transfer_object ) of the type `\Osmuhin\HtmlMeta\Contracts\Dto`;
 
 	* after parsing the HTML string, the root DTO `\Osmuhin\HtmlMeta\Dto\Meta` is formed in output.
 
@@ -122,7 +122,7 @@ The main interaction happens through the $crawler object of type \Osmuhin\HtmlMe
 
 A Distributor validates HTML elements and distributes their data into DTOs.
 
-Distributor must implements the interface `\Osmuhin\HtmlMeta\Contracts\Distributor` and has 2 main methods:
+Distributor must implement the interface `\Osmuhin\HtmlMeta\Contracts\Distributor` and has 2 main methods:
 
 ```php
 public function canHandle(\Osmuhin\HtmlMeta\Element $el): bool
@@ -160,7 +160,7 @@ class TitleDistributor extends \Osmuhin\HtmlMeta\Distributors\AbstractDistributo
 }
 ```
 
-You are free to replace some kind distributor your own, example:
+You are free to replace some kind distributor of your own, example:
 
 ```php
 use Osmuhin\HtmlMeta\Element;
@@ -184,7 +184,7 @@ $meta = $crawler->run();
 $meta->title === 'Prefix for title Google';
 ```
 
-... or even completely overwrite the distributors tree:
+... or even overwrite the distributors tree completely:
 
 ```php
 $crawler = Crawler::init(url: 'https://google.com');
