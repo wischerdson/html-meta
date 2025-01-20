@@ -79,6 +79,24 @@ $meta->author === 'Osmuhin Daniil';
 ```
 </details>
 
+### canonical
+`string` `null`
+
+> [!NOTE]
+> The property process as a URL if not disabled via the `dontProcessUrls` setting.
+
+<details>
+<summary>Example</summary>
+
+```html
+<link rel="canonical" href="/catalog/123123">
+```
+
+```php
+$meta->canonical === 'https://example.com/catalog/123123';
+```
+</details>
+
 ### charset
 `string` `null`
 
