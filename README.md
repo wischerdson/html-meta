@@ -3,8 +3,10 @@
 </p>
 
 <p align="center">
+    <img src="https://poser.pugx.org/osmuhin/html-meta/v" alt="Latest stable version">
     <img src="https://github.com/wischerdson/html-meta/actions/workflows/tests.yml/badge.svg" alt="Tests status">
-    <img src="https://badgen.net/github/license/wischerdson/html-meta" alt="License">
+    <a href="https://packagist.org/packages/osmuhin/html-meta"><img src="https://poser.pugx.org/osmuhin/html-meta/d/total.svg" alt="Total Downloads"></a>
+	<img src="https://poser.pugx.org/osmuhin/html-meta/license.svg" alt="License">
 </p>
 
 **HTML Meta** is a PHP package for parsing website metadata, such as titles, favicons, OpenGraph tags and others.
