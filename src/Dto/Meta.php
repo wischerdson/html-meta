@@ -124,6 +124,13 @@ class Meta implements Dto
 	 */
 	public ?string $appleItunesApp = null;
 
+	/**
+	 * The rel="canonical" attribute in the <link> tag indicates to the search robot that a
+	 * particular page is canonical, that is, the main page.
+	 * Example: <link rel="canonical" href="/page/" \>
+	 */
+	public ?string $canonical = null;
+
 	public array $htmlAttributes = [];
 
 	public Twitter $twitter;
@@ -171,6 +178,7 @@ class Meta implements Dto
 			'title' => $this->title,
 			'twitter' => $this->twitter,
 			'viewport' => $this->viewport,
+			'canonical' => $this->canonical
 		];
 	}
 }

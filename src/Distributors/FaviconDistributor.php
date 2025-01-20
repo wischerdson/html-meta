@@ -38,6 +38,10 @@ class FaviconDistributor extends AbstractDistributor
 			return false;
 		}
 
+		if ($rel === 'canonical') {
+			return false;
+		}
+
 		if ($this->config->shouldProcessUrls()) {
 			$href = Utils::processUrl($href);
 		}

@@ -46,20 +46,9 @@ class Utils
 
 	public static function splitUrl(string $url): array
 	{
-		if (str_contains($url, '://')) {
-			[$scheme, $url] = explode('://', $url, 2);
-			$scheme .= '://';
-		} else {
-			$scheme = '';
-		}
+		$path = preg_replace("/^(https?:\/\/.*?\/)|^(\/\/.*?\/)/i", '', $url);
+		$domain = mb_substr($url, 0, mb_strlen($url) - mb_strlen($path));
 
-		if (str_contains($url, '/')) {
-			[$domain, $path] = explode('/', $url, 2);
-		} else {
-			$domain = $url;
-			$path = '';
-		}
-
-		return [$scheme . $domain, trim($path, '/')];
+		return [rtrim($domain, '/'), trim($path, '/')];
 	}
 }

@@ -30,7 +30,7 @@ final class AbstractDataMapperTest extends TestCase
 	public static function providerForTestingOfUrlProcessing(): array
 	{
 		return [
-			[true, 'favicon.ico', 'example.com/api/favicon.ico'],
+			[true, 'favicon.ico', 'http://example.com/api/favicon.ico'],
 			[false, 'favicon.ico', 'favicon.ico'],
 		];
 	}
@@ -106,7 +106,7 @@ final class AbstractDataMapperTest extends TestCase
 	#[DataProvider('providerForTestingOfUrlProcessing')]
 	public function test_url_processing(bool $useUrlProcessing, string $input, mixed $expected): void
 	{
-		$this->config->processUrlsWith('example.com/api');
+		$this->config->processUrlsWith('http://example.com/api');
 		$this->config->dontProcessUrls(!$useUrlProcessing);
 
 		$dataMapper = $this->getMockBuilder(AbstractDataMapper::class)

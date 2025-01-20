@@ -30,9 +30,12 @@ class UtilsTest extends TestCase
 	{
 		return [
 			['https://example1.com/', ['https://example1.com', '']],
-			['example2.com', ['example2.com', '']],
-			['example3.com///some-path', ['example3.com', 'some-path']],
+			['example2.com', ['', 'example2.com']],
+			['example3.com///some-path', ['', 'example3.com///some-path']],
 			['http://example4.com/some-path-1/some-path-2//', ['http://example4.com', 'some-path-1/some-path-2']],
+			['//some-path-1/path///', ['//some-path-1', 'path']],
+			['/some-path-1/path///', ['', 'some-path-1/path']],
+			['some-path-1/path///', ['', 'some-path-1/path']]
 		];
 	}
 

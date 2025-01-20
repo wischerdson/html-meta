@@ -46,7 +46,7 @@ class HtmlMetaCrawlerTest extends TestCase
 	{
 		$html = file_get_contents(__DIR__ . '/resources/meta.html');
 
-		$meta = Crawler::init(html: $html)->run();
+		$meta = Crawler::init(html: $html, url: 'http://example.com/relative/')->run();
 
 		assertSame('UTF-8', $meta->charset);
 		assertSame('light dark', $meta->colorScheme);
@@ -75,6 +75,7 @@ class HtmlMetaCrawlerTest extends TestCase
 			'data-theme' => 'dark',
 			'dir' => 'rtl'
 		], $meta->htmlAttributes);
+		assertSame('http://example.com/relative/catalog/123123', $meta->canonical);
 	}
 
 	public function test_parsing_http_equiv(): void
@@ -135,7 +136,7 @@ class HtmlMetaCrawlerTest extends TestCase
 			],
 			'appleTouchIcons' => [
 				[
-					'url' => 'apple.com/apple-touch-icon.png',
+					'url' => 'http://example.com/path/apple.com/apple-touch-icon.png',
 					'mime' => 'image/png',
 					'extension' => 'png',
 					'width' => null,
