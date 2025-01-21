@@ -2,7 +2,11 @@ name: Tests
 
 on:
   push:
+    tags-ignore:
+    - '*'
   pull_request:
+  release:
+    types: []
   schedule:
     - cron: '45 5 * * 0'
 

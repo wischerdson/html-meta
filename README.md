@@ -3,7 +3,6 @@
 </p>
 
 <p align="center">
-    <img src="https://poser.pugx.org/osmuhin/html-meta/v" alt="Latest stable version">
     <img src="https://github.com/wischerdson/html-meta/actions/workflows/tests.yml/badge.svg" alt="Tests status">
     <a href="https://packagist.org/packages/osmuhin/html-meta"><img src="https://poser.pugx.org/osmuhin/html-meta/d/total.svg" alt="Total Downloads"></a>
 	<img src="https://poser.pugx.org/osmuhin/html-meta/license.svg" alt="License">
@@ -106,7 +105,7 @@ The main interaction happens through the `$crawler` object of type `\Osmuhin\Htm
 	The priority of the parameters, if they are more than 1 is following: `string $html` ➡ `\GuzzleHttp\Psr7\Request $request` ➡ `string $url`;
 
 	* parses the HTML using the configured xpath:
-  
+
 		```php
 		$crawler->xpath = '//html|//html/head/link|//html/head/meta|//html/head/title';
 		```
@@ -114,7 +113,7 @@ The main interaction happens through the `$crawler` object of type `\Osmuhin\Htm
 		> You are free to overwrite xpath property;
 
 	* passes the parsed elements to the distributor stack;
-  
+
 	* the found HTML element is pass to the distributor stack <br>
 	If the HTML element passed the conditions, then its value is written to [DTO (Data Transfer Object)](https://en.wikipedia.org/wiki/Data_transfer_object ) of the type `\Osmuhin\HtmlMeta\Contracts\Dto`;
 

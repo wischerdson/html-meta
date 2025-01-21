@@ -1,5 +1,6 @@
 {
 	"name": "osmuhin/html-meta",
+	"description": "Parses website metadata such as titles, favicons and others",
 	"type": "library",
 	"license": "MIT",
 	"authors": [
