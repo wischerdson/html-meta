@@ -3,10 +3,8 @@ name: Tests
 on:
   push:
     branches:
-    - '**'
+      - '**'
   pull_request:
-  release:
-    types: []
   schedule:
     - cron: '45 5 * * 0'
 
