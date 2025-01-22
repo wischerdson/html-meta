@@ -2,17 +2,15 @@
 
 namespace Osmuhin\HtmlMeta\Distributors;
 
-use Osmuhin\HtmlMeta\Element;
-
 class TitleDistributor extends AbstractDistributor
 {
-	public function canHandle(Element $el): bool
+	public function canHandle(): bool
 	{
-		return $el->name === 'title';
+		return $this->el->name === 'title';
 	}
 
-	public function handle(Element $el): void
+	public function handle(): void
 	{
-		$this->meta->title = $el->innerText;
+		$this->meta->title = $this->el->innerText;
 	}
 }

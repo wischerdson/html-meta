@@ -27,13 +27,13 @@ final class MetaDistributorTest extends TestCase
 	public function test_can_handle_method(): void
 	{
 		$element = self::makeElement('title', innerText: 'Hello world');
-		self::assertFalse($this->distributor->canHandle($element));
+		self::assertFalse($this->distributor->canHandle());
 
 		$element = self::makeElement('meta');
-		self::assertFalse($this->distributor->canHandle($element));
+		self::assertFalse($this->distributor->canHandle());
 
 		$element = self::makeElement('meta', ['charset' => 'UTF-8']);
-		self::assertTrue($this->distributor->canHandle($element));
+		self::assertTrue($this->distributor->canHandle());
 	}
 
 	public function test_handle_method_uses_data_mapper(): void
@@ -49,7 +49,7 @@ final class MetaDistributorTest extends TestCase
 
 		$element = self::makeNamedMetaElement('viewport', 'user-scalable=no, width=device-width, initial-scale=1.0');
 
-		$this->distributor->handle($element);
+		$this->distributor->handle();
 
 		$reflection = new ReflectionProperty($this->distributor, 'testAssignment');
 		$reflection->setAccessible(true);
@@ -60,7 +60,7 @@ final class MetaDistributorTest extends TestCase
 	public function test_can_distributor_handles_charset(): void
 	{
 		$element = self::makeElement('meta', ['charset' => 'CP1251']);
-		$this->distributor->handle($element);
+		$this->distributor->handle();
 
 		assertEquals('CP1251', $this->meta->charset);
 	}
@@ -68,7 +68,7 @@ final class MetaDistributorTest extends TestCase
 	public function test_can_distributor_handles_empty_content(): void
 	{
 		$element = self::makeNamedMetaElement('meta', "  \n   ");
-		$this->distributor->handle($element);
+		$this->distributor->handle();
 
 		$reflection = new ReflectionProperty($this->distributor, 'testEmptyContent');
 		$reflection->setAccessible(true);
@@ -81,16 +81,16 @@ final class MetaDistributorTest extends TestCase
 		$this->meta->title = 'Test123';
 
 		$element = self::makeNamedMetaElement('title', '123Test');
-		$this->distributor->canHandle($element);
-		$this->distributor->handle($element);
+		$this->distributor->canHandle();
+		$this->distributor->handle();
 
 		self::assertSame('Test123', $this->meta->title);
 
 		$this->meta->title = null;
 
 		$element = self::makeNamedMetaElement('title', '12345Test');
-		$this->distributor->canHandle($element);
-		$this->distributor->handle($element);
+		$this->distributor->canHandle();
+		$this->distributor->handle();
 
 		self::assertSame('12345Test', $this->meta->title);
 	}
@@ -98,14 +98,14 @@ final class MetaDistributorTest extends TestCase
 	public function test_theme_color(): void
 	{
 		$element = self::makeNamedMetaElement('theme-color', 'cyan');
-		$this->distributor->canHandle($element);
-		$this->distributor->handle($element);
+		$this->distributor->canHandle();
+		$this->distributor->handle();
 
 		self::assertSame([0 => 'cyan'], $this->meta->themeColor);
 
 		$element = self::makeNamedMetaElement('theme-color', '#fff', ['media' => '(prefers-color-scheme: light)']);
-		$this->distributor->canHandle($element);
-		$this->distributor->handle($element);
+		$this->distributor->canHandle();
+		$this->distributor->handle();
 
 		self::assertSame([
 			0 => 'cyan',

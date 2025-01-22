@@ -24,19 +24,18 @@ final class HtmlDistributorTest extends TestCase
 	#[TestDox('Test "canHandle" method of the distributor')]
 	public function test_can_handle_method(): void
 	{
-		$element = self::makeElement('head');
-		self::assertFalse($this->distributor->canHandle($element));
+		$this->distributor->el = self::makeElement('head');
+		self::assertFalse($this->distributor->canHandle());
 
-		$element = self::makeElement('html');
-		self::assertTrue($this->distributor->canHandle($element));
+		$this->distributor->el = self::makeElement('html');
+		self::assertTrue($this->distributor->canHandle());
 	}
 
 	#[Test]
 	public function test_handle_method(): void
 	{
-		$element = self::makeElement('html', ['lang' => 'ru_RU', 'dir' => 'rtl', 'class' => 'dark']);
-
-		$this->distributor->handle($element);
+		$this->distributor->el = self::makeElement('html', ['lang' => 'ru_RU', 'dir' => 'rtl', 'class' => 'dark']);
+		$this->distributor->handle();
 
 		self::assertSame('ru_RU', $this->meta->lang);
 		self::assertSame('rtl', $this->meta->dir);

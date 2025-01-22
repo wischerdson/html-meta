@@ -41,8 +41,8 @@ final class HttpEquivDistributorTest extends TestCase
 	#[DataProvider('metaPropertiesProvider')]
 	public function test_can_handle_method(array $attributes, bool $expected): void
 	{
-		$element = self::makeElement('meta', $attributes);
-		self::assertSame($expected, $this->distributor->canHandle($element));
+		$this->distributor->el = self::makeElement('meta', $attributes);
+		self::assertSame($expected, $this->distributor->canHandle());
 	}
 
 	public function test_handle_method_uses_data_mapper(): void
@@ -56,10 +56,10 @@ final class HttpEquivDistributorTest extends TestCase
 
 		self::injectDataMapper($this->distributor, $dataMapper);
 
-		$element = self::makeMetaElement(['http-equiv' => 'http-equiv-property', 'content' => 'value1']);
+		$this->distributor->el = self::makeMetaElement(['http-equiv' => 'http-equiv-property', 'content' => 'value1']);
 
-		$this->distributor->canHandle($element);
-		$this->distributor->handle($element);
+		$this->distributor->canHandle();
+		$this->distributor->handle();
 
 		assertEmpty($this->meta->httpEquiv->other);
 	}
@@ -75,10 +75,10 @@ final class HttpEquivDistributorTest extends TestCase
 
 		self::injectDataMapper($this->distributor, $dataMapper);
 
-		$element = self::makeMetaElement(['http-equiv' => 'http-equiv-property', 'content' => 'value2']);
+		$this->distributor->el = self::makeMetaElement(['http-equiv' => 'http-equiv-property', 'content' => 'value2']);
 
-		$this->distributor->canHandle($element);
-		$this->distributor->handle($element);
+		$this->distributor->canHandle();
+		$this->distributor->handle();
 
 		assertSame(['http-equiv-property' => 'value2'], $this->meta->httpEquiv->other);
 	}

@@ -12,6 +12,8 @@ use Osmuhin\HtmlMeta\ServiceLocator;
 
 abstract class AbstractDistributor implements Distributor
 {
+	public Element $el;
+
 	protected Container $container;
 
 	protected Config $config;
@@ -72,16 +74,31 @@ abstract class AbstractDistributor implements Distributor
 		return @$this->subDistributors[$key];
 	}
 
-	protected function pollSubDistributors(Element $el): bool
+	protected function pollSubDistributors(): bool
 	{
 		foreach ($this->subDistributors as $subDistributor) {
-			if ($subDistributor->canHandle($el)) {
-				$subDistributor->pollSubDistributors($el) || $subDistributor->handle($el);
+			$subDistributor->el = $this->el;
+			property_exists($subDistributor, 'parentContext') && $subDistributor->parentContext = $this;
+
+			if ($subDistributor->canHandle()) {
+				$subDistributor->pollSubDistributors($this->el) || $subDistributor->handle();
 
 				return true;
 			}
 		}
 
 		return false;
+	}
+
+	protected function elAttr(string $attribute, bool $trim = true, bool $lowercase = true): ?string
+	{
+		if (!$value = @$this->el->attributes[$attribute]) {
+			return null;
+		}
+
+		$trim && $value = trim($value);
+		$lowercase && $value = mb_strtolower($value, 'UTF-8');
+
+		return $value;
 	}
 }

@@ -149,14 +149,14 @@ use Osmuhin\HtmlMeta\Element;
 
 class TitleDistributor extends \Osmuhin\HtmlMeta\Distributors\AbstractDistributor
 {
-    public function canHandle(Element $el): bool
+    public function canHandle(): bool
     {
-        return $el->name === 'title';
+        return $this->el->name === 'title';
     }
 
-    public function handle(Element $el): void
+    public function handle(): void
     {
-        $this->meta->title = $el->innerText;
+        $this->meta->title = $this->el->innerText;
     }
 }
 ```
@@ -164,14 +164,13 @@ class TitleDistributor extends \Osmuhin\HtmlMeta\Distributors\AbstractDistributo
 You are free to replace some kind distributor of your own, example:
 
 ```php
-use Osmuhin\HtmlMeta\Element;
 use Osmuhin\HtmlMeta\Distributors\TitleDistributor;
 
 class MyCustomTitleDistributor extends TitleDistributor
 {
-    public function handle(Element $el): void
+    public function handle(): void
     {
-        $this->meta->title = 'Prefix for title ' . $el->innerText;
+        $this->meta->title = 'Prefix for title ' . $this->el->innerText;
     }
 }
 

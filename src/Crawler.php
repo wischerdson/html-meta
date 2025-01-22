@@ -99,9 +99,8 @@ class Crawler
 		$crawler = new DomCrawler($html);
 
 		foreach ($crawler->filterXPath($this->xpath) as $node) {
-			$this->distributor->handle(
-				new Element($node)
-			);
+			$this->distributor->el = new Element($node);
+			$this->distributor->handle();
 		}
 
 		return $this->meta;
@@ -110,14 +109,14 @@ class Crawler
 	private function makeAnonymousDistributor()
 	{
 		return new class extends AbstractDistributor {
-			public function canHandle(Element $element): bool
+			public function canHandle(): bool
 			{
 				return true;
 			}
 
-			public function handle(Element $element): void
+			public function handle(): void
 			{
-				$this->pollSubDistributors($element);
+				$this->pollSubDistributors();
 			}
 		};
 	}

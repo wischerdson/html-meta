@@ -228,9 +228,9 @@ class HtmlMetaCrawlerTest extends TestCase
 
 		$customDistributor = new class($crawler->container) extends TitleDistributor
 		{
-			public function handle(Element $el): void
+			public function handle(): void
 			{
-				$this->meta->title = 'Prefix for title ' . $el->innerText;
+				$this->meta->title = 'Prefix for title ' . $this->el->innerText;
 			}
 		};
 

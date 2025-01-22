@@ -31,12 +31,12 @@ final class AbstractDistributorTest extends TestCase
 	protected function setUp(): void
 	{
 		$this->distributor = new class extends AbstractDistributor {
-			public function canHandle(Element $el): bool
+			public function canHandle(): bool
 			{
 				return true;
 			}
 
-			public function handle(Element $el): void
+			public function handle(): void
 			{
 
 			}
@@ -93,25 +93,25 @@ final class AbstractDistributorTest extends TestCase
 
 	public function test_polling_subDistributors_1(): void
 	{
-		$element = self::createStub(Element::class);
+		$element = $this->distributor->el = self::createStub(Element::class);
 
 		$subDistributor = $this->createMock(AbstractDistributor::class);
 		$subDistributor->expects($this->once())
 			->method('canHandle')
-			->with($this->identicalTo($element))
 			->willReturn(false);
 
 		$this->distributor->useSubDistributors($subDistributor);
 
 		$result = (new ReflectionMethod($this->distributor, 'pollSubDistributors'))
-			->invoke($this->distributor, $element);
+			->invoke($this->distributor);
 
 		assertFalse($result);
+		assertSame($element, $subDistributor->el);
 	}
 
 	public function test_polling_subDistributors_2(): void
 	{
-		$element = self::createStub(Element::class);
+		$this->distributor->el = self::createStub(Element::class);
 
 		$subDistributor1 = Mockery::mock(SubDistributor1::class);
 		$subDistributor1->shouldReceive('canHandle')->once()->andReturn(true);
@@ -127,14 +127,14 @@ final class AbstractDistributorTest extends TestCase
 		$this->distributor->useSubDistributors($subDistributor1, $subDistributor2);
 
 		$result = (new ReflectionMethod($this->distributor, 'pollSubDistributors'))
-			->invoke($this->distributor, $element);
+			->invoke($this->distributor);
 
 		assertTrue($result);
 	}
 
 	public function test_polling_subDistributors_3(): void
 	{
-		$element = self::createStub(Element::class);
+		$this->distributor->el = self::createStub(Element::class);
 
 		$subDistributor = Mockery::mock(SubDistributor1::class);
 		$subDistributor->shouldReceive('canHandle')->once()->andReturn(true)->ordered();
@@ -147,11 +147,13 @@ final class AbstractDistributorTest extends TestCase
 		$this->distributor->useSubDistributors($subDistributor);
 
 		(new ReflectionMethod($this->distributor, 'pollSubDistributors'))
-			->invoke($this->distributor, $element);
+			->invoke($this->distributor);
 	}
 
 	public function test_replace_destributor(): void
 	{
+		$this->distributor->el = self::createStub(Element::class);
+
 		$subDistributor1 = Mockery::mock(SubDistributor1::class);
 		$subDistributor1->shouldReceive('canHandle')->never();
 
@@ -163,6 +165,6 @@ final class AbstractDistributorTest extends TestCase
 		$this->distributor->setSubDistributor($subDistributor2, $subDistributor1::class);
 
 		(new ReflectionMethod($this->distributor, 'pollSubDistributors'))
-			->invoke($this->distributor, self::createStub(Element::class));
+			->invoke($this->distributor);
 	}
 }

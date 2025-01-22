@@ -4,16 +4,15 @@ namespace Osmuhin\HtmlMeta\Distributors;
 
 use Osmuhin\HtmlMeta\DataMappers\AbstractDataMapper;
 use Osmuhin\HtmlMeta\Dto\Icon;
-use Osmuhin\HtmlMeta\Element;
 use Osmuhin\HtmlMeta\Utils;
 
 class FaviconDistributor extends AbstractDistributor
 {
-	protected string $rel;
-
 	protected string $href;
 
 	protected AbstractDataMapper $dataMapper;
+
+	protected LinkRelDistributor $parentContext;
 
 	public function __construct()
 	{
@@ -22,60 +21,55 @@ class FaviconDistributor extends AbstractDistributor
 		$this->dataMapper = new class extends AbstractDataMapper {};
 	}
 
-	public function canHandle(Element $el): bool
+	public function canHandle(): bool
 	{
-		if (
-			(!$rel = @$el->attributes['rel']) ||
-			(!$href = @$el->attributes['href'])
-		) {
-			return false;
-		}
-
-		if (
-			(!$rel = mb_strtolower(trim($rel), 'UTF-8')) ||
-			(!$href = trim($href))
-		) {
-			return false;
-		}
-
-		if ($rel === 'canonical') {
-			return false;
-		}
-
-		if ($this->config->shouldProcessUrls()) {
-			$href = Utils::processUrl($href);
-		}
-
-		$this->rel = $rel;
-		$this->href = $href;
-
-		return true;
-	}
-
-	public function handle(Element $el): void
-	{
-		switch ($this->rel) {
+		switch ($this->parentContext->rel) {
 			case 'shortcut icon':
 			case 'icon':
-				$this->meta->favicon->icons[] = $this->makeIcon($el);
+			case 'apple-touch-icon':
+			case 'manifest':
+				return true;
+		}
+
+		return false;
+	}
+
+	public function handle(): void
+	{
+		if (!$this->href = $this->elAttr('href', lowercase: false)) {
+			return;
+		}
+
+		switch ($this->parentContext->rel) {
+			case 'shortcut icon':
+			case 'icon':
+				$this->meta->favicon->icons[] = $this->makeIcon();
 				break;
 			case 'apple-touch-icon':
-				$this->meta->favicon->appleTouchIcons[] = $this->makeIcon($el);
+				$this->meta->favicon->appleTouchIcons[] = $this->makeIcon();
 				break;
 			case 'manifest':
-				$this->meta->favicon->manifest = $this->href;
+				$this->dataMapper->assignPropertyWithObject(
+					$this->meta->favicon,
+					$this->dataMapper->url('manifest'),
+					$this->href
+				);
 				break;
 		}
 	}
 
-	protected function makeIcon(Element $el): Icon
+	protected function makeIcon(): Icon
 	{
 		$icon = new Icon();
-		$icon->url = $this->href;
 		$icon->extension = Utils::guessExtension($this->href);
 
-		if ($icon->sizes = @$el->attributes['sizes']) {
-			$icon->sizes = mb_strtolower(trim($icon->sizes), 'UTF-8');
+		$this->dataMapper->assignPropertyWithObject(
+			$icon,
+			$this->dataMapper->url('url'),
+			$this->href
+		);
+
+		if ($icon->sizes = $this->elAttr('sizes')) {
 			$explodedSizes = explode('x', $icon->sizes);
 
 			if (\count($explodedSizes) === 2) {
@@ -93,9 +87,7 @@ class FaviconDistributor extends AbstractDistributor
 			}
 		}
 
-		if ($icon->mime = @$el->attributes['type']) {
-			$icon->mime = mb_strtolower(trim($icon->mime), 'UTF-8');
-		} else {
+		if (!$icon->mime = $this->elAttr('type')) {
 			$icon->mime = Utils::guessMimeType($icon->extension);
 		}
 

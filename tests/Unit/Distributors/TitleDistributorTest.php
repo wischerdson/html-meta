@@ -24,20 +24,20 @@ final class TitleDistributorTest extends TestCase
 	#[TestDox('Test "canHandle" method of the distributor')]
 	public function test_can_handle_method(): void
 	{
-		$element = self::makeElement('h1', innerText: 'Hello world');
-		self::assertFalse($this->distributor->canHandle($element));
+		$this->distributor->el = self::makeElement('h1', innerText: 'Hello world');
+		self::assertFalse($this->distributor->canHandle());
 
-		$element = self::makeElement('title', innerText: 'Hello world');
-		self::assertTrue($this->distributor->canHandle($element));
+		$this->distributor->el = self::makeElement('title', innerText: 'Hello world');
+		self::assertTrue($this->distributor->canHandle());
 	}
 
 	#[Test]
 	#[TestDox('Test "handle" method of the distributor')]
 	public function test_handle_method(): void
 	{
-		$element = self::makeElement('title', innerText: '123Hello world321');
+		$this->distributor->el = self::makeElement('title', innerText: '123Hello world321');
+		$this->distributor->handle();
 
-		$this->distributor->handle($element);
 		self::assertSame('123Hello world321', $this->meta->title);
 	}
 }

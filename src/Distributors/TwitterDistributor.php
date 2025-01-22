@@ -3,7 +3,6 @@
 namespace Osmuhin\HtmlMeta\Distributors;
 
 use Osmuhin\HtmlMeta\DataMappers\TwitterDataMapper;
-use Osmuhin\HtmlMeta\Element;
 
 class TwitterDistributor extends AbstractDistributor
 {
@@ -20,28 +19,22 @@ class TwitterDistributor extends AbstractDistributor
 		$this->dataMapper = new TwitterDataMapper();
 	}
 
-	public function canHandle(Element $el): bool
+	public function canHandle(): bool
 	{
-		$name = @$el->attributes['name'] ?: @$el->attributes['property'];
+		$this->name = $this->elAttr('name') ?: $this->elAttr('property');
 
-		if (!$name || !str_starts_with($name, 'twitter:')) {
+		if (!$this->name || !str_starts_with($this->name, 'twitter:')) {
 			return false;
 		}
 
-		if (
-			(!$content = @$el->attributes['content']) ||
-			(!$content = trim($content))
-		) {
+		if (!$this->content = $this->elAttr('content', lowercase: false)) {
 			return false;
 		}
-
-		$this->name = trim($name);
-		$this->content = $content;
 
 		return true;
 	}
 
-	public function handle(Element $el): void
+	public function handle(): void
 	{
 		if ($this->dataMapper->assign($this->name, $this->content)) {
 			return;

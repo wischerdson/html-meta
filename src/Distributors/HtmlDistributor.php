@@ -2,20 +2,18 @@
 
 namespace Osmuhin\HtmlMeta\Distributors;
 
-use Osmuhin\HtmlMeta\Element;
-
 class HtmlDistributor extends AbstractDistributor
 {
-	public function canHandle(Element $el): bool
+	public function canHandle(): bool
 	{
-		return $el->name === 'html';
+		return $this->el->name === 'html';
 	}
 
-	public function handle(Element $el): void
+	public function handle(): void
 	{
-		$this->meta->lang = @$el->attributes['lang'];
-		$this->meta->dir = @$el->attributes['dir'];
+		$this->meta->lang = $this->elAttr('lang', lowercase: false);
+		$this->meta->dir = $this->elAttr('dir');
 
-		$this->meta->htmlAttributes = $el->attributes;
+		$this->meta->htmlAttributes = $this->el->attributes;
 	}
 }

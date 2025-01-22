@@ -66,8 +66,8 @@ final class OpenGraphDistributorTest extends TestCase
 	#[DataProvider('metaPropertiesProvider')]
 	public function test_can_handle_method(?string $property, ?string $value, bool $expected): void
 	{
-		$element = self::makeMetaWithProperty($property, $value);
-		self::assertSame($expected, $this->distributor->canHandle($element));
+		$this->distributor->el = self::makeMetaWithProperty($property, $value);
+		self::assertSame($expected, $this->distributor->canHandle());
 	}
 
 	public function test_handle_method_uses_data_mapper(): void
@@ -81,10 +81,10 @@ final class OpenGraphDistributorTest extends TestCase
 
 		self::injectDataMapper($this->distributor, $dataMapper);
 
-		$element = self::makeMetaWithProperty('og:title', 'value1');
+		$this->distributor->el = self::makeMetaWithProperty('og:title', 'value1');
 
-		$this->distributor->canHandle($element);
-		$this->distributor->handle($element);
+		$this->distributor->canHandle();
+		$this->distributor->handle();
 	}
 
 	#[DataProvider('assigningInDataMapperProvider')]
@@ -99,22 +99,21 @@ final class OpenGraphDistributorTest extends TestCase
 
 		self::injectDataMapper($this->distributor, $dataMapper);
 
-		$element = self::makeMetaWithProperty($key, $content);
+		$this->distributor->el = self::makeMetaWithProperty($key, $content);
 
-		$this->distributor->canHandle($element);
-		$this->distributor->handle($element);
+		$this->distributor->canHandle();
+		$this->distributor->handle();
 	}
 
 	public function test_og_alternate_locales(): void
 	{
-		$element1 = self::makeMetaWithProperty('og:locale:alternate', 'fr_FR');
-		$element2 = self::makeMetaWithProperty('og:locale:alternate', 'es_ES');
+		$this->distributor->el = self::makeMetaWithProperty('og:locale:alternate', 'fr_FR');
+		$this->distributor->canHandle();
+		$this->distributor->handle();
 
-		$this->distributor->canHandle($element1);
-		$this->distributor->handle($element1);
-
-		$this->distributor->canHandle($element2);
-		$this->distributor->handle($element2);
+		$this->distributor->el = self::makeMetaWithProperty('og:locale:alternate', 'es_ES');
+		$this->distributor->canHandle();
+		$this->distributor->handle();
 
 		self::assertSame(['fr_FR', 'es_ES'], $this->meta->openGraph->alternateLocales);
 	}

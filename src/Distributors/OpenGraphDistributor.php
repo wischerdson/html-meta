@@ -3,7 +3,6 @@
 namespace Osmuhin\HtmlMeta\Distributors;
 
 use Osmuhin\HtmlMeta\DataMappers\OpenGraphDataMapper;
-use Osmuhin\HtmlMeta\Element;
 
 class OpenGraphDistributor extends AbstractDistributor
 {
@@ -37,27 +36,20 @@ class OpenGraphDistributor extends AbstractDistributor
 		];
 	}
 
-	public function canHandle(Element $el): bool
+	public function canHandle(): bool
 	{
-		$property = @$el->attributes['property'];
-		$content = @$el->attributes['content'];
+		$property = $this->elAttr('property');
+		$content = $this->elAttr('content', lowercase: false);
 
-		if (!$property || !$content) {
-			return false;
-		}
-
-		if (
-			(!$property = trim($property)) ||
-			!str_contains($property, ':') ||
-			(!$content = trim($content))
-		) {
+		if (!$property || !$content || !str_contains($property, ':')) {
 			return false;
 		}
 
 		$namespace = explode(':', $property, 2)[0];
+		$map = self::getMethodsMap();
 
-		if (($map = self::getMethodsMap()) && isset($map[$namespace])) {
-			$this->property = mb_strtolower($property, 'UTF-8');
+		if (isset($map[$namespace])) {
+			$this->property = $property;
 			$this->content = $content;
 			$this->namespace = $namespace;
 			$this->handlerMethod = $map[$namespace];
@@ -68,7 +60,7 @@ class OpenGraphDistributor extends AbstractDistributor
 		return false;
 	}
 
-	public function handle(Element $el): void
+	public function handle(): void
 	{
 		$this->{$this->handlerMethod}($this->property, $this->content);
 	}

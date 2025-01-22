@@ -48,22 +48,20 @@ final class FaviconDistributorTest extends TestCase
 	#[DataProvider('metaAttributesProvider')]
 	public function test_can_handle_method(array $attributes, bool $expected): void
 	{
-		assertSame($expected, $this->distributor->canHandle(
-			self::makeElement('meta', $attributes)
-		));
+		$this->distributor->el = self::makeElement('meta', $attributes);
+		assertSame($expected, $this->distributor->canHandle());
 	}
 
 	#[DataProvider('iconTypesProvider')]
 	public function test_icons_1(string $iconType, string $dtoProperty): void
 	{
-		$element = self::makeElement('meta', [
+		$this->distributor->el = self::makeElement('meta', [
 			'rel' => $iconType,
 			'href' => '/favicon.ico',
 			'sizes' => '16X14'
 		]);
-
-		$this->distributor->canHandle($element);
-		$this->distributor->handle($element);
+		$this->distributor->canHandle();
+		$this->distributor->handle();
 
 		assertCount(1, $this->meta->favicon->{$dtoProperty});
 		assertInstanceOf(Icon::class, $icon = $this->meta->favicon->{$dtoProperty}[0]);
@@ -78,14 +76,13 @@ final class FaviconDistributorTest extends TestCase
 	#[DataProvider('iconTypesProvider')]
 	public function test_icons_2(string $iconType, string $dtoProperty): void
 	{
-		$element = self::makeElement('meta', [
+		$this->distributor->el = self::makeElement('meta', [
 			'rel' => " \n $iconType ",
 			'href' => "\t /favicon.ico  ",
 			'type' => '   application/ico123123'
 		]);
-
-		$this->distributor->canHandle($element);
-		$this->distributor->handle($element);
+		$this->distributor->canHandle();
+		$this->distributor->handle();
 
 		assertInstanceOf(Icon::class, $icon = $this->meta->favicon->{$dtoProperty}[0]);
 		assertSame('application/ico123123', $icon->mime);
@@ -96,13 +93,12 @@ final class FaviconDistributorTest extends TestCase
 
 	public function test_manifest(): void
 	{
-		$element = self::makeElement('meta', [
+		$this->distributor->el = self::makeElement('meta', [
 			'rel' => '   manifest  ',
 			'href' => "\n\n/favicon/manifest.json  "
 		]);
-
-		$this->distributor->canHandle($element);
-		$this->distributor->handle($element);
+		$this->distributor->canHandle();
+		$this->distributor->handle();
 
 		assertSame('/favicon/manifest.json', $this->meta->favicon->manifest);
 	}

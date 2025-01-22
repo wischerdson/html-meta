@@ -26,21 +26,21 @@ final class LinkDistributorTest extends TestCase
 	#[TestDox('Test "canHandle" method of the distributor')]
 	public function test_can_handle_method(): void
 	{
-		$element = self::makeElement('h1', innerText: 'Hello world');
-		self::assertFalse($this->distributor->canHandle($element));
+		$this->distributor->el = self::makeElement('h1', innerText: 'Hello world');
+		self::assertFalse($this->distributor->canHandle());
 
-		$element = self::makeElement('link');
-		self::assertFalse($this->distributor->canHandle($element));
+		$this->distributor->el = self::makeElement('link');
+		self::assertFalse($this->distributor->canHandle());
 
-		$element = self::makeElement('link', ['some-attribute' => '']);
-		self::assertTrue($this->distributor->canHandle($element));
+		$this->distributor->el = self::makeElement('link', ['some-attribute' => '']);
+		self::assertTrue($this->distributor->canHandle());
 	}
 
 	public function test_canonical(): void
 	{
-		$element = self::makeElement('link', ['rel' => 'caNonicAl   ', 'href' => "\n\n /catalog/123   "]);
+		$this->distributor->el = self::makeElement('link', ['rel' => 'caNonicAl   ', 'href' => "\n\n /catalog/123   "]);
 
-		$this->distributor->handle($element);
+		$this->distributor->handle();
 
 		assertSame('/catalog/123', $this->meta->canonical);
 	}

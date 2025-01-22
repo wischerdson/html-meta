@@ -7,12 +7,12 @@ use Osmuhin\HtmlMeta\Element;
 
 class SubDistributor1 extends AbstractDistributor
 {
-	public function canHandle(Element $el): bool
+	public function canHandle(): bool
 	{
 		return true;
 	}
 
-	public function handle(Element $el): void
+	public function handle(): void
 	{
 
 	}

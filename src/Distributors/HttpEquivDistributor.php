@@ -3,7 +3,6 @@
 namespace Osmuhin\HtmlMeta\Distributors;
 
 use Osmuhin\HtmlMeta\DataMappers\HttpEquivDataMapper;
-use Osmuhin\HtmlMeta\Element;
 
 class HttpEquivDistributor extends AbstractDistributor
 {
@@ -20,29 +19,20 @@ class HttpEquivDistributor extends AbstractDistributor
 		$this->dataMapper = new HttpEquivDataMapper();
 	}
 
-	public function canHandle(Element $el): bool
+	public function canHandle(): bool
 	{
-		if (!$name = @$el->attributes['http-equiv']) {
+		if (!$this->name = $this->elAttr('http-equiv')) {
 			return false;
 		}
 
-		if (!$name = mb_strtolower(trim($name), 'UTF-8')) {
+		if (!$this->content = $this->elAttr('http-equiv', lowercase: false)) {
 			return false;
 		}
-
-		$content = @$el->attributes['content'];
-
-		if (!$content || !$content = trim($content)) {
-			return false;
-		}
-
-		$this->name = $name;
-		$this->content = $content;
 
 		return true;
 	}
 
-	public function handle(Element $el): void
+	public function handle(): void
 	{
 		if ($this->dataMapper->assign($this->name, $this->content)) {
 			return;

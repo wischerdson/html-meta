@@ -3,12 +3,11 @@
 namespace Tests\Feature\Fixtures;
 
 use Osmuhin\HtmlMeta\Distributors\TitleDistributor;
-use Osmuhin\HtmlMeta\Element;
 
 class CustomTitleDistributor extends TitleDistributor
 {
-	public function handle(Element $el): void
+	public function handle(): void
 	{
-		$this->meta->title = $el->innerText . ' title suffix';
+		$this->meta->title = $this->el->innerText . ' title suffix';
 	}
 }

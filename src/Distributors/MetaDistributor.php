@@ -3,7 +3,6 @@
 namespace Osmuhin\HtmlMeta\Distributors;
 
 use Osmuhin\HtmlMeta\DataMappers\MetaDataMapper;
-use Osmuhin\HtmlMeta\Element;
 
 class MetaDistributor extends AbstractDistributor
 {
@@ -30,36 +29,33 @@ class MetaDistributor extends AbstractDistributor
 		$this->dataMapper = new MetaDataMapper();
 	}
 
-	public function canHandle(Element $el): bool
+	public function canHandle(): bool
 	{
-		return $el->name === 'meta' && $el->attributes;
+		return $this->el->name === 'meta' && $this->el->attributes;
 	}
 
-	public function handle(Element $el): void
+	public function handle(): void
 	{
-		if ($charset = @$el->attributes['charset']) {
+		if ($charset = $this->elAttr('charset')) {
 			$this->meta->charset = $charset;
 
 			return;
 		}
 
-		if ($name = @$el->attributes['name']) {
-			$name = mb_strtolower(trim($name), 'UTF-8');
-			$name && $this->handleNamedMeta($name, $el);
+		if ($name = $this->elAttr('name')) {
+			$this->handleNamedMeta($name);
 
 			return;
 		}
 
-		if ($property = @$el->attributes['property']) {
-			$this->meta->unrecognizedMeta[$property] = @$el->attributes['content'];
+		if ($property = $this->elAttr('property')) {
+			$this->meta->unrecognizedMeta[$property] = $this->elAttr('content', lowercase: false);
 		}
 	}
 
-	protected function handleNamedMeta(string $name, Element $meta): void
+	protected function handleNamedMeta(string $name): void
 	{
-		$content = @$meta->attributes['content'];
-
-		if (!$content || !$content = trim($content)) {
+		if (!$content = $this->elAttr('content', lowercase: false)) {
 			$this->testEmptyContent = true;
 
 			return;
@@ -77,7 +73,7 @@ class MetaDistributor extends AbstractDistributor
 
 				return;
 			case 'theme-color':
-				if ($media = @$meta->attributes['media']) {
+				if ($media = $this->elAttr('media', lowercase: false)) {
 					$this->meta->themeColor[$media] = $content;
 				} else {
 					$this->meta->themeColor[] = $content;
