@@ -5,7 +5,7 @@
 <p align="center">
     <img src="https://github.com/wischerdson/html-meta/actions/workflows/tests.yml/badge.svg" alt="Tests status">
     <a href="https://packagist.org/packages/osmuhin/html-meta"><img src="https://poser.pugx.org/osmuhin/html-meta/d/total.svg" alt="Total Downloads"></a>
-	<img src="https://poser.pugx.org/osmuhin/html-meta/license.svg" alt="License">
+    <img src="https://poser.pugx.org/osmuhin/html-meta/license.svg" alt="License">
 </p>
 
 **HTML Meta** is a PHP package for parsing website metadata, such as titles, favicons, OpenGraph tags and others.
@@ -101,23 +101,23 @@ The main interaction happens through the `$crawler` object of type `\Osmuhin\Htm
 1. Initialization: Configure the crawler before `run()` calling.
 
 2. Execution: After `run()` calling, the crawler performs the following steps:
-	* fetches the HTML string from the URL (if raw HTML is not provided). <br>
-	The priority of the parameters, if they are more than 1 is following: `string $html` ➡ `\GuzzleHttp\Psr7\Request $request` ➡ `string $url`;
+    * fetches the HTML string from the URL (if raw HTML is not provided). <br>
+    The priority of the parameters, if they are more than 1 is following: `string $html` ➡ `\GuzzleHttp\Psr7\Request $request` ➡ `string $url`;
 
-	* parses the HTML using the configured xpath:
+    * parses the HTML using the configured xpath:
 
-		```php
-		$crawler->xpath = '//html|//html/head/link|//html/head/meta|//html/head/title';
-		```
+        ```php
+        $crawler->xpath = '//html|//html/head/link|//html/head/meta|//html/head/title';
+        ```
 
-		> You are free to overwrite xpath property;
+        > You are free to overwrite xpath property;
 
-	* passes the parsed elements to the distributor stack;
+    * passes the parsed elements to the distributor stack;
 
-	* the found HTML element is pass to the distributor stack <br>
-	If the HTML element passed the conditions, then its value is written to [DTO (Data Transfer Object)](https://en.wikipedia.org/wiki/Data_transfer_object ) of the type `\Osmuhin\HtmlMeta\Contracts\Dto`;
+    * the found HTML element is pass to the distributor stack <br>
+    If the HTML element passed the conditions, then its value is written to [DTO (Data Transfer Object)](https://en.wikipedia.org/wiki/Data_transfer_object ) of the type `\Osmuhin\HtmlMeta\Contracts\Dto`;
 
-	* after parsing the HTML string, the root DTO `\Osmuhin\HtmlMeta\Dto\Meta` is formed in output.
+    * after parsing the HTML string, the root DTO `\Osmuhin\HtmlMeta\Dto\Meta` is formed in output.
 
 ### Distributors
 
@@ -126,12 +126,12 @@ A Distributor validates HTML elements and distributes their data into DTOs.
 Distributor must implement the interface `\Osmuhin\HtmlMeta\Contracts\Distributor` and has 2 main methods:
 
 ```php
-public function canHandle(\Osmuhin\HtmlMeta\Element $el): bool
+public function canHandle(): bool
 {
 
 }
 
-public function handle(\Osmuhin\HtmlMeta\Element $el): void
+public function handle(): void
 {
 
 }
@@ -145,19 +145,17 @@ If returns true, then all sub-distributors are polled, and then the handle metho
 You can view the structure of the simplest [TitleDistributor](/src/Distributors/TitleDistributor.php) distributor:
 
 ```php
-use Osmuhin\HtmlMeta\Element;
-
 class TitleDistributor extends \Osmuhin\HtmlMeta\Distributors\AbstractDistributor
 {
-    public function canHandle(): bool
-    {
-        return $this->el->name === 'title';
-    }
+	public function canHandle(): bool
+	{
+		return $this->el->name === 'title';
+	}
 
-    public function handle(): void
-    {
-        $this->meta->title = $this->el->innerText;
-    }
+	public function handle(): void
+	{
+		$this->meta->title = $this->el->innerText;
+	}
 }
 ```
 
@@ -173,7 +171,10 @@ class MyCustomTitleDistributor extends TitleDistributor
         $this->meta->title = 'Prefix for title ' . $this->el->innerText;
     }
 }
+```
 
+replace original `TitleDistributor` in initial configuration:
+```php
 $crawler = Crawler::init(url: 'https://google.com');
 $crawler->distributor->setSubDistributor(
     MyCustomTitleDistributor::class,
@@ -211,7 +212,9 @@ $crawler->distributor->useSubDistributors(
         \Osmuhin\HtmlMeta\Distributors\OpenGraphDistributor::init()
     ),
     \Osmuhin\HtmlMeta\Distributors\LinkDistributor::init()->useSubDistributors(
-        \Osmuhin\HtmlMeta\Distributors\FaviconDistributor::init()
+        \Osmuhin\HtmlMeta\Distributors\LinkRelDistributor::init()->useSubDistributors(
+            \Osmuhin\HtmlMeta\Distributors\FaviconDistributor::init()
+        )
     )
 );
 ```
