@@ -147,15 +147,15 @@ You can view the structure of the simplest [TitleDistributor](/src/Distributors/
 ```php
 class TitleDistributor extends \Osmuhin\HtmlMeta\Distributors\AbstractDistributor
 {
-	public function canHandle(): bool
-	{
-		return $this->el->name === 'title';
-	}
+    public function canHandle(): bool
+    {
+        return $this->el->name === 'title';
+    }
 
-	public function handle(): void
-	{
-		$this->meta->title = $this->el->innerText;
-	}
+    public function handle(): void
+    {
+        $this->meta->title = $this->el->innerText;
+    }
 }
 ```
 
