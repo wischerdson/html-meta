@@ -21,13 +21,16 @@ class HttpEquivDistributor extends AbstractDistributor
 
 	public function canHandle(): bool
 	{
-		if (!$this->name = $this->elAttr('http-equiv')) {
+		if (!$name = $this->elAttr('http-equiv')) {
 			return false;
 		}
 
-		if (!$this->content = $this->elAttr('http-equiv', lowercase: false)) {
+		if (!$content = $this->elAttr('content', lowercase: false)) {
 			return false;
 		}
+
+		$this->name = $name;
+		$this->content = $content;
 
 		return true;
 	}

@@ -132,7 +132,9 @@ class Crawler
 				\Osmuhin\HtmlMeta\Distributors\OpenGraphDistributor::init()
 			),
 			\Osmuhin\HtmlMeta\Distributors\LinkDistributor::init()->useSubDistributors(
-				\Osmuhin\HtmlMeta\Distributors\FaviconDistributor::init()
+				\Osmuhin\HtmlMeta\Distributors\LinkRelDistributor::init()->useSubDistributors(
+					\Osmuhin\HtmlMeta\Distributors\FaviconDistributor::init()
+				)
 			)
 		);
 	}

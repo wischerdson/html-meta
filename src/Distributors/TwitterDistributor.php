@@ -21,15 +21,18 @@ class TwitterDistributor extends AbstractDistributor
 
 	public function canHandle(): bool
 	{
-		$this->name = $this->elAttr('name') ?: $this->elAttr('property');
+		$name = $this->elAttr('name') ?: $this->elAttr('property');
 
-		if (!$this->name || !str_starts_with($this->name, 'twitter:')) {
+		if (!$name || !str_starts_with($name, 'twitter:')) {
 			return false;
 		}
 
-		if (!$this->content = $this->elAttr('content', lowercase: false)) {
+		if (!$content = $this->elAttr('content', lowercase: false)) {
 			return false;
 		}
+
+		$this->name = $name;
+		$this->content = $content;
 
 		return true;
 	}

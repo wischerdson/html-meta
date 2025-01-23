@@ -28,10 +28,12 @@ class LinkRelDistributor extends AbstractDistributor
 			return;
 		}
 
-		$this->dataMapper->assignPropertyWithObject(
-			$this->meta,
-			$this->dataMapper->url('canonical'),
-			$href
-		);
+		if ($this->rel === 'canonical') {
+			$this->dataMapper->assignPropertyWithObject(
+				$this->meta,
+				$this->dataMapper->url('canonical'),
+				$href
+			);
+		}
 	}
 }

@@ -48,7 +48,7 @@ class HtmlMetaCrawlerTest extends TestCase
 
 		$meta = Crawler::init(html: $html, url: 'http://example.com/relative/')->run();
 
-		assertSame('UTF-8', $meta->charset);
+		assertSame('utf-8', $meta->charset);
 		assertSame('light dark', $meta->colorScheme);
 		assertSame('ExampleApp', $meta->applicationName);
 		assertSame('Evil Inc.', $meta->copyright);

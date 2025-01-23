@@ -8,11 +8,11 @@ use Osmuhin\HtmlMeta\Utils;
 
 class FaviconDistributor extends AbstractDistributor
 {
+	protected ?string $rel;
+
 	protected string $href;
 
 	protected AbstractDataMapper $dataMapper;
-
-	protected LinkRelDistributor $parentContext;
 
 	public function __construct()
 	{
@@ -23,7 +23,7 @@ class FaviconDistributor extends AbstractDistributor
 
 	public function canHandle(): bool
 	{
-		switch ($this->parentContext->rel) {
+		switch ($this->rel = $this->elAttr('rel')) {
 			case 'shortcut icon':
 			case 'icon':
 			case 'apple-touch-icon':
@@ -40,7 +40,7 @@ class FaviconDistributor extends AbstractDistributor
 			return;
 		}
 
-		switch ($this->parentContext->rel) {
+		switch ($this->rel) {
 			case 'shortcut icon':
 			case 'icon':
 				$this->meta->favicon->icons[] = $this->makeIcon();

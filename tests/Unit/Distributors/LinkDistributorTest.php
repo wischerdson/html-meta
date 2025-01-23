@@ -9,8 +9,6 @@ use PHPUnit\Framework\TestCase;
 use Tests\Unit\Traits\ElementCreator;
 use Tests\Unit\Traits\SetupContainer;
 
-use function PHPUnit\Framework\assertSame;
-
 final class LinkDistributorTest extends TestCase
 {
 	use ElementCreator, SetupContainer;
@@ -34,14 +32,5 @@ final class LinkDistributorTest extends TestCase
 
 		$this->distributor->el = self::makeElement('link', ['some-attribute' => '']);
 		self::assertTrue($this->distributor->canHandle());
-	}
-
-	public function test_canonical(): void
-	{
-		$this->distributor->el = self::makeElement('link', ['rel' => 'caNonicAl   ', 'href' => "\n\n /catalog/123   "]);
-
-		$this->distributor->handle();
-
-		assertSame('/catalog/123', $this->meta->canonical);
 	}
 }

@@ -78,7 +78,6 @@ abstract class AbstractDistributor implements Distributor
 	{
 		foreach ($this->subDistributors as $subDistributor) {
 			$subDistributor->el = $this->el;
-			property_exists($subDistributor, 'parentContext') && $subDistributor->parentContext = $this;
 
 			if ($subDistributor->canHandle()) {
 				$subDistributor->pollSubDistributors($this->el) || $subDistributor->handle();
