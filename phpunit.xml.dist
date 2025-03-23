@@ -13,11 +13,11 @@
 	failOnRisky="true"
 	failOnWarning="true"
 	testdox="true"
+	cacheResult="false"
 >
 	<coverage>
 		<report>
 			<html outputDirectory="build/coverage-html" />
-			<!-- <clover outputFile="build/coverage.xml" /> -->
 		</report>
 	</coverage>
 	<testsuites>
